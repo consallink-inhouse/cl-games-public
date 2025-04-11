@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Tetris</title>
+  <!-- おしゃれなレトロフォント「Press Start 2P」を利用 -->
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* 全体背景：グラデーションでスタイリッシュに */
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1c1c1c, #555);
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    /* ゲームコンテナ（キャンバス＋ボタン類）の設定 */
+    #gameContainer {
+      position: relative;
+      width: 450px; /* 10タイル×30px + 情報表示用150px */
+      height: 600px; /* 20タイル×30px */
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border: 2px solid #fff;
+      background-color: #000;
+    }
+    /* キャンバス設定 */
+    canvas {
+      display: block;
+      background-color: #000;
+    }
+    /* タイトル画面オーバーレイの設定 */
+    #titleScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    #titleScreen h1 {
+      font-size: 48px;
+      margin-bottom: 40px;
+    }
+    /* ボタン共通のデザイン */
+    #startButton, #retryButton {
+      padding: 10px 20px;
+      font-size: 24px;
+      font-family: 'Press Start 2P', cursive;
+      background: linear-gradient(135deg, #f06, #f79);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    #startButton:hover, #retryButton:hover {
+      transform: scale(1.05);
+    }
+    /* リトライボタンのスタイル（初期非表示・位置指定） */
+    #retryButton {
+      position: absolute;
+      left: 75px;
+      top: 300px;
+      width: 150px;
+      height: 40px;
+      font-size: 20px;
+      display: none;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="450" height="600"></canvas>
+    <!-- タイトル画面 -->
+    <div id="titleScreen">
+      <h1>TETRIS</h1>
+      <button id="startButton">START</button>
+    </div>
+    <!-- ゲームオーバー時に表示されるリトライボタン -->
+    <button id="retryButton">RETRY</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const BOARD_WIDTH = 10;
+    const BOARD_HEIGHT = 20;
+    const TILE_SIZE = 30;
+    let dropDelay = 500; // 初期落下間隔（ミリ秒）
+
+    let board = [];
+    let score = 0;
+    let level = 1;
+    let linesCleared = 0;
+    let gameOver = false;
+    let currentPiece, nextPiece;
+    let currentColorIndex, nextColorIndex;
+    let currentX = 0, currentY = 0;
+    let gameStarted = false;
+    
+    // ピースの色定義
+    const pieceColors = ["cyan", "yellow", "magenta", "green", "red", "blue", "orange"];
+    // ピースの形状定義
+    const PIECES = [
+      [ [1, 1, 1, 1] ],
+      [ [1, 1], [1, 1] ],
+      [ [0, 1, 0], [1, 1, 1] ],
+      [ [1, 1, 0], [0, 1, 1] ],
+      [ [0, 1, 1], [1, 1, 0] ],
+      [ [1, 1, 1], [0, 0, 1] ],
+      [ [1, 1, 1], [1, 0, 0] ]
+    ];
+
+    // ボードの初期化
+    function createBoard() {
+      board = [];
+      for (let i = 0; i < BOARD_HEIGHT; i++) {
+        board.push(new Array(BOARD_WIDTH).fill(0));
+      }
+    }
+
+    // 新しいピースの生成
+    function spawnPiece() {
+      currentPiece = nextPiece || PIECES[Math.floor(Math.random() * PIECES.length)];
+      currentColorIndex = (typeof nextColorIndex !== "undefined")
+                            ? nextColorIndex
+                            : Math.floor(Math.random() * pieceColors.length);
+      nextPiece = PIECES[Math.floor(Math.random() * PIECES.length)];
+      nextColorIndex = Math.floor(Math.random() * pieceColors.length);
+      currentX = Math.floor(BOARD_WIDTH / 2) - Math.floor(currentPiece[0].length / 2);
+      currentY = 0;
+      if (collision(currentX, currentY, currentPiece)) {
+        gameOver = true;
+        document.getElementById("retryButton").style.display = "block";
+      }
+    }
+
+    // 衝突判定：指定位置にピースが配置可能かチェック
+    function collision(x, y, piece) {
+      for (let i = 0; i < piece.length; i++) {
+        for (let j = 0; j < piece[i].length; j++) {
+          if (piece[i][j]) {
+            let newX = x + j;
+            let newY = y + i;
+            if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT || (newY >= 0 && board[newY][newX] !== 0)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    // ピースをボードに固定する
+    function placePiece() {
+      for (let i = 0; i < currentPiece.length; i++) {
+        for (let j = 0; j < currentPiece[i].length; j++) {
+          if (currentPiece[i][j]) {
+            board[currentY + i][currentX + j] = currentColorIndex + 1;
+          }
+        }
+      }
+    }
+
+    // ラインクリア：揃ったラインを削除し、スコア・レベルを更新
+    function clearLines() {
+      for (let i = BOARD_HEIGHT - 1; i >= 0; i--) {
+        let full = true;
+        for (let j = 0; j < BOARD_WIDTH; j++) {
+          if (board[i][j] === 0) {
+            full = false;
+            break;
+          }
+        }
+        if (full) {
+          board.splice(i, 1);
+          board.unshift(new Array(BOARD_WIDTH).fill(0));
+          linesCleared++;
+          score += 100 * level;
+          if (linesCleared % 5 === 0) {
+            level++;
+            dropDelay = Math.max(100, 500 - (level * 50));
+          }
+          i++; // 削除した行の再チェック
+        }
+      }
+    }
+
+    // ピースを1マス下に移動
+    function moveDown() {
+      if (!collision(currentX, currentY + 1, currentPiece)) {
+        currentY++;
+      } else {
+        placePiece();
+        clearLines();
+        spawnPiece();
+      }
+    }
+
+    // ピースの右回転
+    function rotateRight(piece) {
+      let rows = piece.length, cols = piece[0].length;
+      let rotated = [];
+      for (let i = 0; i < cols; i++) {
+        rotated[i] = [];
+        for (let j = 0; j < rows; j++) {
+          rotated[i][j] = piece[rows - 1 - j][i];
+        }
+      }
+      return rotated;
+    }
+
+    // ピースの左回転
+    function rotateLeft(piece) {
+      let rows = piece.length, cols = piece[0].length;
+      let rotated = [];
+      for (let i = 0; i < cols; i++) {
+        rotated[i] = [];
+        for (let j = 0; j < rows; j++) {
+          rotated[i][j] = piece[j][cols - 1 - i];
+        }
+      }
+      return rotated;
+    }
+
+    // ピースの回転処理（引数rightがtrueなら右回転、falseなら左回転）
+    function rotate(right) {
+      let rotatedPiece = right ? rotateRight(currentPiece) : rotateLeft(currentPiece);
+      if (!collision(currentX, currentY, rotatedPiece)) {
+        currentPiece = rotatedPiece;
+      }
+    }
+
+    // 描画処理
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ボード上のブロック描画
+      for (let i = 0; i < BOARD_HEIGHT; i++) {
+        for (let j = 0; j < BOARD_WIDTH; j++) {
+          if (board[i][j] !== 0) {
+            ctx.fillStyle = pieceColors[board[i][j] - 1];
+            ctx.fillRect(j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
+          ctx.strokeStyle = "gray";
+          ctx.strokeRect(j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
+      }
+      // 現在落下中のピース描画
+      ctx.fillStyle = pieceColors[currentColorIndex];
+      for (let i = 0; i < currentPiece.length; i++) {
+        for (let j = 0; j < currentPiece[i].length; j++) {
+          if (currentPiece[i][j]) {
+            ctx.fillRect((currentX + j) * TILE_SIZE, (currentY + i) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
+        }
+      }
+      // 情報表示（Score, Level, Next） - フォントサイズは10px
+      ctx.fillStyle = "white";
+      ctx.font = "10px 'Press Start 2P'";
+      ctx.fillText("Score: " + score, BOARD_WIDTH * TILE_SIZE + 10, 30);
+      ctx.fillText("Level: " + level, BOARD_WIDTH * TILE_SIZE + 10, 50);
+      
+      // Nextピースの表示
+      ctx.fillText("Next:", BOARD_WIDTH * TILE_SIZE + 10, 70);
+      const previewTileSize = 20;
+      const offsetX = BOARD_WIDTH * TILE_SIZE + 10;
+      const offsetY = 80;
+      for (let i = 0; i < nextPiece.length; i++) {
+        for (let j = 0; j < nextPiece[i].length; j++) {
+          if (nextPiece[i][j]) {
+            ctx.fillStyle = pieceColors[nextColorIndex];
+            ctx.fillRect(offsetX + j * previewTileSize, offsetY + i * previewTileSize, previewTileSize, previewTileSize);
+            ctx.strokeStyle = "gray";
+            ctx.strokeRect(offsetX + j * previewTileSize, offsetY + i * previewTileSize, previewTileSize, previewTileSize);
+          }
+        }
+      }
+      // ゲームオーバー時の表示
+      if (gameOver) {
+        ctx.fillStyle = "white";
+        ctx.font = "bold 30px 'Press Start 2P'";
+        const msg = "GAME OVER";
+        const textWidth = ctx.measureText(msg).width;
+        ctx.fillText(msg, (BOARD_WIDTH * TILE_SIZE - textWidth) / 2, (BOARD_HEIGHT * TILE_SIZE) / 2);
+      }
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      if (!gameOver) {
+        moveDown();
+        draw();
+        setTimeout(gameLoop, dropDelay);
+      }
+    }
+
+    // ゲームリセット処理
+    function resetGame() {
+      gameOver = false;
+      score = 0;
+      level = 1;
+      linesCleared = 0;
+      dropDelay = 500;
+      createBoard();
+      document.getElementById("retryButton").style.display = "none";
+      spawnPiece();
+      draw();
+      gameLoop();
+    }
+
+    // キー入力処理
+    document.addEventListener("keydown", function(e) {
+      if (!gameStarted || gameOver) return;
+      switch (e.key) {
+        case "ArrowLeft":
+          if (!collision(currentX - 1, currentY, currentPiece))
+            currentX--;
+          break;
+        case "ArrowRight":
+          if (!collision(currentX + 1, currentY, currentPiece))
+            currentX++;
+          break;
+        case "ArrowDown":
+          moveDown();
+          break;
+        case "ArrowUp":
+          rotate(false);
+          break;
+        case "Enter":
+          rotate(true);
+          break;
+      }
+      draw();
+    });
+
+    // リトライボタン押下時の処理
+    document.getElementById("retryButton").addEventListener("click", function() {
+      resetGame();
+    });
+
+    // タイトル画面のSTARTボタン押下でゲーム開始
+    document.getElementById("startButton").addEventListener("click", function() {
+      document.getElementById("titleScreen").style.display = "none";
+      gameStarted = true;
+      createBoard();
+      spawnPiece();
+      draw();
+      gameLoop();
+    });
+  </script>
+</body>
+</html>
