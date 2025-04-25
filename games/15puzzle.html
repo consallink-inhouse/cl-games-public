@@ -130,6 +130,16 @@
       left: 32%;
       display: none;
     }
+    @media (max-width: 480px) {
+      #titleScreen h1 { font-size: 18px; }
+      #startButton, #retryButton {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+      #infoPanel { font-size: 12px; }
+      .tile { font-size: 20px !important; }
+      .tileNumberOverlay { font-size: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -169,6 +179,7 @@
     let showNumbers = false;
 
     const puzzleBoardEl = document.getElementById("puzzleBoard");
+    const gameContainerEl = document.getElementById("gameContainer");
     const timerLabelEl = document.getElementById("timerLabel");
     const moveCountLabelEl = document.getElementById("moveCountLabel");
     const titleScreenEl = document.getElementById("titleScreen");
@@ -179,6 +190,24 @@
     const layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
     // 画像用タイルサイズ（隙間を除いた連続画像としてのサイズ）
     const imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
+
+    window.addEventListener("resize", () => {
+      boardWidth = gameContainerEl.clientWidth;
+      layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
+      imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
+
+      for (let num = 1; num <= SIZE * SIZE - 1; num++) {
+        const btn = tileElements[num];
+        if (!btn) continue;
+        btn.style.width = layoutTileSize + "px";
+        btn.style.height = layoutTileSize + "px";
+        const posX = -(((num - 1) % SIZE) * imageTileSize);
+        const posY = - (Math.floor((num - 1) / SIZE) * imageTileSize);
+        btn.style.backgroundSize = `${imageTileSize * SIZE}px ${imageTileSize * SIZE}px`;
+        btn.style.backgroundPosition = `${posX}px ${posY}px`;
+      }
+      updateTilePositions();
+    });
 
     // ゲーム初期化：盤面生成、DOM要素作成、タイマー開始
     function initGame() {
