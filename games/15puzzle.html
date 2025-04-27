@@ -1,485 +1,511 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-      <meta charset="UTF-8">
-      <title>15 Puzzle</title>
-  <!-- レトロなフォント「Press Start 2P」を使用 -->
-      <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
-      <style>
-    /* 全体の背景設定 */
+
+<head>
+    <meta charset="UTF-8">
+    <title>15 Puzzle</title>
+    <!-- レトロなフォント「Press Start 2P」を使用 -->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* 全体の背景設定 */
         body {
-          margin: 0;
-          background: linear-gradient(135deg, #1c1c1c, #555);
-          font-family: 'Press Start 2P', cursive;
-          color: #fff;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1c1c1c, #555);
+            font-family: 'Press Start 2P', cursive;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-    /* ゲームコンテナ */
+
+        /* ゲームコンテナ */
         #gameContainer {
-          position: relative;
-          width: 600px;
-          max-width: 95vw;
-          height: auto;
-          aspect-ratio: 4 / 5;
-          border: 3px solid #fff;
-          box-shadow: 0 0 30px rgba(0,0,0,0.5);
-          background-color: #1e1e1e;
+            position: relative;
+            width: 600px;
+            max-width: 95vw;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            border: 3px solid #fff;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            background-color: #1e1e1e;
         }
-    /* 盤面（4x4グリッド） */
+
+        /* 盤面（4x4グリッド） */
         #puzzleBoard {
-          position: relative;
-          width: 100%;
-          height: 80%;
-          padding: 15px;
-          box-sizing: border-box;
+            position: relative;
+            width: 100%;
+            height: 80%;
+            padding: 15px;
+            box-sizing: border-box;
         }
-    /* 完成図オーバーレイ */
+
+        /* 完成図オーバーレイ */
         #completeOverlay {
-          display: none;
-          position: absolute;
-          left: 15px;
-          top: 15px;
-          width: 570px;
-          height: 570px;
-          background-image: url('./question/result.png');
-          background-size: 570px 570px;
-          background-repeat: no-repeat;
-          z-index: 100;
-          pointer-events: none;
+            display: none;
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            width: 570px;
+            height: 570px;
+            background-image: url('./question/result.png');
+            background-size: 570px 570px;
+            background-repeat: no-repeat;
+            z-index: 100;
+            pointer-events: none;
         }
+
         .tile {
-          position: absolute;
-          background: linear-gradient(135deg, #5a5a5a, #2a2a2a);
-          border: 3px solid #c8c8c8;
-          border-radius: 15px;
-          box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
-          font-size: 42px;
-          color: #fff;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          transition: left 0.3s ease, top 0.3s ease;
-          user-select: none;
+            position: absolute;
+            background: linear-gradient(135deg, #5a5a5a, #2a2a2a);
+            border: 3px solid #c8c8c8;
+            border-radius: 15px;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+            font-size: 42px;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: left 0.3s ease, top 0.3s ease;
+            user-select: none;
         }
-    /* タイル番号オーバーレイ用スタイル */
+
+        /* タイル番号オーバーレイ用スタイル */
         .tileNumberOverlay {
-          position: absolute;
-          top: 3px;
-          right: 3px;
-          background-color: rgba(0, 0, 0, 0.5);
-          color: #fff;
-          font-size: 18px;
-          padding: 3px;
-          border-radius: 5px;
-          display: none;
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 18px;
+            padding: 3px;
+            border-radius: 5px;
+            display: none;
         }
-    /* 情報パネル（下部20%） */
+
+        /* 情報パネル（下部20%） */
         #infoPanel {
-          height: 20%;
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          background-color: #1e1e1e;
-          border-top: 3px solid #fff;
-          font-size: 24px;
+            height: 20%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #1e1e1e;
+            border-top: 3px solid #fff;
+            font-size: 24px;
         }
-    /* タイトル画面（開始前のオーバーレイ） */
+
+        /* タイトル画面（開始前のオーバーレイ） */
         #titleScreen {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.85);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          z-index: 10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
         }
+
         #titleScreen h1 {
-          font-size: 45px;
-          margin-bottom: 60px;
+            font-size: 45px;
+            margin-bottom: 60px;
         }
-    /* STARTおよび RETRYボタンの共通デザイン */
-        #startButton, #retryButton {
-          padding: 15px 30px;
-          font-size: 36px;
-          font-family:'Press Start 2P', cursive;
-          background: linear-gradient(135deg, #f06, #f79);
-          border: none;
-          color: #fff;
-          cursor: pointer;
-          border-radius: 8px;
-          box-shadow: 0 6px 10px rgba(0,0,0,0.3);
-          transition: transform 0.2s;
-        }
-    /* ボタンホバー時の拡大効果 */
-        #startButton:hover, #retryButton:hover {
-          transform: scale(1.05);
-        }
-    /* RETRYボタンの位置調整と初期非表示 */
+
+        /* STARTおよび RETRYボタンの共通デザイン */
+        #startButton,
         #retryButton {
-          position: absolute;
-          top: 36%;
-          left: 32%;
-          display: none;
+            padding: 15px 30px;
+            font-size: 36px;
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #f06, #f79);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        /* ボタンホバー時の拡大効果 */
+        #startButton:hover,
+        #retryButton:hover {
+            transform: scale(1.05);
+        }
+
+        /* RETRYボタンの位置調整と初期非表示 */
+        #retryButton {
+            position: absolute;
+            top: 36%;
+            left: 32%;
+            display: none;
         }
 
         @media (max-width: 480px) {
-          #gameContainer {
-            width: 90% !important;
-            height: auto !important;
-            aspect-ratio: 4 / 5;
-          }
-          #puzzleBoard {
-            padding: 10px;
-          }
-          #completeOverlay {
-            width: calc(90% - 20px); /* パディング考慮 */
-            height: calc(90% - 20px);
-            background-size: cover;
-          }
-          .tile {
-            font-size: 5vw; /* 画面幅に応じた可変フォントサイズ */
-            border: 2px solid #c8c8c8;
-            border-radius: 10px;
-          }
-          .tileNumberOverlay {
-            font-size: 3vw;
-            padding: 2px;
-          }
-          #infoPanel {
-            font-size: 4vw;
-          }
-          #titleScreen h1 {
-            font-size: 6vw;
-            margin-bottom: 5vw;
-          }
-          #startButton, #retryButton {
-            font-size: 5vw;
-            padding: 2vw 4vw;
-            border-radius: 5px;
-          }
+            #gameContainer {
+                width: 90% !important;
+                height: auto !important;
+                aspect-ratio: 4 / 5;
+            }
+
+            #puzzleBoard {
+                padding: 10px;
+            }
+
+            #completeOverlay {
+                width: calc(90% - 20px);
+                /* パディング考慮 */
+                height: calc(90% - 20px);
+                background-size: cover;
+            }
+
+            .tile {
+                font-size: 5vw;
+                /* 画面幅に応じた可変フォントサイズ */
+                border: 2px solid #c8c8c8;
+                border-radius: 10px;
+            }
+
+            .tileNumberOverlay {
+                font-size: 3vw;
+                padding: 2px;
+            }
+
+            #infoPanel {
+                font-size: 4vw;
+            }
+
+            #titleScreen h1 {
+                font-size: 6vw;
+                margin-bottom: 5vw;
+            }
+
+            #startButton,
+            #retryButton {
+                font-size: 5vw;
+                padding: 2vw 4vw;
+                border-radius: 5px;
+            }
         }
-      </style>
-    </head>
+    </style>
+</head>
+
 <body>
-  <div id="gameContainer">
-    <!-- 盤面コンテナ -->
-    <div id="puzzleBoard">
-      <!-- 完成図オーバーレイ（「a」キー押下時に表示） -->
-      <div id="completeOverlay"></div>
+    <div id="gameContainer">
+        <!-- 盤面コンテナ -->
+        <div id="puzzleBoard">
+            <!-- 完成図オーバーレイ（「a」キー押下時に表示） -->
+            <div id="completeOverlay"></div>
+        </div>
+        <!-- 情報パネル -->
+        <div id="infoPanel">
+            <div id="timerLabel">タイマー: 0秒</div>
+            <div id="moveCountLabel">手数: 0回</div>
+        </div>
+        <!-- タイトル画面 -->
+        <div id="titleScreen">
+            <h1>15 PUZZLE</h1>
+            <button id="startButton">START</button>
+        </div>
+        <!-- ゲームクリア時のリトライボタン -->
+        <button id="retryButton">RETRY</button>
     </div>
-    <!-- 情報パネル -->
-    <div id="infoPanel">
-      <div id="timerLabel">タイマー: 0秒</div>
-      <div id="moveCountLabel">手数: 0回</div>
-    </div>
-    <!-- タイトル画面 -->
-    <div id="titleScreen">
-      <h1>15 PUZZLE</h1>
-      <button id="startButton">START</button>
-    </div>
-    <!-- ゲームクリア時のリトライボタン -->
-    <button id="retryButton">RETRY</button>
-  </div>
 
-  <script>
-    const SIZE = 4;
-    const GAP = 7.5;         // タイル間の隙間（px）
-    const PADDING = 15;    // 盤面内側の余白（px）
-    let board = [];        // 盤面の数字配置（0は空）
-    let emptyRow, emptyCol;
-    let moveCount = 0;
-    let elapsedSeconds = 0;
-    let timerInterval = null;
-    let gameStarted = false;
-    // 各数字（1～15）に対応するDOM要素を格納
-    const tileElements = {};
-    // qキーで番号表示のON/OFF状態を管理
-    let showNumbers = false;
+    <script>
+        const SIZE = 4;
+        const GAP = 7.5;         // タイル間の隙間（px）
+        const PADDING = 15;    // 盤面内側の余白（px）
+        let board = [];        // 盤面の数字配置（0は空）
+        let emptyRow, emptyCol;
+        let moveCount = 0;
+        let elapsedSeconds = 0;
+        let timerInterval = null;
+        let gameStarted = false;
+        // 各数字（1～15）に対応するDOM要素を格納
+        const tileElements = {};
+        // qキーで番号表示のON/OFF状態を管理
+        let showNumbers = false;
 
-    const puzzleBoardEl = document.getElementById("puzzleBoard");
-    const gameContainerEl = document.getElementById("gameContainer");
-    const timerLabelEl = document.getElementById("timerLabel");
-    const moveCountLabelEl = document.getElementById("moveCountLabel");
-    const titleScreenEl = document.getElementById("titleScreen");
-    const retryButtonEl = document.getElementById("retryButton");
+        const puzzleBoardEl = document.getElementById("puzzleBoard");
+        const gameContainerEl = document.getElementById("gameContainer");
+        const timerLabelEl = document.getElementById("timerLabel");
+        const moveCountLabelEl = document.getElementById("moveCountLabel");
+        const titleScreenEl = document.getElementById("titleScreen");
+        const retryButtonEl = document.getElementById("retryButton");
 
-    let boardWidth = gameContainerEl.clientWidth;
-    let layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
-    let imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
+        let boardWidth = gameContainerEl.clientWidth;
+        let layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
+        let imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
 
-    window.addEventListener("resize", () => {
-      boardWidth = gameContainerEl.clientWidth;
-      layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
-      imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
+        window.addEventListener("resize", () => {
+            boardWidth = gameContainerEl.clientWidth;
+            layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
+            imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
 
-      for (let num = 1; num <= SIZE * SIZE - 1; num++) {
-        const btn = tileElements[num];
-        if (!btn) continue;
-        btn.style.width = layoutTileSize + "px";
-        btn.style.height = layoutTileSize + "px";
-        const posX = -(((num - 1) % SIZE) * imageTileSize);
-        const posY = - (Math.floor((num - 1) / SIZE) * imageTileSize);
-        btn.style.backgroundSize = `${imageTileSize * SIZE}px ${imageTileSize * SIZE}px`;
-        btn.style.backgroundPosition = `${posX}px ${posY}px`;
-      }
-      updateTilePositions();
-    });
-
-    // ゲーム初期化：盤面生成、DOM要素作成、タイマー開始
-    function initGame() {
-      moveCount = 0;
-      elapsedSeconds = 0;
-      updateInfoPanel();
-      board = generateSolvableShuffle();
-      // 空タイルの位置を特定
-      for (let i = 0; i < SIZE; i++) {
-        for (let j = 0; j < SIZE; j++) {
-          if (board[i][j] === 0) {
-            emptyRow = i;
-            emptyCol = j;
-          }
-        }
-      }
-      // 初回のみタイル要素を生成
-      if (Object.keys(tileElements).length === 0) {
-        createTileElements();
-      }
-      updateTilePositions();
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        elapsedSeconds++;
-        updateInfoPanel();
-      }, 1000);
-    }
-
-    // タイル（1～15）のDOM要素を生成
-    function createTileElements() {
-      const imageURL = "./question/result.png"; // 画像ファイルのパスを指定
-      for (let num = 1; num <= SIZE * SIZE - 1; num++) {
-        const btn = document.createElement("button");
-        btn.classList.add("tile");
-        btn.dataset.number = num;
-
-        // 背景画像として画像ファイルを使用
-        btn.style.backgroundImage = `url('${imageURL}')`;
-        // 画像全体のサイズを、連続画像として表示するためのサイズに設定
-        btn.style.backgroundSize = `${imageTileSize * SIZE}px ${imageTileSize * SIZE}px`;
-
-        // タイル番号に基づき画像内の表示位置を設定（連続画像として計算）
-        const posX = -(((num - 1) % SIZE) * imageTileSize);
-        const posY = - (Math.floor((num - 1) / SIZE) * imageTileSize);
-        btn.style.backgroundPosition = `${posX}px ${posY}px`;
-
-        // タイル番号オーバーレイを作成（右上部に表示）
-        const overlay = document.createElement("span");
-        overlay.classList.add("tileNumberOverlay");
-        overlay.textContent = num;
-        btn.appendChild(overlay);
-
-        btn.addEventListener("click", tileClicked);
-        // レイアウト上のタイルサイズを設定
-        btn.style.width = layoutTileSize + "px";
-        btn.style.height = layoutTileSize + "px";
-        btn.style.position = "absolute";
-        btn.style.transition = "left 0.3s ease, top 0.3s ease";
-        puzzleBoardEl.appendChild(btn);
-        tileElements[num] = btn;
-      }
-    }
-
-    // 盤面状態に合わせて各タイルの位置を更新
-    function updateTilePositions() {
-      for (let i = 0; i < SIZE; i++) {
-        for (let j = 0; j < SIZE; j++) {
-          const num = board[i][j];
-          if (num !== 0) {
-            const btn = tileElements[num];
-            const left = PADDING + j * (layoutTileSize + GAP);
-            const top = PADDING + i * (layoutTileSize + GAP);
-            btn.style.left = left + "px";
-            btn.style.top = top + "px";
-          }
-        }
-      }
-    }
-
-    // タイルクリック時の処理（アニメーション付きスライド）
-    function tileClicked(event) {
-      if (!gameStarted) return;
-      const num = parseInt(event.currentTarget.dataset.number);
-      let tileRow, tileCol;
-      outer: for (let i = 0; i < SIZE; i++) {
-        for (let j = 0; j < SIZE; j++) {
-          if (board[i][j] === num) {
-            tileRow = i;
-            tileCol = j;
-            break outer;
-          }
-        }
-      }
-      let moved = false;
-      if (tileRow === emptyRow) {
-        if (tileCol < emptyCol) {
-          for (let j = emptyCol; j > tileCol; j--) {
-            board[tileRow][j] = board[tileRow][j - 1];
-          }
-          board[tileRow][tileCol] = 0;
-          emptyCol = tileCol;
-          moved = true;
-        } else if (tileCol > emptyCol) {
-          for (let j = emptyCol; j < tileCol; j++) {
-            board[tileRow][j] = board[tileRow][j + 1];
-          }
-          board[tileRow][tileCol] = 0;
-          emptyCol = tileCol;
-          moved = true;
-        }
-      } else if (tileCol === emptyCol) {
-        if (tileRow < emptyRow) {
-          for (let i = emptyRow; i > tileRow; i--) {
-            board[i][tileCol] = board[i - 1][tileCol];
-          }
-          board[tileRow][tileCol] = 0;
-          emptyRow = tileRow;
-          moved = true;
-        } else if (tileRow > emptyRow) {
-          for (let i = emptyRow; i < tileRow; i++) {
-            board[i][tileCol] = board[i + 1][tileCol];
-          }
-          board[tileRow][tileCol] = 0;
-          emptyRow = tileRow;
-          moved = true;
-        }
-      }
-      if (moved) {
-        moveCount++;
-        updateInfoPanel();
-        updateTilePositions();
-        if (isGameClear()) {
-          clearInterval(timerInterval);
-          setTimeout(() => {
-            alert("おめでとうございます！クリアしました！\nクリアタイム: " + elapsedSeconds + "秒\n手数: " + moveCount + "回");
-            retryButtonEl.style.display = "block";
-          }, 300);
-        }
-      }
-    }
-
-    // 情報パネルの内容を更新
-    function updateInfoPanel() {
-      timerLabelEl.textContent = "タイマー: " + elapsedSeconds + "秒";
-      moveCountLabelEl.textContent = "手数: " + moveCount + "回";
-    }
-
-    // ゲームクリアの判定
-    function isGameClear() {
-      let num = 1;
-      for (let i = 0; i < SIZE; i++) {
-        for (let j = 0; j < SIZE; j++) {
-          if (i === SIZE - 1 && j === SIZE - 1) {
-            return board[i][j] === 0;
-          }
-          if (board[i][j] !== num++) return false;
-        }
-      }
-      return true;
-    }
-
-    // 解ける盤面のシャッフルを生成
-    function generateSolvableShuffle() {
-      let list;
-      do {
-        list = [];
-        for (let i = 1; i <= SIZE * SIZE - 1; i++) {
-          list.push(i);
-        }
-        list.push(0);
-        shuffleArray(list);
-      } while (!isSolvable(list));
-      let arr = [];
-      for (let i = 0; i < SIZE; i++) {
-        arr.push(list.slice(i * SIZE, (i + 1) * SIZE));
-      }
-      return arr;
-    }
-
-    // Fisher–Yatesシャッフルアルゴリズム
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    // 盤面が解けるか判定
-    function isSolvable(list) {
-      let inversions = 0;
-      for (let i = 0; i < list.length; i++) {
-        for (let j = i + 1; j < list.length; j++) {
-          if (list[i] && list[j] && list[i] > list[j]) inversions++;
-        }
-      }
-      const emptyRowFromBottom = SIZE - Math.floor(list.indexOf(0) / SIZE);
-      return (inversions % 2 === 0) === (emptyRowFromBottom % 2 === 1);
-    }
-
-    // ゲームの再スタート処理
-    function restartGame() {
-      retryButtonEl.style.display = "none";
-      initGame();
-    }
-
-    // タイトル画面のSTARTボタンでゲーム開始
-    document.getElementById("startButton").addEventListener("click", () => {
-      titleScreenEl.style.display = "none";
-      gameStarted = true;
-      initGame();
-    });
-
-    // RETRYボタンのクリックイベント
-    retryButtonEl.addEventListener("click", () => {
-      restartGame();
-    });
-
-    // Enterキーでリスタート（ゲーム終了時）
-    document.addEventListener("keydown", (e) => {
-      if (!gameStarted && e.key === "Enter") {
-        restartGame();
-      }
-    });
-
-    // qキーでタイル番号オーバーレイの表示/非表示をトグル
-    document.addEventListener("keydown", (e) => {
-      if (e.key.toLowerCase() === "q") {
-        showNumbers = !showNumbers;
-        Object.values(tileElements).forEach(tile => {
-          const overlay = tile.querySelector('.tileNumberOverlay');
-          if (overlay) {
-            overlay.style.display = showNumbers ? "block" : "none";
-          }
+            for (let num = 1; num <= SIZE * SIZE - 1; num++) {
+                const btn = tileElements[num];
+                if (!btn) continue;
+                btn.style.width = layoutTileSize + "px";
+                btn.style.height = layoutTileSize + "px";
+                const posX = -(((num - 1) % SIZE) * imageTileSize);
+                const posY = - (Math.floor((num - 1) / SIZE) * imageTileSize);
+                btn.style.backgroundSize = `${imageTileSize * SIZE}px ${imageTileSize * SIZE}px`;
+                btn.style.backgroundPosition = `${posX}px ${posY}px`;
+            }
+            updateTilePositions();
         });
-      }
-    });
 
-    // aキーで完成図の表示/非表示を切り替え
-    document.addEventListener("keydown", (e) => {
-      if (e.key.toLowerCase() === "a") {
-        document.getElementById("completeOverlay").style.display = "block";
-      }
-    });
-    document.addEventListener("keyup", (e) => {
-      if (e.key.toLowerCase() === "a") {
-        document.getElementById("completeOverlay").style.display = "none";
-      }
-    });
-  </script>
+        // ゲーム初期化：盤面生成、DOM要素作成、タイマー開始
+        function initGame() {
+            moveCount = 0;
+            elapsedSeconds = 0;
+            updateInfoPanel();
+            board = generateSolvableShuffle();
+            // 空タイルの位置を特定
+            for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE; j++) {
+                    if (board[i][j] === 0) {
+                        emptyRow = i;
+                        emptyCol = j;
+                    }
+                }
+            }
+            // 初回のみタイル要素を生成
+            if (Object.keys(tileElements).length === 0) {
+                createTileElements();
+            }
+            updateTilePositions();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                elapsedSeconds++;
+                updateInfoPanel();
+            }, 1000);
+        }
+
+        // タイル（1～15）のDOM要素を生成
+        function createTileElements() {
+            const imageURL = "./question/result.png"; // 画像ファイルのパスを指定
+            for (let num = 1; num <= SIZE * SIZE - 1; num++) {
+                const btn = document.createElement("button");
+                btn.classList.add("tile");
+                btn.dataset.number = num;
+
+                // 背景画像として画像ファイルを使用
+                btn.style.backgroundImage = `url('${imageURL}')`;
+                // 画像全体のサイズを、連続画像として表示するためのサイズに設定
+                btn.style.backgroundSize = `${imageTileSize * SIZE}px ${imageTileSize * SIZE}px`;
+
+                // タイル番号に基づき画像内の表示位置を設定（連続画像として計算）
+                const posX = -(((num - 1) % SIZE) * imageTileSize);
+                const posY = - (Math.floor((num - 1) / SIZE) * imageTileSize);
+                btn.style.backgroundPosition = `${posX}px ${posY}px`;
+
+                // タイル番号オーバーレイを作成（右上部に表示）
+                const overlay = document.createElement("span");
+                overlay.classList.add("tileNumberOverlay");
+                overlay.textContent = num;
+                btn.appendChild(overlay);
+
+                btn.addEventListener("click", tileClicked);
+                // レイアウト上のタイルサイズを設定
+                btn.style.width = layoutTileSize + "px";
+                btn.style.height = layoutTileSize + "px";
+                btn.style.position = "absolute";
+                btn.style.transition = "left 0.3s ease, top 0.3s ease";
+                puzzleBoardEl.appendChild(btn);
+                tileElements[num] = btn;
+            }
+        }
+
+        // 盤面状態に合わせて各タイルの位置を更新
+        function updateTilePositions() {
+            for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE; j++) {
+                    const num = board[i][j];
+                    if (num !== 0) {
+                        const btn = tileElements[num];
+                        const left = PADDING + j * (layoutTileSize + GAP);
+                        const top = PADDING + i * (layoutTileSize + GAP);
+                        btn.style.left = left + "px";
+                        btn.style.top = top + "px";
+                    }
+                }
+            }
+        }
+
+        // タイルクリック時の処理（アニメーション付きスライド）
+        function tileClicked(event) {
+            if (!gameStarted) return;
+            const num = parseInt(event.currentTarget.dataset.number);
+            let tileRow, tileCol;
+            outer: for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE; j++) {
+                    if (board[i][j] === num) {
+                        tileRow = i;
+                        tileCol = j;
+                        break outer;
+                    }
+                }
+            }
+            let moved = false;
+            if (tileRow === emptyRow) {
+                if (tileCol < emptyCol) {
+                    for (let j = emptyCol; j > tileCol; j--) {
+                        board[tileRow][j] = board[tileRow][j - 1];
+                    }
+                    board[tileRow][tileCol] = 0;
+                    emptyCol = tileCol;
+                    moved = true;
+                } else if (tileCol > emptyCol) {
+                    for (let j = emptyCol; j < tileCol; j++) {
+                        board[tileRow][j] = board[tileRow][j + 1];
+                    }
+                    board[tileRow][tileCol] = 0;
+                    emptyCol = tileCol;
+                    moved = true;
+                }
+            } else if (tileCol === emptyCol) {
+                if (tileRow < emptyRow) {
+                    for (let i = emptyRow; i > tileRow; i--) {
+                        board[i][tileCol] = board[i - 1][tileCol];
+                    }
+                    board[tileRow][tileCol] = 0;
+                    emptyRow = tileRow;
+                    moved = true;
+                } else if (tileRow > emptyRow) {
+                    for (let i = emptyRow; i < tileRow; i++) {
+                        board[i][tileCol] = board[i + 1][tileCol];
+                    }
+                    board[tileRow][tileCol] = 0;
+                    emptyRow = tileRow;
+                    moved = true;
+                }
+            }
+            if (moved) {
+                moveCount++;
+                updateInfoPanel();
+                updateTilePositions();
+                if (isGameClear()) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => {
+                        alert("おめでとうございます！クリアしました！\nクリアタイム: " + elapsedSeconds + "秒\n手数: " + moveCount + "回");
+                        retryButtonEl.style.display = "block";
+                    }, 300);
+                }
+            }
+        }
+
+        // 情報パネルの内容を更新
+        function updateInfoPanel() {
+            timerLabelEl.textContent = "タイマー: " + elapsedSeconds + "秒";
+            moveCountLabelEl.textContent = "手数: " + moveCount + "回";
+        }
+
+        // ゲームクリアの判定
+        function isGameClear() {
+            let num = 1;
+            for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE; j++) {
+                    if (i === SIZE - 1 && j === SIZE - 1) {
+                        return board[i][j] === 0;
+                    }
+                    if (board[i][j] !== num++) return false;
+                }
+            }
+            return true;
+        }
+
+        // 解ける盤面のシャッフルを生成
+        function generateSolvableShuffle() {
+            let list;
+            do {
+                list = [];
+                for (let i = 1; i <= SIZE * SIZE - 1; i++) {
+                    list.push(i);
+                }
+                list.push(0);
+                shuffleArray(list);
+            } while (!isSolvable(list));
+            let arr = [];
+            for (let i = 0; i < SIZE; i++) {
+                arr.push(list.slice(i * SIZE, (i + 1) * SIZE));
+            }
+            return arr;
+        }
+
+        // Fisher–Yatesシャッフルアルゴリズム
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // 盤面が解けるか判定
+        function isSolvable(list) {
+            let inversions = 0;
+            for (let i = 0; i < list.length; i++) {
+                for (let j = i + 1; j < list.length; j++) {
+                    if (list[i] && list[j] && list[i] > list[j]) inversions++;
+                }
+            }
+            const emptyRowFromBottom = SIZE - Math.floor(list.indexOf(0) / SIZE);
+            return (inversions % 2 === 0) === (emptyRowFromBottom % 2 === 1);
+        }
+
+        // ゲームの再スタート処理
+        function restartGame() {
+            retryButtonEl.style.display = "none";
+            initGame();
+        }
+
+        // タイトル画面のSTARTボタンでゲーム開始
+        document.getElementById("startButton").addEventListener("click", () => {
+            titleScreenEl.style.display = "none";
+            gameStarted = true;
+            initGame();
+        });
+
+        // RETRYボタンのクリックイベント
+        retryButtonEl.addEventListener("click", () => {
+            restartGame();
+        });
+
+        // Enterキーでリスタート（ゲーム終了時）
+        document.addEventListener("keydown", (e) => {
+            if (!gameStarted && e.key === "Enter") {
+                restartGame();
+            }
+        });
+
+        // qキーでタイル番号オーバーレイの表示/非表示をトグル
+        document.addEventListener("keydown", (e) => {
+            if (e.key.toLowerCase() === "q") {
+                showNumbers = !showNumbers;
+                Object.values(tileElements).forEach(tile => {
+                    const overlay = tile.querySelector('.tileNumberOverlay');
+                    if (overlay) {
+                        overlay.style.display = showNumbers ? "block" : "none";
+                    }
+                });
+            }
+        });
+
+        // aキーで完成図の表示/非表示を切り替え
+        document.addEventListener("keydown", (e) => {
+            if (e.key.toLowerCase() === "a") {
+                document.getElementById("completeOverlay").style.display = "block";
+            }
+        });
+        document.addEventListener("keyup", (e) => {
+            if (e.key.toLowerCase() === "a") {
+                document.getElementById("completeOverlay").style.display = "none";
+            }
+        });
+    </script>
 </body>
+
 </html>
