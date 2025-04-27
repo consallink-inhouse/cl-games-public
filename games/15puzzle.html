@@ -1,147 +1,173 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>15 Puzzle</title>
+    <head>
+      <meta charset="UTF-8">
+      <title>15 Puzzle</title>
   <!-- レトロなフォント「Press Start 2P」を使用 -->
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
+      <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+      <style>
     /* 全体の背景設定 */
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #1c1c1c, #555);
-      font-family: 'Press Start 2P', cursive;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    /* ゲームコンテナ（高さ500px） */
-    #gameContainer {
-      transform-origin: top center;
-      position: relative;
-      width: 400px;
-      height: 500px;
-      border: 2px solid #fff;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      background-color: #1e1e1e;
-    }
-    /* 盤面（4x4グリッド・上部80%） */
-    #puzzleBoard {
-      position: relative;
-      width: 100%;
-      height: 80%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
+        body {
+          margin: 0;
+          background: linear-gradient(135deg, #1c1c1c, #555);
+          font-family: 'Press Start 2P', cursive;
+          color: #fff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+    /* ゲームコンテナ */
+        #gameContainer {
+          position: relative;
+          width: 600px;
+          max-width: 95vw;
+          height: auto;
+          aspect-ratio: 4 / 5;
+          border: 3px solid #fff;
+          box-shadow: 0 0 30px rgba(0,0,0,0.5);
+          background-color: #1e1e1e;
+        }
+    /* 盤面（4x4グリッド） */
+        #puzzleBoard {
+          position: relative;
+          width: 100%;
+          height: 80%;
+          padding: 15px;
+          box-sizing: border-box;
+        }
     /* 完成図オーバーレイ */
-    #completeOverlay {
-      display: none;
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      width: 380px;
-      height: 380px;
-      background-image: url('./question/result.png');
-      background-size: 380px 380px;
-      background-repeat: no-repeat;
-      z-index: 100;
-      pointer-events: none;
-    }
-    /* 各タイルのスタイル */
-    .tile {
-      position: absolute;
-      /* タイルサイズはJSで設定 */
-      background: linear-gradient(135deg, #5a5a5a, #2a2a2a);
-      border: 2px solid #c8c8c8;
-      border-radius: 10px;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-      font-size: 28px;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: left 0.3s ease, top 0.3s ease;
-      user-select: none;
-    }
+        #completeOverlay {
+          display: none;
+          position: absolute;
+          left: 15px;
+          top: 15px;
+          width: 570px;
+          height: 570px;
+          background-image: url('./question/result.png');
+          background-size: 570px 570px;
+          background-repeat: no-repeat;
+          z-index: 100;
+          pointer-events: none;
+        }
+        .tile {
+          position: absolute;
+          background: linear-gradient(135deg, #5a5a5a, #2a2a2a);
+          border: 3px solid #c8c8c8;
+          border-radius: 15px;
+          box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+          font-size: 42px;
+          color: #fff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          transition: left 0.3s ease, top 0.3s ease;
+          user-select: none;
+        }
     /* タイル番号オーバーレイ用スタイル */
-    .tileNumberOverlay {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      font-size: 12px;
-      padding: 2px;
-      border-radius: 3px;
-      display: none; /* 初期は非表示 */
-    }
+        .tileNumberOverlay {
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          background-color: rgba(0, 0, 0, 0.5);
+          color: #fff;
+          font-size: 18px;
+          padding: 3px;
+          border-radius: 5px;
+          display: none;
+        }
     /* 情報パネル（下部20%） */
-    #infoPanel {
-      height: 20%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      background-color: #1e1e1e;
-      border-top: 2px solid #fff;
-      font-size: 16px;
-    }
+        #infoPanel {
+          height: 20%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          background-color: #1e1e1e;
+          border-top: 3px solid #fff;
+          font-size: 24px;
+        }
     /* タイトル画面（開始前のオーバーレイ） */
-    #titleScreen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-    #titleScreen h1 {
-      font-size: 30px;
-      margin-bottom: 40px;
-    }
+        #titleScreen {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.85);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+        }
+        #titleScreen h1 {
+          font-size: 45px;
+          margin-bottom: 60px;
+        }
     /* STARTおよび RETRYボタンの共通デザイン */
-    #startButton, #retryButton {
-      padding: 10px 20px;
-      font-size: 24px;
-      font-family:'Press Start 2P', cursive;
-      background: linear-gradient(135deg, #f06, #f79);
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      border-radius: 5px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
-    }
+        #startButton, #retryButton {
+          padding: 15px 30px;
+          font-size: 36px;
+          font-family:'Press Start 2P', cursive;
+          background: linear-gradient(135deg, #f06, #f79);
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          border-radius: 8px;
+          box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+          transition: transform 0.2s;
+        }
     /* ボタンホバー時の拡大効果 */
-    #startButton:hover, #retryButton:hover {
-      transform: scale(1.05);
-    }
+        #startButton:hover, #retryButton:hover {
+          transform: scale(1.05);
+        }
     /* RETRYボタンの位置調整と初期非表示 */
-    #retryButton {
-      position: absolute;
-      top: 36%;
-      left: 32%;
-      display: none;
-    }
-    @media (max-width: 480px) {
-      #titleScreen h1 { font-size: 18px; }
-      #startButton, #retryButton {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-      #infoPanel { font-size: 12px; }
-      .tile { font-size: 20px !important; }
-      .tileNumberOverlay { font-size: 10px; }
-    }
-  </style>
-</head>
+        #retryButton {
+          position: absolute;
+          top: 36%;
+          left: 32%;
+          display: none;
+        }
+
+        @media (max-width: 480px) {
+          #gameContainer {
+            width: 90% !important;
+            height: auto !important;
+            aspect-ratio: 4 / 5;
+          }
+          #puzzleBoard {
+            padding: 10px;
+          }
+          #completeOverlay {
+            width: calc(90% - 20px); /* パディング考慮 */
+            height: calc(90% - 20px);
+            background-size: cover;
+          }
+          .tile {
+            font-size: 5vw; /* 画面幅に応じた可変フォントサイズ */
+            border: 2px solid #c8c8c8;
+            border-radius: 10px;
+          }
+          .tileNumberOverlay {
+            font-size: 3vw;
+            padding: 2px;
+          }
+          #infoPanel {
+            font-size: 4vw;
+          }
+          #titleScreen h1 {
+            font-size: 6vw;
+            margin-bottom: 5vw;
+          }
+          #startButton, #retryButton {
+            font-size: 5vw;
+            padding: 2vw 4vw;
+            border-radius: 5px;
+          }
+        }
+      </style>
+    </head>
 <body>
   <div id="gameContainer">
     <!-- 盤面コンテナ -->
@@ -165,8 +191,8 @@
 
   <script>
     const SIZE = 4;
-    const GAP = 5;         // タイル間の隙間（px）
-    const PADDING = 10;    // 盤面内側の余白（px）
+    const GAP = 7.5;         // タイル間の隙間（px）
+    const PADDING = 15;    // 盤面内側の余白（px）
     let board = [];        // 盤面の数字配置（0は空）
     let emptyRow, emptyCol;
     let moveCount = 0;
@@ -185,11 +211,9 @@
     const titleScreenEl = document.getElementById("titleScreen");
     const retryButtonEl = document.getElementById("retryButton");
 
-    const boardWidth = 400;
-    // レイアウト用タイルサイズ（ギャップを考慮）
-    const layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
-    // 画像用タイルサイズ（隙間を除いた連続画像としてのサイズ）
-    const imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
+    let boardWidth = gameContainerEl.clientWidth;
+    let layoutTileSize = (boardWidth - 2 * PADDING - (SIZE - 1) * GAP) / SIZE;
+    let imageTileSize = (boardWidth - 2 * PADDING) / SIZE;
 
     window.addEventListener("resize", () => {
       boardWidth = gameContainerEl.clientWidth;
