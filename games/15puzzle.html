@@ -227,7 +227,7 @@
         // 各数字（1～15）に対応するDOM要素を格納
         const tileElements = {};
         // qキーで番号表示のON/OFF状態を管理
-        let showNumbers = false;
+        let showNumbers = true;
 
         const puzzleBoardEl = document.getElementById("puzzleBoard");
         const gameContainerEl = document.getElementById("gameContainer");
@@ -283,6 +283,14 @@
                 elapsedSeconds++;
                 updateInfoPanel();
             }, 1000);
+
+            Object.values(tileElements).forEach(tile => {
+                const overlay = tile.querySelector('.tileNumberOverlay');
+                if (overlay) {
+                    overlay.style.display = "block";
+                }
+            });
+
         }
 
         // タイル（1～15）のDOM要素を生成
