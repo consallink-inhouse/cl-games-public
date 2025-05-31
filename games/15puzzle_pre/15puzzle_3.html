@@ -5,7 +5,7 @@
   <title>15 Puzzle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <style>
     body {
       margin: 0;
@@ -22,7 +22,6 @@
 
     #gameContainer {
       position: relative;
-      margin-top: 5vh;
       width: 95vw;
       max-width: 600px;
       aspect-ratio: 4 / 5;
@@ -46,7 +45,7 @@
       top: 15px;
       width: calc(100% - 30px);
       height: calc(100% - 30px);
-      background-image: url('./question/result.png');
+      background-image: url('./images/level3.png');
       background-size: cover;
       background-repeat: no-repeat;
       z-index: 100;
@@ -195,6 +194,48 @@
       font-size: 3.5vw;
     }
 
+    header {
+      width: 100%;
+      padding: 20px 10px;
+      text-align: center;
+      font-size: 5vw;
+      background-color: #1c1c1c;
+      border-bottom: 2px solid #fff;
+    }
+    header a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .game-title-area {
+      width: 100%;
+      background: linear-gradient(135deg, #f06, #f79);
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 5vw;
+    }
+    .game-title-area a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .info-section {
+      text-align: center;
+      margin: 10px 0;
+    }
+    .image-title {
+      font-size: 4vw;
+      margin: 5px 0;
+    }
+    .x-link {
+      font-size: 3.5vw;
+      margin: 0;
+    }
+    .x-link a {
+      color: #0af;
+      text-decoration: underline;
+    }
+
     @media (min-width: 768px) {
       .tile {
         font-size: 42px;
@@ -210,8 +251,8 @@
 
       #startButton,
       #retryButton {
-        padding: 1vw 3vw;
         font-size: 36px;
+        padding: 1vw 3vw;
       }
 
       #titleScreen h1 {
@@ -229,11 +270,39 @@
       .label-text {
         font-size: 24px;
       }
+
+      header {
+        font-size: 28px;
+      }
+      .game-title-area {
+        font-size: 28px;
+      }
+
+      .image-title {
+        font-size: 24px;
+      }
+      .x-link {
+        font-size: 20px;
+      }
+
     }
   </style>
 </head>
 <body>
-  <div id="gameContainer">
+    <header>
+        <a href="../game_center.html">CL GAME CENTER</a>
+    </header>
+    <br>
+
+    <div class="game-title-area"><a href="./menu.html">15 Puzzle</a></div>
+
+    <div class="info-section">
+        <p class="image-title">「HELLOT ロゴ」</p>
+        <p class="x-link">
+          Xアカウント：<a href="https://www.consallink.co.jp/blogs/technical-games-15puzzle" target="_blank">consallink</a>
+        </p>
+    </div>
+    <div id="gameContainer">
     <div id="puzzleBoard">
       <div id="completeOverlay"></div>
     </div>
@@ -255,7 +324,6 @@
           </label>
         </div>
     </div>
-
     <div id="titleScreen">
       <h1>15 PUZZLE</h1>
       <button id="startButton">START</button>
@@ -264,6 +332,9 @@
   </div>
 
     <script>
+
+        const imageFile = './images/level3.png';
+
         const SIZE = 4;
         const GAP = 5;         // タイル間の隙間（px）
         const PADDING = 15;    // 盤面内側の余白（px）
@@ -347,7 +418,7 @@
 
         // タイル（1～15）のDOM要素を生成
         function createTileElements() {
-            const imageURL = "./question/result.png"; // 画像ファイルのパスを指定
+            const imageURL = imageFile; // 画像ファイルのパスを指定
             for (let num = 1; num <= SIZE * SIZE - 1; num++) {
                 const btn = document.createElement("button");
                 btn.classList.add("tile");
