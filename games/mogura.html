@@ -27,6 +27,14 @@
       font-size: 0.9rem;
     }
 
+    #wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
     .control-panel {
       margin: 10px;
       display: flex;
@@ -125,186 +133,196 @@
   </style>
 </head>
 <body>
-  <h1>FUKUOKA TATAKI</h1>
-  <br/>
-  <div id="scoreboard">SCORE: <span id="score">0</span></div>
+  <div id="wrapper">
+      <h1>FUKUOKA TATAKI</h1>
+      <br/>
+      <div id="scoreboard">SCORE: <span id="score">0</span></div>
 
-  <div class="control-panel">
-    <select id="gridSizeSelector">
-      <option value="5">5×5</option>
-      <option value="4">4×4</option>
-      <option value="3">3×3</option>
-    </select>
-    <button id="startBtn">START GAME</button>
-    <div id="timer">TIME: 30</div>
-    <div id="stats">
-      出現数: <span id="spawnCount">0</span> /  
-      OKクリック: <span id="hitOk">0</span> /  
-      NGクリック: <span id="hitNg">0</span>
-    </div>
-  </div>
+      <div class="control-panel">
+        <select id="gridSizeSelector">
+          <option value="5">5×5</option>
+          <option value="4">4×4</option>
+          <option value="3">3×3</option>
+        </select>
+        <button id="startBtn">START GAME</button>
+        <div id="timer">TIME: 30</div>
+        <div id="stats">
+          出現数: <span id="spawnCount">0</span> /
+          OKクリック: <span id="hitOk">0</span> /
+          NGクリック: <span id="hitNg">0</span>
+        </div>
+      </div>
 
-  <div id="game"></div>
+      <div id="game"></div>
 
-  <script>
-    const gameArea = document.getElementById('game');
-    const scoreEl = document.getElementById('score');
-    const startBtn = document.getElementById('startBtn');
-    const gridSizeSelector = document.getElementById('gridSizeSelector');
-    const timerDisplay = document.getElementById('timer');
-    const spawnEl = document.getElementById('spawnCount');
-    const hitOkEl = document.getElementById('hitOk');
-    const hitNgEl = document.getElementById('hitNg');
+      <script>
+        const gameArea = document.getElementById('game');
+        const scoreEl = document.getElementById('score');
+        const startBtn = document.getElementById('startBtn');
+        const gridSizeSelector = document.getElementById('gridSizeSelector');
+        const timerDisplay = document.getElementById('timer');
+        const spawnEl = document.getElementById('spawnCount');
+        const hitOkEl = document.getElementById('hitOk');
+        const hitNgEl = document.getElementById('hitNg');
 
-    let holes = [];
-    let score = 0;
-    let gameInterval;
-    let timerInterval;
-    let isPlaying = false;
-    let remainingTime = 30;
-    let spawnCount = 0;
-    let hitOk = 0;
-    let hitNg = 0;
+        let holes = [];
+        let score = 0;
+        let gameInterval;
+        let timerInterval;
+        let isPlaying = false;
+        let remainingTime = 30;
+        let spawnCount = 0;
+        let hitOk = 0;
+        let hitNg = 0;
 
-    const okImages = [
-      "./mogura/ok/ok01.png",
-    ];
-    const ngImages = [
-      "./mogura/ng/ng02.png",
-      "./mogura/ng/ng03.png",
-      "./mogura/ng/ng04.png",
-      "./mogura/ng/ng05.png",
-      "./mogura/ng/ng06.png",
-      "./mogura/ng/ng07.png"
-    ];
+        const okImages = [
+          "./mogura/ok/ok01.png",
+        ];
+        const ngImages = [
+          "./mogura/ng/ng01.png",
+          "./mogura/ng/ng02.png",
+          "./mogura/ng/ng03.png",
+          "./mogura/ng/ng04.png",
+          "./mogura/ng/ng05.png",
+          "./mogura/ng/ng06.png",
+          "./mogura/ng/ng07.png"
+        ];
 
-    function createHoles(gridSize) {
-      holes = [];
-      gameArea.innerHTML = "";
-      gameArea.style.gridTemplateColumns = `repeat(${gridSize}, min(17vw, 80px))`;
+        function createHoles(gridSize) {
+          holes = [];
+          gameArea.innerHTML = "";
+          gameArea.style.gridTemplateColumns = `repeat(${gridSize}, min(17vw, 80px))`;
 
-      const total = gridSize * gridSize;
+          const total = gridSize * gridSize;
 
-      for (let i = 0; i < total; i++) {
-        const hole = document.createElement('div');
-        hole.className = 'hole';
+          for (let i = 0; i < total; i++) {
+            const hole = document.createElement('div');
+            hole.className = 'hole';
 
-        const mogura = document.createElement('img');
-        mogura.className = 'mogura';
-        mogura.dataset.index = i;
+            const mogura = document.createElement('img');
+            mogura.className = 'mogura';
+            mogura.dataset.index = i;
 
-        mogura.addEventListener('click', () => {
-          if (!isPlaying || !mogura.classList.contains('up')) return;
+            mogura.addEventListener('click', () => {
+              if (!isPlaying || !mogura.classList.contains('up')) return;
 
-          if (mogura.classList.contains('good')) {
-            score++;
-            hitOk++;
-            mogura.classList.add('hit-good');
-          } else if (mogura.classList.contains('bad')) {
-            score--;
-            hitNg++;
-            mogura.classList.add('hit-bad');
+              if (mogura.classList.contains('good')) {
+                score++;
+                hitOk++;
+                mogura.classList.add('hit-good');
+              } else if (mogura.classList.contains('bad')) {
+                score--;
+                hitNg++;
+                mogura.classList.add('hit-bad');
+              }
+
+              scoreEl.textContent = score;
+              hitOkEl.textContent = hitOk;
+              hitNgEl.textContent = hitNg;
+
+              setTimeout(() => {
+                resetMogura(mogura);
+              }, 300);
+            });
+
+            hole.appendChild(mogura);
+            holes.push({ hole, mogura });
+            gameArea.appendChild(hole);
+          }
+        }
+
+        function resetMogura(mogura) {
+          const hole = mogura.parentElement;
+          mogura.className = 'mogura';
+          mogura.src = "";
+          hole.classList.remove('ok-glow');
+        }
+
+        let lastIndex = -1;
+
+        function randomHoleIndex() {
+          let index;
+          do {
+            index = Math.floor(Math.random() * holes.length);
+          } while (index === lastIndex && holes.length > 1);
+          lastIndex = index;
+          return index;
+        }
+
+        function getRandomImage(images) {
+          return images[Math.floor(Math.random() * images.length)];
+        }
+
+        function showMogura(index, duration) {
+          const m = holes[index].mogura;
+          const hole = holes[index].hole;
+          const isGood = Math.random() < 0.7;
+
+          m.src = isGood ? getRandomImage(okImages) : getRandomImage(ngImages);
+          m.className = 'mogura up ' + (isGood ? 'good ok-shake' : 'bad');
+
+          if (isGood) {
+            hole.classList.add('ok-glow');
+            spawnCount++;
+            spawnEl.textContent = spawnCount;
           }
 
-          scoreEl.textContent = score;
-          hitOkEl.textContent = hitOk;
-          hitNgEl.textContent = hitNg;
-
           setTimeout(() => {
-            resetMogura(mogura);
-          }, 300);
+            resetMogura(m);
+          }, duration);
+        }
+
+        function startGame() {
+          if (isPlaying) return;
+          isPlaying = true;
+          score = 0;
+          spawnCount = 0;
+          hitOk = 0;
+          hitNg = 0;
+          remainingTime = 30;
+
+          scoreEl.textContent = 0;
+          spawnEl.textContent = 0;
+          hitOkEl.textContent = 0;
+          hitNgEl.textContent = 0;
+          timerDisplay.textContent = `TIME: ${remainingTime}`;
+
+          const gridSize = parseInt(gridSizeSelector.value, 10);
+          createHoles(gridSize);
+
+          let showInterval = 1200;
+          gameInterval = setInterval(() => {
+            const idx = randomHoleIndex();
+            showMogura(idx, showInterval);
+            if (showInterval > 500) showInterval -= 10;
+          }, 700);
+
+          timerInterval = setInterval(() => {
+            remainingTime--;
+            timerDisplay.textContent = `TIME: ${remainingTime}`;
+            if (remainingTime <= 0) {
+              clearInterval(gameInterval);
+              clearInterval(timerInterval);
+              isPlaying = false;
+              alert(`GAME OVER!\nYour Score: ${score}`);
+            }
+          }, 1000);
+        }
+
+        gridSizeSelector.addEventListener('change', () => {
+          if (!isPlaying) {
+            const newSize = parseInt(gridSizeSelector.value, 10);
+            createHoles(newSize);
+          }
         });
 
-        hole.appendChild(mogura);
-        holes.push({ hole, mogura });
-        gameArea.appendChild(hole);
-      }
-    }
+        startBtn.addEventListener('click', startGame);
 
-    function resetMogura(mogura) {
-      const hole = mogura.parentElement;
-      mogura.className = 'mogura';
-      mogura.src = "";
-      hole.classList.remove('ok-glow');
-    }
-
-    function randomHoleIndex() {
-      return Math.floor(Math.random() * holes.length);
-    }
-
-    function getRandomImage(images) {
-      return images[Math.floor(Math.random() * images.length)];
-    }
-
-    function showMogura(index, duration) {
-      const m = holes[index].mogura;
-      const hole = holes[index].hole;
-      const isGood = Math.random() < 0.7;
-
-      m.src = isGood ? getRandomImage(okImages) : getRandomImage(ngImages);
-      m.className = 'mogura up ' + (isGood ? 'good ok-shake' : 'bad');
-
-      if (isGood) {
-        hole.classList.add('ok-glow');
-        spawnCount++;
-        spawnEl.textContent = spawnCount;
-      }
-
-      setTimeout(() => {
-        resetMogura(m);
-      }, duration);
-    }
-
-    function startGame() {
-      if (isPlaying) return;
-      isPlaying = true;
-      score = 0;
-      spawnCount = 0;
-      hitOk = 0;
-      hitNg = 0;
-      remainingTime = 30;
-
-      scoreEl.textContent = 0;
-      spawnEl.textContent = 0;
-      hitOkEl.textContent = 0;
-      hitNgEl.textContent = 0;
-      timerDisplay.textContent = `TIME: ${remainingTime}`;
-
-      const gridSize = parseInt(gridSizeSelector.value, 10);
-      createHoles(gridSize);
-
-      let showInterval = 1200;
-      gameInterval = setInterval(() => {
-        const idx = randomHoleIndex();
-        showMogura(idx, showInterval);
-        if (showInterval > 500) showInterval -= 10;
-      }, 700);
-
-      timerInterval = setInterval(() => {
-        remainingTime--;
-        timerDisplay.textContent = `TIME: ${remainingTime}`;
-        if (remainingTime <= 0) {
-          clearInterval(gameInterval);
-          clearInterval(timerInterval);
-          isPlaying = false;
-          alert(`GAME OVER!\nYour Score: ${score}`);
-        }
-      }, 1000);
-    }
-
-    gridSizeSelector.addEventListener('change', () => {
-      if (!isPlaying) {
-        const newSize = parseInt(gridSizeSelector.value, 10);
-        createHoles(newSize);
-      }
-    });
-
-    startBtn.addEventListener('click', startGame);
-
-    window.addEventListener('load', () => {
-      const initialSize = parseInt(gridSizeSelector.value, 10);
-      createHoles(initialSize);
-    });
-  </script>
+        window.addEventListener('load', () => {
+          const initialSize = parseInt(gridSizeSelector.value, 10);
+          createHoles(initialSize);
+        });
+      </script>
+    </div>
 </body>
 </html>
