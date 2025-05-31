@@ -202,9 +202,12 @@
             const mogura = document.createElement('img');
             mogura.className = 'mogura';
             mogura.dataset.index = i;
+            mogura.clicked = false;
 
             mogura.addEventListener('click', () => {
-              if (!isPlaying || !mogura.classList.contains('up')) return;
+              if (!isPlaying || !mogura.classList.contains('up') || mogura.clicked) return;
+
+              mogura.clicked = true;
 
               if (mogura.classList.contains('good')) {
                 score++;
@@ -235,6 +238,7 @@
           const hole = mogura.parentElement;
           mogura.className = 'mogura';
           mogura.src = "";
+          mogura.clicked = false;
           hole.classList.remove('ok-glow');
         }
 
