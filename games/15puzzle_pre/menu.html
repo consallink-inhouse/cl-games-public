@@ -90,6 +90,10 @@
       text-align: center;
     }
 
+    .special-button {
+      background: linear-gradient(135deg, rgb(0, 0, 255), rgb(0, 128, 255)) !important;
+    }
+
     .level-button:hover {
       transform: scale(1.05);
     }
@@ -121,6 +125,9 @@
   <div class="game-title-area">15 Puzzle</div>
   <main>
     <h1>SELECT LEVEL</h1>
+    <button class="level-button special-button" onclick="location.href='./special_1.html'">SPECIAL ★</button>
+    <button class="level-button special-button" onclick="location.href='./special_2.html'">SPECIAL ★★</button>
+    <button class="level-button special-button" onclick="location.href='./special_3.html'">SPECIAL ★★★</button>
     <button class="level-button" onclick="location.href='./15puzzle_1.html'">NORMAL ★</button>
     <button class="level-button" onclick="location.href='./15puzzle_2.html'">NORMAL ★★</button>
     <button class="level-button" onclick="location.href='./15puzzle_3.html'">NORMAL ★★★</button>
