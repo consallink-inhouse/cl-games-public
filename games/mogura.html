@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FUKUOKA TATAKI</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <audio id="okSound1" src="./sounds/ok1.mp3" preload="auto"></audio>
+  <audio id="okSound2" src="./sounds/ok2.mp3" preload="auto"></audio>
+  <audio id="okSound3" src="./sounds/ok3.mp3" preload="auto"></audio>
+  <audio id="ngSound1" src="./sounds/ng1.mp3" preload="auto"></audio>
   <style>
     body {
       margin: 0;
@@ -213,10 +217,13 @@
                 score++;
                 hitOk++;
                 mogura.classList.add('hit-good');
+                playRandomOkSound();
+
               } else if (mogura.classList.contains('bad')) {
                 score--;
                 hitNg++;
                 mogura.classList.add('hit-bad');
+                playRandomNgSound();
               }
 
               scoreEl.textContent = score;
@@ -239,7 +246,7 @@
           mogura.className = 'mogura';
           mogura.src = "";
           mogura.clicked = false;
-          hole.classList.remove('ok-glow');
+          // hole.classList.remove('ok-glow');
         }
 
         let lastIndex = -1;
@@ -266,7 +273,7 @@
           m.className = 'mogura up ' + (isGood ? 'good ok-shake' : 'bad');
 
           if (isGood) {
-            hole.classList.add('ok-glow');
+            // hole.classList.add('ok-glow');
             spawnCount++;
             spawnEl.textContent = spawnCount;
           }
@@ -326,6 +333,33 @@
           const initialSize = parseInt(gridSizeSelector.value, 10);
           createHoles(initialSize);
         });
+
+        function playRandomOkSound() {
+          const sounds = [
+            document.getElementById('okSound1'),
+            document.getElementById('okSound2'),
+            document.getElementById('okSound3')
+          ];
+          const randomIndex = Math.floor(Math.random() * sounds.length);
+          const sound = sounds[randomIndex];
+          if (sound) {
+            sound.currentTime = 0;
+            sound.play();
+          }
+        }
+
+        function playRandomNgSound() {
+          const sounds = [
+            document.getElementById('ngSound1'),
+          ];
+          const randomIndex = Math.floor(Math.random() * sounds.length);
+          const sound = sounds[randomIndex];
+          if (sound) {
+            sound.currentTime = 0;
+            sound.play();
+          }
+        }
+
       </script>
     </div>
 </body>
