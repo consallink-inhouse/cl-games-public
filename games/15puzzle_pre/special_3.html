@@ -32,6 +32,13 @@
       overflow: hidden;
       overflow-y: auto;
     }
+    body {
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+    body.fade-in {
+      opacity: 1;
+    }
 
     #gameContainer {
       position: relative;
@@ -58,7 +65,7 @@
       top: 15px;
       width: calc(100% - 30px);
       height: calc(100% - 30px);
-      background-image: url('./images/special3.png');
+      background-image: url('./images/special3.jpg');
       background-size: cover;
       background-repeat: no-repeat;
       z-index: 100;
@@ -316,10 +323,7 @@
     <div class="game-title-area"><a href="./menu.html">15 Puzzle</a></div>
 
     <div class="info-section">
-        <p class="image-title japanese">「おは乗り2周年でつながろう！」</p>
-        <p class="x-link account">
-          Xアカウント：<a href="https://x.com/norikae_next" target="_blank">乗換案内NEXT</a>
-        </p>
+        <p class="image-title japanese">「オフィスのにんじん」</p>
     </div>
     <div id="gameContainer">
     <div id="puzzleBoard">
@@ -352,7 +356,7 @@
 
     <script>
 
-        const imageFile = './images/special3.png';
+        const imageFile = './images/special3.jpg';
 
         const SIZE = 4;
         const GAP = 5;         // タイル間の隙間（px）
@@ -395,6 +399,10 @@
                 btn.style.backgroundPosition = `${posX}px ${posY}px`;
             }
             updateTilePositions();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.classList.add("fade-in");
         });
 
         // ゲーム初期化：盤面生成、DOM要素作成、タイマー開始

@@ -32,6 +32,13 @@
       overflow: hidden;
       overflow-y: auto;
     }
+    body {
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+    body.fade-in {
+      opacity: 1;
+    }
 
     #gameContainer {
       position: relative;
@@ -317,9 +324,6 @@
 
     <div class="info-section">
         <p class="image-title japanese">「根菜リンクちゃうて」</p>
-        <p class="x-link account">
-          Xアカウント：<a href="https://x.com/consallink" target="_blank">consallink</a>
-        </p>
     </div>
     <div id="gameContainer">
     <div id="puzzleBoard">
@@ -395,6 +399,10 @@
                 btn.style.backgroundPosition = `${posX}px ${posY}px`;
             }
             updateTilePositions();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.classList.add("fade-in");
         });
 
         // ゲーム初期化：盤面生成、DOM要素作成、タイマー開始
