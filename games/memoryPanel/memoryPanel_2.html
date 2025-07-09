@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    .japanese {
+        font-family: 'Noto Sans JP', sans-serif !important;
+        font-size: 6vw !important;
+    }
+    .account {
+        font-family: 'Noto Sans JP', sans-serif !important;
+        font-size: 4vw !important;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1c1c1c, #555);
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    body.fade-in {
+      opacity: 1;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 10px;
+      text-align: center;
+      font-size: 5vw;
+      background-color: #1c1c1c;
+      border-bottom: 2px solid #fff;
+    }
+    header a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .game-title-area {
+      width: 100%;
+      background: linear-gradient(135deg, #f06, #f79);
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 5vw;
+    }
+    .game-title-area a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    h1 {
+      font-size: 6vw;
+      margin: 5vw 0 2vw;
+    }
+
+    #gameContainer {
+      display: grid;
+      grid-template-columns: repeat(4, 22vw);
+      grid-gap: 2vw;
+      margin-bottom: 4vw;
+    }
+
+    .card {
+      width: 22vw;
+      height: 22vw;
+      perspective: 1000px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      backface-visibility: hidden;
+      border: 0.5vw solid #fff;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-back {
+      background: #000;
+    }
+
+    .image-title {
+      font-size: 4vw;
+      margin: 5px 0;
+    }
+
+    .x-link {
+      font-size: 3.5vw;
+      margin: 0;
+    }
+    .x-link a {
+      color: #0af;
+      text-decoration: underline;
+    }
+
+    @keyframes matchAnimation {
+      0% { transform: rotateY(180deg) scale(1); }
+      60% { transform: rotateY(180deg) scale(1.2); }
+      100% { transform: rotateY(180deg) scale(1); }
+    }
+
+    .card.matched .card-inner {
+      animation: matchAnimation 0.5s ease-in-out;
+    }
+
+    @keyframes specialGlow {
+      0% { box-shadow: 0 0 0px rgba(255,215,0,0); }
+      50% { box-shadow: 0 0 20px 10px rgba(255,215,0,1); }
+      100% { box-shadow: 0 0 0px rgba(255,215,0,0); }
+    }
+
+    .card.special.flipped {
+      animation: specialGlow 1s ease-out;
+    }
+
+    #scoreBoard {
+      font-size: 4vw;
+      text-align: center;
+      margin-bottom: 4vw;
+    }
+
+    #resultScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      text-align: center;
+    }
+
+    #resultScreen h2 {
+      margin-bottom: 4vw;
+      white-space: pre-wrap;
+      font-size: 5vw;
+    }
+
+    #restartButton {
+      padding: 2vw 6vw;
+      font-size: 4vw;
+      background: linear-gradient(135deg, #f06, #f79);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 1vw;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+      font-family: 'Press Start 2P', cursive !important;
+    }
+
+    #restartButton:hover {
+      transform: scale(1.05);
+    }
+
+    #matchModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0vw;
+      opacity: 0;
+      transform: scale(0.8) translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #matchModal.show {
+      display: flex;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    #matchModal.hide {
+      opacity: 0;
+      transform: scale(0.8) translateY(20px);
+    }
+
+    #matchModal img {
+      max-width: 60vw;
+      max-height: 40vh;
+      border: 0.5vw solid #fff;
+    }
+
+    #matchModal p {
+      font-size: 5vw;
+      color: #fff;
+      margin-bottom: 4vw;
+    }
+
+    #matchModal button {
+      padding: 3vw 6vw;
+      font-size: 5vw;
+      background: #f06;
+      color: #fff;
+      border: none;
+      border-radius: 1vw;
+      font-family: 'Press Start 2P', cursive !important;
+    }
+
+    @media (min-width: 768px) {
+      header, .game-title-area {
+        font-size: 28px;
+      }
+      h1 {
+        font-size: 40px;
+      }
+      #scoreBoard {
+        font-size: 20px;
+      }
+      #gameContainer {
+        grid-template-columns: repeat(4, 150px);
+        grid-gap: 10px;
+      }
+      .card {
+        width: 150px;
+        height: 150px;
+      }
+      .card-front,
+      .card-back {
+        border: 2px solid #fff;
+      }
+      #resultScreen h2 {
+        font-size: 24px;
+      }
+      #restartButton {
+        font-family: 'Press Start 2P', cursive !important;
+        font-size: 20px;
+        padding: 10px 30px;
+      }
+      .image-title {
+        font-size: 24px;
+      }
+      .x-link {
+        font-size: 20px;
+      }
+      .japanese {
+          font-size: 2vw !important;
+      }
+      .account {
+          font-size: 1.5vw !important;
+      }
+
+      #matchModal p {
+        font-size: 2vw;
+        color: #fff;
+        margin-bottom: 2vw;
+      }
+
+      #matchModal button {
+        padding: 1vw 3vw;
+        font-size: 2vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../game_center.html">CL GAME CENTER</a>
+  </header>
+  <div class="game-title-area"><a href="./menu.html">Memory Panel</a></div>
+
+  <p class="image-title japanese">「覚えてコンサルリンク」</p>
+  <p class="x-link account">
+    Xアカウント：<a href="https://x.com/consallink" target="_blank">consallink</a>
+  </p>
+  <br/>
+
+  <div id="gameContainer"></div>
+  <div id="scoreBoard">
+    <p>Attempts: <span id="attemptsCount">0</span></p>
+  </div>
+  <div id="resultScreen">
+    <h2 id="resultText"></h2>
+    <button id="restartButton">RESTART</button>
+  </div>
+
+  <div id="matchModal">
+    <img id="matchImage" src="" alt="">
+    <p id="matchText" class="japanese"></p>
+    <button onclick="closeMatchModal()">OK</button>
+  </div>
+
+  <script>
+    const panelImages = [
+      { path: "./panel2/001.png", description: "気付いてる？<br/>これが本物やで！" },
+      { path: "./panel2/002.png", description: "キミだけが見抜けた<br/>左下の“ぽっかり”" },
+      { path: "./panel2/003.png", description: "この子のさみしさに気づけた<br/>キミに拍手" },
+      { path: "./panel2/004.png", description: "そこがないと始まらない！<br/>ビッグスター" },
+      { path: "./panel2/005.png", description: "なんで逃げたの？<br/>恥ずかしがり屋さん" },
+      { path: "./panel2/006.png", description: "もしかしてそこの星、<br/>さぼってた？" },
+      { path: "./panel2/007.png", description: "気づけたあなただけに<br/>その星あげたい" },
+      { path: "./panel2/008.png", description: "気付いたのすごい！<br/>右下の抜け感" }
+    ];
+
+    let selectedImages = [];
+    let cards = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let attempts = 0;
+
+    const gameContainer = document.getElementById('gameContainer');
+    const attemptsCountEl = document.getElementById('attemptsCount');
+    const resultScreen = document.getElementById('resultScreen');
+    const resultText = document.getElementById('resultText');
+    const restartButton = document.getElementById('restartButton');
+
+    function initGame() {
+      gameContainer.innerHTML = '';
+      cards = [];
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      attempts = 0;
+      attemptsCountEl.textContent = 0;
+      resultScreen.style.display = 'none';
+
+      let available = [...panelImages];
+      selectedImages = [];
+      for (let i = 0; i < 8; i++) {
+        const randomIndex = Math.floor(Math.random() * available.length);
+        selectedImages.push(available.splice(randomIndex, 1)[0]);
+      }
+
+      let pairedImages = [...selectedImages, ...selectedImages];
+      pairedImages.sort(() => Math.random() - 0.5);
+
+      pairedImages.forEach((imgObj, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.image = imgObj.path;
+        card.dataset.description = imgObj.description;
+        const cardInner = document.createElement('div');
+        cardInner.classList.add('card-inner');
+
+        const cardFront = document.createElement('div');
+        cardFront.classList.add('card-front');
+        cardFront.style.backgroundImage = "url('./picture/" + imgObj.path + "')";
+
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-back');
+
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
+
+        card.addEventListener('click', flipCard);
+        gameContainer.appendChild(card);
+        cards.push(card);
+      });
+    }
+
+    function flipCard() {
+      if (lockBoard || this.classList.contains('flipped')) return;
+      this.classList.add('flipped');
+      if (!firstCard) {
+        firstCard = this;
+        return;
+      }
+
+      secondCard = this;
+      attempts++;
+      attemptsCountEl.textContent = attempts;
+      lockBoard = true;
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      let isMatch = firstCard.dataset.image === secondCard.dataset.image;
+      if (isMatch) {
+        const card1 = firstCard;
+        const card2 = secondCard;
+
+        setTimeout(() => {
+            card1.removeEventListener('click', flipCard);
+            card1.classList.add('matched');
+            card2.removeEventListener('click', flipCard);
+            card2.classList.add('matched');
+
+            setTimeout(() => {
+
+              const matchedImage = firstCard.dataset.image;
+              const description = firstCard.dataset.description;
+
+              showMatchModal(matchedImage, description, () => {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                resetBoard();
+                checkGameOver();
+              });
+            }, 500);
+
+
+
+        }, 500);
+
+      } else {
+        setTimeout(() => {
+          firstCard.classList.remove('flipped');
+          secondCard.classList.remove('flipped');
+          resetBoard();
+        }, 1000);
+      }
+    }
+
+    function resetBoard() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+
+    function checkGameOver() {
+      const allFlipped = cards.every(card => card.classList.contains('flipped'));
+      if (allFlipped) {
+        let resultMsg = "Game Clear!\nAttempts: " + attempts;
+        resultText.textContent = resultMsg;
+        resultScreen.style.display = 'flex';
+      }
+    }
+
+    function showMatchModal(imagePath, description, onClose) {
+      const modal = document.getElementById("matchModal");
+      document.getElementById("matchImage").src = "./picture/" + imagePath;
+      document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
+
+      modal.classList.remove("hide");
+      modal.style.display = "flex";
+      setTimeout(() => {
+        modal.classList.add("show");
+      }, 10);
+
+      modal.dataset.onClose = onClose.toString();
+      window._onMatchClose = onClose;
+    }
+
+    function closeMatchModal() {
+      const modal = document.getElementById("matchModal");
+      modal.classList.remove("show");
+      modal.classList.add("hide");
+      setTimeout(() => {
+        modal.style.display = "none";
+        if (window._onMatchClose) {
+          window._onMatchClose();
+          window._onMatchClose = null;
+        }
+      }, 400);
+    }
+
+    window.onload = () => {
+      document.body.classList.add("fade-in");
+      initGame();
+    };
+
+    restartButton.addEventListener('click', () => {
+      initGame();
+    });
+  </script>
+</body>
+</html>
