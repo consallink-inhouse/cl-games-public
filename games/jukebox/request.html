@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CL-JUKEBOX-REQUEST</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="./favicon/favicon.ico">
     <style>
         body {
@@ -13,6 +13,13 @@
             background: #111;
             font-family: 'Segoe UI', sans-serif;
             color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        *, *::before, *::after {
+          box-sizing: border-box;
         }
 
         h1 {
@@ -34,7 +41,7 @@
         }
 
         input {
-            width: 98%;
+            width: 100%;
             padding: 10px;
             font-size: 16px;
             border: none;
