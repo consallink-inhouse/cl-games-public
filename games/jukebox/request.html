@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CL-JUKEBOX-REQUEST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./favicon/favicon.ico">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #111;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #00ffe7;
+            text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        input {
+            width: 98%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #0ff;
+            background-color: #222;
+            color: #0ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            background: #ff00cc;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-shadow: 0 0 5px #fff;
+            box-shadow: 0 0 10px #ff00cc, 0 0 20px #ff00cc;
+            margin-top: 8px;
+        }
+
+        button.search-btn {
+            background: #00ff99;
+            box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        hr {
+          border: none;
+          height: 3px;
+          background: #ff9900;
+          box-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 0 0 30px #ff9900;
+        }
+
+        .clear-btn {
+            background: #00ccff;
+            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .clear-btn:hover {
+            opacity: 0.9;
+        }
+
+        #status {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: -25px;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        th {
+            background-color: #222;
+            color: #0ff;
+        }
+
+        @media (max-width: 600px) {
+            input, button {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+
+        .play-resume-btn {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #0f0;
+            border-radius: 50%;
+            background-color: transparent;
+            position: relative;
+            margin: 20px 0;
+            cursor: pointer;
+            background: #00ff99;
+            box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+        }
+
+        .play-resume-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            transform: translate(-40%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 16px solid #fff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+
+        .search-btn {
+            background: #00ff99;
+            box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background-color: #222;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .result-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 8px #0ff;
+        }
+
+        .result-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .result-title {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #fff;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div style="text-align: center;">
+        <img src="./image/ConsalLink.png" alt="ConsalLink" style="max-width: 300px; width: 100%; height: auto;">
+    </div>
+
+    <div class="form-group">
+        <label for="searchInput">YouTube 検索キーワード</label>
+        <input type="text" id="searchInput" placeholder="キーワードで動画を検索">
+    </div>
+
+    <div class="form-group" style="display: flex; gap: 10px;">
+        <button class="search-btn" onclick="searchYouTube()">検索</button>
+        <button class="clear-btn" onclick="clearSearch()">クリア</button>
+    </div>
+    <div id="searchResults" class="results-grid"></div>
+
+    <div id="searchResults" class="results-grid"></div>
+
+    <div class="form-group">
+        <label for="nameInput">名前（必須）</label>
+        <input type="text" id="nameInput" placeholder="あなたの名前">
+    </div>
+
+    <div class="form-group">
+        <label for="urlInput">YouTubeリンク</label>
+        <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=xxxx">
+    </div>
+
+    <button onclick="submitRequest()">リクエストを送信</button>
+
+    <p id="status"></p>
+
+    <h2 style="display: flex; align-items: center; justify-content: space-between;">
+        🎧 現在のリクエスト一覧
+        <button class="play-resume-btn" onclick="resumePlayback()" title="再生再開"></button>
+    </h2>
+
+    <table id="requestTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>名前</th>
+                <th>動画タイトル</th>
+                <th>リクエスト日時</th>
+                <th>削除</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCG4_B-r5ImdquKQi3HCF-mz-l8xd7Ep-o",
+            authDomain: "cl-sample.firebaseapp.com",
+            databaseURL: "https://cl-sample-default-rtdb.firebaseio.com/",
+            projectId: "cl-sample",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const ngWords = ['死ね', 'バカ', 'グロ', '差別', '暴力', '殺す', 'fuck', 'shit', 'bitch', 'クソ'];
+
+        const YOUTUBE_API_KEY = 'AIzaSyCt017WJafcVkGWm3JaXW7W8_PFMCnrugw';
+
+        function containsNgWord(text) {
+            return ngWords.some(word => text.toLowerCase().includes(word));
+        }
+
+        function isValidYouTubeUrl(url) {
+            return url.includes("youtube.com/watch") || url.includes("youtu.be/");
+        }
+
+        function extractVideoId(url) {
+            const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? match[1] : null;
+        }
+
+        function formatDate(timestamp) {
+            const d = new Date(timestamp);
+            return d.toLocaleString();
+        }
+
+        function fetchVideoTitle(videoId, callback) {
+            if (!videoId) {
+                callback("動画ID不明");
+                return;
+            }
+
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${YOUTUBE_API_KEY}`;
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    const title = data.items?.[0]?.snippet?.title || "タイトル取得失敗";
+                    callback(title);
+                })
+                .catch(() => callback("タイトル取得失敗"));
+        }
+
+        function submitRequest() {
+            const name = document.getElementById("nameInput").value.trim();
+            const url = document.getElementById("urlInput").value.trim();
+
+            if (!name) {
+                alert("⚠️ 名前は必須です");
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert("⚠️ YouTubeのURLのみ受け付けています");
+                return;
+            }
+
+            if (containsNgWord(url) || containsNgWord(name)) {
+                alert("⚠️ 不適切な表現が含まれています");
+                return;
+            }
+
+            // 成功したときだけstatus表示
+            const newRef = database.ref("videoQueue").push();
+            newRef.set({
+                name: name,
+                url: url,
+                timestamp: Date.now()
+            }).then(() => {
+                setStatus("✅ リクエストが送信されました！");
+                document.getElementById("nameInput").value = "";
+                document.getElementById("urlInput").value = "";
+            }).catch((err) => {
+                alert("❌ エラー：" + err.message);
+            });
+        }
+
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        function loadRequests() {
+            database.ref("videoQueue").orderByChild("timestamp").on("value", snapshot => {
+                const tbody = document.querySelector("#requestTable tbody");
+                tbody.innerHTML = "";
+
+                const data = snapshot.val();
+                if (!data) return;
+
+                const sortedKeys = Object.keys(data).sort((a, b) => data[a].timestamp - data[b].timestamp);
+
+                sortedKeys.forEach((key, index) => {
+                    const entry = data[key];
+                    const tr = document.createElement("tr");
+
+                    const numberTd = document.createElement("td");
+                    numberTd.textContent = index + 1;
+
+                    const nameTd = document.createElement("td");
+                    nameTd.textContent = entry.name;
+
+                    const titleTd = document.createElement("td");
+                    const link = document.createElement("a");
+                    link.href = entry.url;
+                    link.target = "_blank";
+                    link.textContent = "読み込み中...";
+                    titleTd.appendChild(link);
+
+                    const videoId = extractVideoId(entry.url);
+                    fetchVideoTitle(videoId, (title) => {
+                        link.textContent = title;
+                    });
+
+                    const dateTd = document.createElement("td");
+                    dateTd.textContent = formatDate(entry.timestamp);
+
+                    const deleteTd = document.createElement("td");
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.textContent = "削除";
+                    deleteBtn.style.padding = "5px 10px";
+                    deleteBtn.style.backgroundColor = "#ff4444";
+                    deleteBtn.style.color = "#fff";
+                    deleteBtn.style.border = "none";
+                    deleteBtn.style.borderRadius = "4px";
+                    deleteBtn.style.cursor = "pointer";
+                    deleteBtn.onclick = () => {
+                        if (confirm(`本当に削除しますか？\n「${link.textContent}」`)) {
+                            database.ref("videoQueue").child(key).remove();
+                        }
+                    };
+                    deleteTd.appendChild(deleteBtn);
+
+                    // 行に追加
+                    tr.appendChild(numberTd);
+                    tr.appendChild(nameTd);
+                    tr.appendChild(titleTd);
+                    tr.appendChild(dateTd);
+                    tr.appendChild(deleteTd);
+
+                    tbody.appendChild(tr);
+                });
+
+            });
+        }
+
+        function resumePlayback() {
+            const resumeRef = firebase.database().ref("resumeRequest");
+            resumeRef.set({timestamp: Date.now()}).then(() => {
+                alert("再生再開をリクエストしました！");
+            });
+        }
+
+        function searchYouTube() {
+          const query = document.getElementById("searchInput").value.trim();
+          if (!query) return;
+
+          const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=15&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}`;
+
+          fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+              const results = data.items || [];
+              const container = document.getElementById("searchResults");
+              container.innerHTML = "";
+
+              results.forEach(item => {
+                const videoId = item.id.videoId;
+                const title = item.snippet.title;
+                const thumbnail = item.snippet.thumbnails.medium.url;
+
+                const div = document.createElement("div");
+                div.className = "result-item";
+                div.onclick = () => selectVideo(videoId);
+                div.innerHTML = `
+                  <img src="${thumbnail}" alt="thumb">
+                  <div class="result-title">${title}</div>
+                `;
+
+                container.appendChild(div);
+              });
+            })
+            .catch(err => {
+              alert("検索エラー: " + err.message);
+            });
+        }
+
+        function selectVideo(videoId) {
+          const url = `https://www.youtube.com/watch?v=${videoId}`;
+          document.getElementById("urlInput").value = url;
+        }
+
+        function clearSearch() {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("searchResults").innerHTML = "";
+            document.getElementById("status").textContent = "";
+        }
+
+        loadRequests();
+    </script>
+</body>
+
+</html>

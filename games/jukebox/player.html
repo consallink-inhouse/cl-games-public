@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CL-JUKEBOX-PLAYER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./favicon/favicon.ico">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: auto;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto !important;
+        }
+
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #00ffe7;
+            text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7;
+            margin-bottom: 20px;
+        }
+
+        #player-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        #player {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 0 20px 5px #ff00ec8a;
+            border-radius: 10px;
+        }
+
+        #nowPlaying {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+            color: #0ff;
+        }
+
+        #queueContainer {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #0ff;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        th {
+            background-color: #222;
+            color: #0ff;
+        }
+
+        tr.highlight {
+            background-color: #222;
+            box-shadow: 0 0 10px #0ff;
+        }
+
+        td a {
+            color: #0ff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 6px;
+                word-break: break-word;
+            }
+
+            td a {
+                display: inline-block;
+                max-width: 100%;
+                overflow-wrap: break-word;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <img src="./image/ConsalLink.png" alt="ConsalLink" style="max-width: 180px; width: 100%; height: auto;">
+    </div>
+
+    <div id="player-wrapper">
+        <div id="player"></div>
+    </div>
+    <div id="nowPlaying">▶ 再生待機中...</div>
+    <h2>🎧 再生リスト</h2>
+    <div id="queueContainer">
+        <table id="queueTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>タイトル</th>
+                    <th>リクエスト者</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCG4_B-r5ImdquKQi3HCF-mz-l8xd7Ep-o",
+            authDomain: "cl-sample.firebaseapp.com",
+            databaseURL: "https://cl-sample-default-rtdb.firebaseio.com/",
+            projectId: "cl-sample",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let player;
+        let currentKey = null;
+        let isInRandomMode = false;
+        let currentTitle = "";
+
+        const fallbackSeedVideoId = "24Z1lKF-8zA";
+
+        function extractVideoId(url) {
+            const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? match[1] : null;
+        }
+
+        function fetchVideoTitle(videoId, callback) {
+            const apiKey = "AIzaSyCt017WJafcVkGWm3JaXW7W8_PFMCnrugw";
+            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=${apiKey}`)
+                .then(res => res.json())
+                .then(data => {
+                    const title = data.items?.[0]?.snippet?.title || "タイトル取得失敗";
+                    callback(title);
+                })
+                .catch(() => callback("タイトル取得失敗"));
+        }
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: '',
+                events: {
+                    onReady: () => {
+                        player.mute();
+                        checkQueueAndPlay();
+                        monitorResumeRequest();
+                    },
+                    onStateChange: onPlayerStateChange,
+                    onError: onPlayerError
+                },
+                playerVars: {autoplay: 1, controls: 1}
+            });
+        }
+
+        function onPlayerError(event) {
+            console.warn("再生エラー発生:", event.data);
+            if (currentKey) {
+                database.ref("videoQueue").child(currentKey).remove().then(() => {
+                    currentKey = null;
+                    checkQueueAndPlay();
+                });
+            } else {
+                player.nextVideo();
+            }
+        }
+
+        function checkQueueAndPlay() {
+            database.ref("videoQueue").orderByChild("timestamp").limitToFirst(1).once("value", snapshot => {
+                const items = snapshot.val();
+                if (!items) {
+                    playRandom();
+                    return;
+                }
+
+                const key = Object.keys(items)[0];
+                const entry = items[key];
+                const videoId = extractVideoId(entry.url);
+                currentKey = key;
+                isInRandomMode = false;
+
+                fetchVideoTitle(videoId, title => {
+                    currentTitle = title;
+                    document.getElementById("nowPlaying").textContent = `▶ 現在再生中: ${title}`;
+                    player.loadVideoById(videoId);
+                });
+            });
+        }
+
+        function playRandom() {
+            isInRandomMode = true;
+            currentKey = null;
+            document.getElementById("nowPlaying").textContent = "▶ ランダム再生中...";
+            player.loadPlaylist({listType: 'playlist', list: 'RD' + fallbackSeedVideoId, index: 0});
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED && currentKey) {
+                database.ref("videoQueue").child(currentKey).remove().then(() => {
+                    currentKey = null;
+                    checkQueueAndPlay();
+                });
+            }
+        }
+
+        database.ref("videoQueue").on("child_added", snapshot => {
+            if (isInRandomMode) {
+                const entry = snapshot.val();
+                const videoId = extractVideoId(entry.url);
+                currentKey = snapshot.key;
+                isInRandomMode = false;
+                fetchVideoTitle(videoId, title => {
+                    currentTitle = title;
+                    player.loadVideoById(videoId);
+                    document.getElementById("nowPlaying").textContent = `▶ 現在再生中: ${title}`;
+                });
+            }
+        });
+
+        function updateQueueDisplay() {
+            database.ref("videoQueue").orderByChild("timestamp").once("value", snapshot => {
+                const data = snapshot.val();
+                const tbody = document.querySelector("#queueTable tbody");
+                tbody.innerHTML = "";
+                if (!data) return;
+
+                const sortedKeys = Object.keys(data).sort((a, b) => data[a].timestamp - data[b].timestamp);
+                sortedKeys.forEach((key, index) => {
+                    const entry = data[key];
+                    const videoId = extractVideoId(entry.url);
+
+                    const tr = document.createElement("tr");
+                    if (index === 0) tr.classList.add("highlight");
+
+                    const noTd = document.createElement("td");
+                    noTd.textContent = index + 1;
+                    noTd.setAttribute("data-label", "No");
+
+                    const titleTd = document.createElement("td");
+                    titleTd.setAttribute("data-label", "タイトル");
+                    const link = document.createElement("a");
+                    link.href = entry.url;
+                    link.target = "_blank";
+                    link.textContent = "読み込み中...";
+                    fetchVideoTitle(videoId, title => {
+                        link.textContent = title;
+                    });
+                    titleTd.appendChild(link);
+
+                    const nameTd = document.createElement("td");
+                    nameTd.setAttribute("data-label", "リクエスト者");
+                    nameTd.textContent = entry.name || "匿名";
+
+                    tr.appendChild(noTd);
+                    tr.appendChild(titleTd);
+                    tr.appendChild(nameTd);
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        function monitorResumeRequest() {
+            database.ref("resumeRequest").on("value", snapshot => {
+                const data = snapshot.val();
+                const now = Date.now();
+
+                if (data && now - data.timestamp < 10000) {
+                    if (player && typeof player.playVideo === 'function') {
+                        console.log("再生再開要求を検知しました！");
+                        player.playVideo();
+                    } else {
+                        console.warn("player未準備のため、再試行します");
+                        const retryInterval = setInterval(() => {
+                            if (player && typeof player.playVideo === 'function') {
+                                player.playVideo();
+                                console.log("playerの初期化後に再生再開しました！");
+                                clearInterval(retryInterval);
+                            }
+                        }, 500);
+                    }
+                }
+            });
+        }
+        database.ref("videoQueue").on("value", updateQueueDisplay);
+    </script>
+</body>
+
+</html>
