@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <title>Memory Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
     <style>
         body {
             margin: 0;
-            padding: 20px 10px;
+            padding: 15px 10px;
             background: #111;
             font-family: 'Segoe UI', sans-serif;
             color: #fff;
@@ -120,7 +119,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 0px auto;
             padding: 10px;
             border: 2px solid #00ffe7;
             box-shadow: 0 0 18px #00ffe7;
@@ -276,29 +275,8 @@
 
 <body>
 
-    <div class="game-thumb">
-        <div class="thumb-left game-title">
-            <a href="../game_center.html">
-                <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER">
-            </a>
-        </div>
-    </div>
-    <div class="game-thumb">
-        <div class="thumb-left">
-            <a href="./menu.html">
-                <img src="./images/Header_MemoryPanel.png" alt="Memory Panel">
-            </a>
-        </div>
-    </div>
-
-    <p class="image-title">タイトル</p>
-    <p class="x-link account">
-        Xアカウント：<a href="リンク" target="_blank">アカウント名</a>
-    </p>
-    <br />
-
     <div id="gameContainer"></div>
-    <div id="scoreBoard">
+    <div id="scoreBoard" style="display: none;">
         <p>Attempts: <span id="attemptsCount">0</span></p>
     </div>
     <div id="resultScreen">
@@ -310,12 +288,6 @@
         <img id="matchImage" src="" alt="">
         <p id="matchText" class="japanese"></p>
         <button onclick="closeMatchModal()">OK</button>
-    </div>
-
-    <div class="logo-footer">
-        <a href="../game_center.html">
-            <img src="../images/ConsalLink.png" alt="CL LOGO">
-        </a>
     </div>
 
     <script>
@@ -372,11 +344,6 @@
         const params = new URLSearchParams(window.location.search);
         const mode = params.get('mode') || 'special1';
         const currentSet = panelSets[mode] || panelSets['special1'];
-
-        // DOMに反映
-        document.querySelector('.image-title').textContent = currentSet.title;
-        document.querySelector('.x-link a').textContent = currentSet.xAccount;
-        document.querySelector('.x-link a').href = currentSet.xAccountURL;
 
         let panelImages = currentSet.images;
 
