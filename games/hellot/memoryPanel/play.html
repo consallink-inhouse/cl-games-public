@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px 10px;
+            background: #111;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes cardZoomHighlight {
+            0% {
+                transform: rotateY(180deg) scale(1);
+            }
+
+            30% {
+                transform: rotateY(180deg) scale(1.15);
+            }
+
+            60% {
+                transform: rotateY(180deg) scale(1);
+            }
+
+            100% {
+                transform: rotateY(180deg) scale(1);
+            }
+        }
+
+        .card-front.zoom-highlight {
+            will-change: transform;
+            animation: cardZoomHighlight 0.4s ease-in-out;
+            z-index: 2;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        header a img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .game-thumb {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .thumb-left img {
+            max-width: 700px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .game-title-area {
+            text-align: center;
+            color: #ff00cc;
+            font-size: 22px;
+            text-shadow: 0 0 8px #ff00cc;
+            margin: 10px 0 20px;
+        }
+
+        .game-title {
+            margin-bottom: -25px;
+            margin-top: -10px;
+        }
+
+        .image-title {
+            text-align: center;
+            margin: 0;
+            font-size: 20px;
+            color: #fff;
+            text-shadow: 0 0 6px #ffa500;
+        }
+
+        .x-link {
+            text-align: center;
+            margin: 0;
+            font-size: 16px;
+            color: #ffa500;
+            text-shadow: 0 0 6px #ffa500;
+        }
+
+        .x-link a {
+            color: #00ffe7;
+            text-decoration: underline;
+        }
+
+        #gameContainer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #00ffe7;
+            box-shadow: 0 0 18px #00ffe7;
+            background-color: #000;
+            border-radius: 10px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-radius: 10px;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            backface-visibility: hidden;
+            border: 1px solid #fff;
+        }
+
+        .card-front {
+            transform: rotateY(180deg);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-back {
+            background: #111;
+        }
+
+        #scoreBoard {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #00ffe7;
+            text-shadow: 0 0 6px #00ffe7;
+        }
+
+        #resultScreen,
+        #matchModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        #resultScreen.show,
+        #matchModal.show {
+            display: flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        #resultScreen h2,
+        #matchModal p {
+            color: #fff;
+            text-shadow: 0 0 6px #ffa500;
+        }
+
+        #matchModal {
+          transition: opacity 0.4s ease, transform 0.4s ease;
+          opacity: 0;
+          transform: scale(0.8) translateY(20px);
+        }
+
+        #matchModal.show {
+          display: flex;
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+
+        #matchModal.fade-out {
+          opacity: 0;
+          transform: scale(0.8) translateY(20px);
+        }
+
+        #restartButton,
+        #matchModal button {
+            font-size: 16px;
+            padding: 12px 24px;
+            background-color: #00ffe7;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 0 12px #00ffe7, 0 0 24px #00ffe7;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #restartButton:hover,
+        #matchModal button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 16px #00ffe7, 0 0 32px #00ffe7;
+        }
+
+        #matchModal img {
+            max-width: 80%;
+            max-height: 40vh;
+            border: 2px solid #fff;
+        }
+
+        .logo-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .logo-footer a {
+            display: inline-block;
+        }
+
+        .logo-footer img {
+            max-width: 75px;
+            width: 100%;
+            height: auto;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .logo-footer img:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-thumb">
+        <div class="thumb-left game-title">
+            <a href="../game_center.html">
+                <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER">
+            </a>
+        </div>
+    </div>
+    <div class="game-thumb">
+        <div class="thumb-left">
+            <a href="./menu.html">
+                <img src="./images/Header_MemoryPanel.png" alt="Memory Panel">
+            </a>
+        </div>
+    </div>
+
+    <p class="image-title">タイトル</p>
+    <p class="x-link account">
+        Xアカウント：<a href="リンク" target="_blank">アカウント名</a>
+    </p>
+    <br />
+
+    <div id="gameContainer"></div>
+    <div id="scoreBoard">
+        <p>Attempts: <span id="attemptsCount">0</span></p>
+    </div>
+    <div id="resultScreen">
+        <h2 id="resultText"></h2>
+        <button id="restartButton">RESTART</button>
+    </div>
+
+    <div id="matchModal">
+        <img id="matchImage" src="" alt="">
+        <p id="matchText" class="japanese"></p>
+        <button onclick="closeMatchModal()">OK</button>
+    </div>
+
+    <div class="logo-footer">
+        <a href="../game_center.html">
+            <img src="../images/ConsalLink.png" alt="CL LOGO">
+        </a>
+    </div>
+
+    <script>
+
+        const panelSets = {
+            special1: {
+                title: "「トナミの旨み、覚えた！？」",
+                xAccount: "@tonami_shoyu",
+                xAccountURL: "https://x.com/tonami_shoyu",
+                images: [
+                    {path: "./images/special1/001.jpeg", description: "4種のダシの旨みたっぷり！！<br/>氷見産煮干し使用 めんつゆ"},
+                    {path: "./images/special1/002.jpeg", description: "アナゴやウナギに！！<br/>「艶」寿司といえば富山"},
+                    {path: "./images/special1/003.jpeg", description: "ごはんや夏野菜にピッタリ！！<br/>富山県産にんにく使用 にんにくおかず味噌"},
+                    {path: "./images/special1/004.jpeg", description: "ヒラメやタイなどの白身魚に！！<br/>「粋」寿司といえば富山"},
+                    {path: "./images/special1/005.jpeg", description: "ブリやハマチに！！<br/>「寿」寿司といえば富山"},
+                    {path: "./images/special1/006.jpeg", description: "ますの寿司に！！<br/>「鶴」寿司といえば富山"},
+                    {path: "./images/special1/007.jpeg", description: "炭酸割りがオススメ！！<br/>濃縮ゆずドリンク 金屋美人"},
+                    {path: "./images/special1/008.jpeg", description: "白エビやバイ貝に！！<br/>「雅」寿司といえば富山"}
+                ]
+            },
+            normal1: {
+                title: "「カラフルリンク」",
+                xAccount: "consallink",
+                xAccountURL: "https://x.com/consallink",
+                images: [
+                    {path: "./images/panel1/001.png", description: "とまらない情熱が、ここにある！<br/>コンサルレッド"},
+                    {path: "./images/panel1/002.png", description: "甘くて強い、それが<br/>コンサルピンク"},
+                    {path: "./images/panel1/003.png", description: "元気はここから！<br/>コンサルオレンジ"},
+                    {path: "./images/panel1/004.png", description: "どこまでも明るくいこう！<br/>コンサルイエロー"},
+                    {path: "./images/panel1/005.png", description: "進め、自然体で！<br/>コンサルグリーン"},
+                    {path: "./images/panel1/006.png", description: "秘めた魅力が光る！<br/>コンサルパープル"},
+                    {path: "./images/panel1/007.png", description: "信頼はブレない色から！<br/>コンサルブルー"},
+                    {path: "./images/panel1/008.png", description: "空を見上げると？<br/>コンサルライトブルー"}
+                ]
+            },
+            normal2: {
+                title: "「覚えてコンサルリンク」",
+                xAccount: "consallink",
+                xAccountURL: "https://x.com/consallink",
+                images: [
+                    {path: "./images/panel2/001.png", description: "気付いてる？<br/>これが本物やで！"},
+                    {path: "./images/panel2/002.png", description: "キミだけが見抜けた<br/>左下の“ぽっかり”"},
+                    {path: "./images/panel2/003.png", description: "この子のさみしさに気づけた<br/>キミに拍手"},
+                    {path: "./images/panel2/004.png", description: "そこがないと始まらない！<br/>ビッグスター"},
+                    {path: "./images/panel2/005.png", description: "なんで逃げたの？<br/>恥ずかしがり屋さん"},
+                    {path: "./images/panel2/006.png", description: "もしかしてそこの星、<br/>さぼってた？"},
+                    {path: "./images/panel2/007.png", description: "気づけたあなただけに<br/>その星あげたい"},
+                    {path: "./images/panel2/008.png", description: "気付いたのすごい！<br/>右下の抜け感"}
+                ]
+            },
+            // 必要に応じて他セットをここに追加可能
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode') || 'special1';
+        const currentSet = panelSets[mode] || panelSets['special1'];
+
+        // DOMに反映
+        document.querySelector('.image-title').textContent = currentSet.title;
+        document.querySelector('.x-link a').textContent = currentSet.xAccount;
+        document.querySelector('.x-link a').href = currentSet.xAccountURL;
+
+        let panelImages = currentSet.images;
+
+        let selectedImages = [];
+        let cards = [];
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let attempts = 0;
+
+        const gameContainer = document.getElementById('gameContainer');
+        const attemptsCountEl = document.getElementById('attemptsCount');
+        const resultScreen = document.getElementById('resultScreen');
+        const resultText = document.getElementById('resultText');
+        const restartButton = document.getElementById('restartButton');
+
+        function initGame() {
+            gameContainer.innerHTML = '';
+            cards = [];
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+            attempts = 0;
+            attemptsCountEl.textContent = 0;
+            resultScreen.style.display = 'none';
+
+            let available = [...panelImages];
+            selectedImages = [];
+            for (let i = 0; i < 8; i++) {
+                const randomIndex = Math.floor(Math.random() * available.length);
+                selectedImages.push(available.splice(randomIndex, 1)[0]);
+            }
+
+            let pairedImages = [...selectedImages, ...selectedImages];
+            pairedImages.sort(() => Math.random() - 0.5);
+
+            pairedImages.forEach((imgObj, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.image = imgObj.path;
+                card.dataset.description = imgObj.description;
+                const cardInner = document.createElement('div');
+                cardInner.classList.add('card-inner');
+
+                const cardFront = document.createElement('div');
+                cardFront.classList.add('card-front');
+                cardFront.style.backgroundImage = "url('" + imgObj.path + "')";
+
+                const cardBack = document.createElement('div');
+                cardBack.classList.add('card-back');
+
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                card.appendChild(cardInner);
+
+                card.addEventListener('click', flipCard);
+                gameContainer.appendChild(card);
+                cards.push(card);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard || this.classList.contains('flipped')) return;
+            this.classList.add('flipped');
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            attempts++;
+            attemptsCountEl.textContent = attempts;
+            lockBoard = true;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.image === secondCard.dataset.image;
+
+            if (isMatch) {
+                const card1 = firstCard;
+                const card2 = secondCard;
+
+                card1.removeEventListener('click', flipCard);
+                card2.removeEventListener('click', flipCard);
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+
+                const front1 = card1.querySelector('.card-front');
+                const front2 = card2.querySelector('.card-front');
+
+                // アニメーション前の初期状態を設定
+                front1.style.transition = 'transform 0.4s ease';
+                front2.style.transition = 'transform 0.4s ease';
+
+                // 拡大アニメーション開始
+                setTimeout(() => {
+                    front1.style.transform = 'rotateY(180deg) scale(1.15)';
+                    front2.style.transform = 'rotateY(180deg) scale(1.15)';
+
+                    // 拡大後、元のサイズに戻す
+                    setTimeout(() => {
+                        front1.style.transform = 'rotateY(180deg) scale(1)';
+                        front2.style.transform = 'rotateY(180deg) scale(1)';
+
+                        // 戻しアニメが終わった後にモーダルを表示
+                        setTimeout(() => {
+                            const matchedImage = card1.dataset.image;
+                            const description = card1.dataset.description;
+
+                            showMatchModal(matchedImage, description, () => {
+                                resetBoard();
+                                checkGameOver();
+                            });
+                        }, 300); // 縮小戻し後の待ち時間
+
+                    }, 400); // 拡大表示時間
+
+                }, 300); // 回転完了後のズーム開始タイミング
+
+            } else {
+                // 不一致の場合はカードを元に戻す
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    resetBoard();
+                }, 1000);
+            }
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard] = [null, null];
+            lockBoard = false;
+        }
+
+        function checkGameOver() {
+            const allFlipped = cards.every(card => card.classList.contains('flipped'));
+            if (allFlipped) {
+                let resultMsg = "Game Clear!<br>Attempts: " + attempts;
+                resultText.innerHTML = resultMsg;
+                resultScreen.style.display = 'flex';
+            }
+        }
+
+        function showMatchModal(imagePath, description, onClose) {
+            const modal = document.getElementById("matchModal");
+            document.getElementById("matchImage").src = "" + imagePath;
+            document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
+
+            modal.classList.remove("hide");
+            modal.style.display = "flex";
+            setTimeout(() => {
+                modal.classList.add("show");
+            }, 10);
+
+            modal.dataset.onClose = onClose.toString();
+            window._onMatchClose = onClose;
+        }
+
+        function closeMatchModal() {
+          const modal = document.getElementById("matchModal");
+
+          // フェードアウト用クラス追加
+          modal.classList.remove("show");
+          modal.classList.add("fade-out");
+
+          // アニメーション終了後に非表示・コールバック実行
+          setTimeout(() => {
+            modal.style.display = "none";
+            modal.classList.remove("fade-out");
+
+            if (window._onMatchClose) {
+              window._onMatchClose();
+              window._onMatchClose = null;
+            }
+          }, 400); // ← CSSの transition に合わせた時間
+        }
+
+        window.onload = () => {
+            document.body.classList.add("fade-in");
+            initGame();
+        };
+
+        restartButton.addEventListener('click', () => {
+            initGame();
+        });
+
+        function animateZoom(cardFront, callback) {
+            cardFront.style.transition = 'transform 0.4s ease';
+            cardFront.style.transform = 'rotateY(180deg) scale(1.15)';
+
+            // アニメーション終了後に元に戻す
+            setTimeout(() => {
+                cardFront.style.transform = 'rotateY(180deg) scale(1)';
+                // 次の処理へ
+                setTimeout(() => {
+                    callback && callback();
+                }, 300); // 戻りアニメの時間
+            }, 400); // 拡大アニメ時間
+        }
+    </script>
+</body>
+
+</html>
