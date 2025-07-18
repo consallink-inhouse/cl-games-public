@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Block Breaker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      animation: fadeIn 1s ease-in;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 90vw;
+      max-width: 800px;
+      height: 75vh;
+      max-height: 600px;
+      border: 2px solid #00ffe7;
+      box-shadow: 0 0 18px #00ffe7;
+      background-color: #000;
+      border-radius: 10px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #titleScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      text-align: center;
+    }
+
+    #titleScreen h1 {
+      font-size: 6vw;
+      color: #ff00cc;
+      text-shadow: 0 0 8px #ff00cc;
+      margin-bottom: 40px;
+    }
+
+    #startButton, #retryButton {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #00ffe7;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #00ffe7, 0 0 24px #00ffe7;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #startButton:hover, #retryButton:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 16px #00ffe7, 0 0 32px #00ffe7;
+    }
+
+    #retryButton {
+      position: absolute;
+      top: 50%;
+      left: 43%;
+      display: none;
+      margin-top: 15px;
+    }
+
+    #scoreDisplay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 16px;
+      color: #00ffe7;
+      text-shadow: 0 0 6px #00ffe7;
+      z-index: 5;
+    }
+
+    @media (max-width: 600px) {
+      #titleScreen h1 {
+        font-size: 24px;
+      }
+      #startButton, #retryButton {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="titleScreen">
+      <h1>BLOCK BREAKER</h1>
+      <button id="startButton">START</button>
+    </div>
+    <button id="retryButton">RETRY</button>
+    <div id="scoreDisplay">SCORE: 0</div>
+  </div>
+
+  <!-- ゲームロジックは元のJSを使用（修正前のJS部分を利用） -->
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const titleScreen = document.getElementById("titleScreen");
+    const startButton = document.getElementById("startButton");
+    const retryButton = document.getElementById("retryButton");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+
+    let paddle, ball, blocks = [];
+    let score = 0, gameRunning = false, gameOver = false, gameClear = false;
+    let fadeAlpha = 0.0;
+    let mouseDown = false;
+    let touchX = null;
+
+    class Paddle {
+      constructor() {
+        this.width = 100;
+        this.height = 10;
+        this.x = (canvas.width - this.width) / 2;
+        this.y = canvas.height - 40;
+      }
+      move(mouseX) {
+        const rect = canvas.getBoundingClientRect();
+        this.x = mouseX - rect.left - this.width / 2;
+        if (this.x < 0) this.x = 0;
+        if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
+      }
+      draw(ctx) {
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.height);
+        gradient.addColorStop(0, "#00ffe7");
+        gradient.addColorStop(1, "#0055aa");
+        ctx.fillStyle = gradient;
+        ctx.shadowColor = "#00ffe7";
+        ctx.shadowBlur = 10;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.shadowBlur = 0;
+      }
+      getBounds() {
+        return { x: this.x, y: this.y, width: this.width, height: this.height };
+      }
+    }
+
+    class Ball {
+      constructor() {
+        this.diameter = 20;
+        this.x = canvas.width / 2 - this.diameter / 2;
+        this.y = canvas.height / 2;
+        this.dx = 3;
+        this.dy = 3;
+      }
+      move() {
+        this.x += this.dx;
+        this.y += this.dy;
+        if (this.x < 0 || this.x > canvas.width - this.diameter) this.dx = -this.dx;
+        if (this.y < 0) this.dy = -this.dy;
+      }
+      draw(ctx) {
+        const gradient = ctx.createRadialGradient(
+          this.x + this.diameter/2,
+          this.y + this.diameter/2,
+          2,
+          this.x + this.diameter/2,
+          this.y + this.diameter/2,
+          this.diameter / 2
+        );
+        gradient.addColorStop(0, "#fff");
+        gradient.addColorStop(0.2, "#ffff99");
+        gradient.addColorStop(0.5, "#ffcc00");
+        gradient.addColorStop(1, "#ff9900");
+        ctx.fillStyle = gradient;
+        ctx.shadowColor = "#ffcc00";
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(this.x + this.diameter / 2, this.y + this.diameter / 2, this.diameter / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      getBounds() {
+        return { x: this.x, y: this.y, width: this.diameter, height: this.diameter };
+      }
+    }
+
+    class Block {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.width = 60;
+        this.height = 20;
+        this.color = ["#ff00cc", "#00ffe7", "#ffa500", "#ff4444", "#66ff66"][Math.floor(Math.random() * 5)];
+      }
+      draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 10;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.shadowBlur = 0;
+      }
+      getBounds() {
+        return { x: this.x, y: this.y, width: this.width, height: this.height };
+      }
+    }
+
+    function isIntersecting(r1, r2) {
+      return !(r2.x > r1.x + r1.width || r2.x + r2.width < r1.x || r2.y > r1.y + r1.height || r2.y + r2.height < r1.y);
+    }
+
+    function initGame() {
+      paddle = new Paddle();
+      ball = new Ball();
+      blocks = [];
+      score = 0;
+      gameRunning = true;
+      gameOver = false;
+      gameClear = false;
+      retryButton.style.display = "none";
+
+      const cols = 10;
+      const rows = 5;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          blocks.push(new Block(60 + col * 65, 50 + row * 30));
+        }
+      }
+    }
+
+    function gameLoop() {
+      if (!gameRunning) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ball.move();
+      if (mouseDown && mouseXCache != null) paddle.move(mouseXCache);
+      if (touchX != null) paddle.move(touchX);
+
+      if (isIntersecting(ball.getBounds(), paddle.getBounds())) ball.dy = -Math.abs(ball.dy);
+
+      for (let i = 0; i < blocks.length; i++) {
+        if (isIntersecting(ball.getBounds(), blocks[i].getBounds())) {
+          blocks.splice(i, 1);
+          ball.dy = -ball.dy;
+          score++;
+          break;
+        }
+      }
+
+      if (ball.y > canvas.height) {
+        gameRunning = false;
+        gameOver = true;
+        retryButton.style.display = "block";
+      }
+
+      if (blocks.length === 0) {
+        gameRunning = false;
+        gameClear = true;
+        retryButton.style.display = "block";
+      }
+
+      paddle.draw(ctx);
+      ball.draw(ctx);
+      blocks.forEach(b => b.draw(ctx));
+      scoreDisplay.innerText = "SCORE: " + score;
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    let mouseXCache = 0;
+    canvas.addEventListener("mousedown", () => mouseDown = true);
+    canvas.addEventListener("mouseup", () => mouseDown = false);
+    canvas.addEventListener("mouseleave", () => mouseDown = false);
+    canvas.addEventListener("mousemove", e => {
+      if (mouseDown) mouseXCache = e.clientX;
+    });
+
+    canvas.addEventListener("touchstart", e => {
+      if (e.touches.length > 0) touchX = e.touches[0].clientX;
+    });
+    canvas.addEventListener("touchmove", e => {
+      if (e.touches.length > 0) touchX = e.touches[0].clientX;
+    });
+    canvas.addEventListener("touchend", () => touchX = null);
+
+    startButton.onclick = () => {
+      titleScreen.style.display = "none";
+      initGame();
+      requestAnimationFrame(gameLoop);
+    };
+    retryButton.onclick = () => {
+      initGame();
+      requestAnimationFrame(gameLoop);
+    };
+  </script>
+</body>
+</html>
