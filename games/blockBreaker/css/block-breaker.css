@@ -208,6 +208,10 @@ canvas {
         font-size: 14px;
         padding: 10px 20px;
     }
+
+    #gameContainer {
+      height: 50vh;
+    }
 }
 
 #levelUpText {
