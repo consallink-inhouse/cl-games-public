@@ -14,6 +14,7 @@
             font-family: 'Segoe UI', sans-serif;
             color: #fff;
             animation: fadeIn 1s ease-in;
+            position: relative;
         }
 
         @keyframes fadeIn {
@@ -26,9 +27,7 @@
             }
         }
 
-        *,
-        *::before,
-        *::after {
+        * {
             box-sizing: border-box;
         }
 
@@ -49,11 +48,80 @@
             text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7;
         }
 
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            color: #00ffe7;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+
+        .menu-toggle.open {
+            transform: rotate(90deg);
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            width: 250px;
+            height: 100%;
+            background: #222;
+            box-shadow: 1px 0 20px #00ccff;
+            transition: left 0.4s ease, opacity 0.4s ease;
+            padding-top: 60px;
+            z-index: 1000;
+            opacity: 0;
+        }
+
+        .side-menu.open {
+            left: 0;
+            opacity: 1;
+        }
+
+        .side-menu a {
+            display: flex;
+            align-items: center;
+            padding: 7px 20px;
+            color: #00ffe7;
+            text-decoration: none;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffe7;
+            transition: background 0.2s;
+        }
+
+        .side-menu a img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .side-menu a:hover {
+            background: #00ccff33;
+        }
+
+        .side-menu h2 {
+            color: #00ffe7;
+            text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .side-menu a.active {
+            color: #ff00ff;
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
+        }
+
         .results-grid {
             display: grid;
             gap: 20px;
             max-width: 1000px;
-            /* PC版を拡大 */
             margin: 0 auto;
             grid-template-columns: repeat(2, 1fr);
         }
@@ -77,7 +145,27 @@
             width: 100%;
             height: auto;
             border-radius: 6px;
-            /* box-shadow を削除 */
+        }
+
+        .coming-soon {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .footer img {
+            max-width: 30vh;
+            opacity: 0.8;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .footer img:hover {
+            opacity: 1;
         }
 
         @media (max-width: 600px) {
@@ -88,16 +176,34 @@
             .results-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        .coming-soon {
-            opacity: 0.5;
-            cursor: default;
+            .menu-toggle {
+                display: block;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- ハンバーガーメニュー -->
+    <div class="menu-toggle" onclick="toggleMenu()" id="menuBtn">☰</div>
+
+    <!-- サイドメニュー -->
+    <div class="side-menu" id="sideMenu">
+        <h2>SELECT GAME</h2>
+        <a href="./15puzzle/menu.html" class="active">
+            <img src="./images/menu-icon.png" alt="icon">15 Puzzle
+        </a>
+        <a href="./memoryPanel/menu.html" class="active">
+            <img src="./images/menu-icon.png" alt="icon">Memory Panel
+        </a>
+        <a href="./blockBreaker/menu.html" class="active">
+            <img src="./images/menu-icon.png" alt="icon">Block Breaker
+        </a>
+    </div>
+
+
+
     <div class="logo-area">
         <img src="./images/ConsalLink.png" alt="CL LOGO">
     </div>
@@ -114,14 +220,29 @@
         </div>
 
         <div class="result-item" onclick="location.href='./blockBreaker/menu.html'">
-            <img src="./images/game_title/BrockBreaker.png" alt="Brock Breaker">
+            <img src="./images/game_title/BrockBreaker.png" alt="Block Breaker">
         </div>
 
         <div class="result-item coming-soon">
             <img src="./images/game_title/ComingSoon.png" alt="Coming Soon">
         </div>
-
     </div>
+
+    <!-- フッター -->
+    <div class="footer">
+        <a href="https://www.consallink.co.jp/" target="_blank">
+            <img src="./images/footer.png" alt="ConsalLink Footer">
+        </a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const btn = document.getElementById('menuBtn');
+            menu.classList.toggle('open');
+            btn.classList.toggle('open');
+        }
+    </script>
 </body>
 
 </html>
