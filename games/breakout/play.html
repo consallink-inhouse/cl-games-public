@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <style>
-    body {
+    body, html {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       background: #111;
       font-family: 'Segoe UI', sans-serif;
       color: #fff;
@@ -147,7 +148,9 @@
       }
       move(mouseX) {
         const rect = canvas.getBoundingClientRect();
-        this.x = mouseX - rect.left - this.width / 2;
+        const canvasScale = canvas.width / rect.width;
+        const adjustedX = (mouseX - rect.left) * canvasScale;
+        this.x = adjustedX - this.width / 2;
         if (this.x < 0) this.x = 0;
         if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
       }
