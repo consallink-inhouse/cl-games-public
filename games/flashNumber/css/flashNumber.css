@@ -8,7 +8,6 @@ body {
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 @keyframes fadeIn {
@@ -82,7 +81,7 @@ body {
     font-size: 48px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #444;
+    background-color: transparent;
     margin-bottom: 10px;
     height: 60px;
     display: flex;
@@ -205,9 +204,9 @@ body {
     width: 300px;
     max-width: 80%;
     position: absolute;
-    top: 45%;
-    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
+    left: 50%;
     background-color: #111;
     padding: 40px 30px;
     border-radius: 12px;
