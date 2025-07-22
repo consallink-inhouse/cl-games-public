@@ -15,39 +15,36 @@ const levelModal = document.getElementById("levelModal");
 const levelButtons = document.getElementById("levelButtons");
 const statusInfo = document.getElementById("statusInfo");
 
-let correctNumber = "";
+let currentLevel = 1;
+let digitLength = 1;
+let flashSpeed = 500;
+
 let inputNumber = "";
 let isFlashing = false;
 let countdownTimer = null;
 
-let currentLevel = 1;
-let flashSpeed = 500;
-let digitLength = 5;
-
 let currentQuestion = 0;
 let correctCount = 0;
+let correctAnswer = 0;
 
-// レベル設定マスタ
+let flashSequence = [];
+
+// レベル設定（各数字の桁数）
 const levelSettings = {
-    1: { digits: 5, speed: 700 },
-    2: { digits: 5, speed: 500 },
-    3: { digits: 5, speed: 300 },
-    4: { digits: 7, speed: 700 },
-    5: { digits: 7, speed: 500 },
-    6: { digits: 7, speed: 300 },
-    7: { digits: 10, speed: 700 },
-    8: { digits: 10, speed: 500 },
-    9: { digits: 10, speed: 300 },
-    10: { digits: 10, speed: 100 }
+    1: { digits: 1, speed: 500 },
+    2: { digits: 2, speed: 500 },
+    3: { digits: 3, speed: 500 },
+    4: { digits: 4, speed: 500 },
+    5: { digits: 5, speed: 500 }
 };
 
-// レベルボタン生成
+// レベル選択ボタン生成
 function createLevelButtons() {
-    for (let level = 1; level <= 10; level++) {
+    for (let level = 1; level <= 5; level++) {
         const btn = document.createElement("button");
         btn.textContent = `LEVEL${level}`;
-        btn.style.margin = "5px";
         btn.className = "level-button";
+        btn.style.margin = "5px";
         btn.addEventListener("click", () => {
             selectLevel(level);
         });
@@ -70,7 +67,7 @@ function selectLevel(level) {
     updateStatusInfo();
 }
 
-// 数字ボタン生成
+// 数字ボタン生成（電卓風）
 function createNumberButtons() {
     inputPanel.innerHTML = "";
 
@@ -98,7 +95,7 @@ function createNumberButtons() {
                 btn.className = "number-button";
                 btn.textContent = num;
                 btn.addEventListener("click", () => {
-                    if (!isFlashing && inputNumber.length < correctNumber.length) {
+                    if (!isFlashing) {
                         inputNumber += num;
                         updateInputDisplay();
                     }
@@ -111,12 +108,23 @@ function createNumberButtons() {
     });
 }
 
-// 表示更新
 function updateInputDisplay() {
     flashNumberEl.textContent = inputNumber || "";
 }
 
-// フラッシュ表示（1文字ずつ）
+function updateStatusInfo() {
+    statusInfo.textContent = `レベル${currentLevel}　${currentQuestion + 1} / 10問`;
+}
+
+// 指定桁数のランダム数値を生成
+function generateRandomNumber(digits) {
+    let min = Math.pow(10, digits - 1);
+    let max = Math.pow(10, digits) - 1;
+    if (digits === 1) min = 0; // 1桁だけは0許容
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// フラッシュ表示処理（5回）
 function flashNumberSequence(sequence, index = 0, callback) {
     if (index >= sequence.length) {
         flashNumberEl.textContent = "";
@@ -133,14 +141,11 @@ function flashNumberSequence(sequence, index = 0, callback) {
     }, flashSpeed);
 }
 
-// カウントダウン表示
 function startCountdown(seconds = 10) {
     updateCountdownDisplay(seconds);
-
     countdownTimer = setInterval(() => {
         seconds--;
         updateCountdownDisplay(seconds);
-
         if (seconds <= 0) {
             clearInterval(countdownTimer);
             handleTimeout();
@@ -148,7 +153,6 @@ function startCountdown(seconds = 10) {
     }, 1000);
 }
 
-// 残り時間表示
 function updateCountdownDisplay(seconds) {
     countdownTimerArea.innerHTML = `制限時間：<span style="color: #ffa500; text-shadow: 0 0 10px #ffa500;">${seconds}</span> 秒`;
 }
@@ -158,32 +162,21 @@ function stopCountdown() {
     countdownTimerArea.innerHTML = "";
 }
 
-function updateStatusInfo() {
-    statusInfo.textContent = `LEVEL${currentLevel}　${currentQuestion + 1} / 10問`;
-}
-
-// タイムアウト処理
 function handleTimeout() {
-    if (!correctNumber) return;
-
     resultModal.style.display = "block";
     resultText.textContent = "TIME UP!";
-    resultValue.textContent = "正解：" + correctNumber;
+    resultValue.textContent = "答え：" + correctAnswer;
 
     resultText.style.color = "#ff3333";
     resultValue.style.color = "#ff3333";
     resultText.style.textShadow = "0 0 8px #ff3333";
     resultValue.style.textShadow = "0 0 8px #ff3333";
 
-    correctNumber = "";
-    inputNumber = "";
     disableInput(true);
-
     nextButton.style.display = "inline-block";
     resetButton.style.display = "none";
 }
 
-// 入力無効化
 function disableInput(disabled) {
     document.querySelectorAll(".number-button").forEach(btn => {
         btn.disabled = disabled;
@@ -191,47 +184,46 @@ function disableInput(disabled) {
     answerButton.disabled = disabled;
 }
 
-// ランダム数生成
-function generateFixedLengthNumber(length) {
-    let number = "";
-    for (let i = 0; i < length; i++) {
-        number += Math.floor(Math.random() * 10).toString();
-    }
-    return number;
-}
-
-// STARTボタン押下時
 startButton.addEventListener("click", () => {
     startNextQuestion();
 });
 
 function startNextQuestion() {
     if (currentQuestion >= 10) return;
-    updateStatusInfo();
+
     inputNumber = "";
-    correctNumber = generateFixedLengthNumber(digitLength);
+    correctAnswer = 0;
+    flashSequence = [];
+
+    for (let i = 0; i < 5; i++) {
+        const num = generateRandomNumber(digitLength);
+        flashSequence.push(num);
+        correctAnswer += num;
+    }
+
     isFlashing = true;
     disableInput(true);
     startButton.disabled = true;
     updateInputDisplay();
+    updateStatusInfo();
 
-    flashNumberSequence(correctNumber.split(""), 0, () => {
+    flashNumberSequence(flashSequence.map(n => n.toString()), 0, () => {
         isFlashing = false;
         disableInput(false);
         startCountdown(10);
     });
 }
 
-// ANSWERボタン押下
 answerButton.addEventListener("click", () => {
-    if (isFlashing || !correctNumber) return;
+    if (isFlashing) return;
 
     stopCountdown();
-    const isCorrect = inputNumber === correctNumber;
+
+    const isCorrect = parseInt(inputNumber, 10) === correctAnswer;
 
     resultModal.style.display = "block";
     resultText.textContent = isCorrect ? "正解！" : "不正解";
-    resultValue.textContent = isCorrect ? correctNumber : "正解：" + correctNumber;
+    resultValue.textContent = isCorrect ? `合計：${correctAnswer}` : `正解：${correctAnswer}`;
 
     if (isCorrect) {
         correctCount++;
@@ -246,14 +238,10 @@ answerButton.addEventListener("click", () => {
         resultValue.style.textShadow = "0 0 8px #ff3333";
     }
 
-    correctNumber = "";
-    inputNumber = "";
     disableInput(true);
-
     currentQuestion++;
 
     if (currentQuestion >= 10) {
-        // 最終結果
         finalScore.style.display = "block";
         finalScore.innerHTML = `<strong>${correctCount} / 10問 正解<br>スコア：${correctCount * 10}点</strong>`;
         nextButton.style.display = "none";
@@ -264,20 +252,16 @@ answerButton.addEventListener("click", () => {
     }
 });
 
-// 次へ
 nextButton.addEventListener("click", () => {
     resultModal.style.display = "none";
     startNextQuestion();
 });
 
-// リセット（レベル選択に戻る）
 resetButton.addEventListener("click", () => {
     location.reload();
 });
 
-// ゲーム初期化
 function resetGame() {
-    correctNumber = "";
     inputNumber = "";
     currentQuestion = 0;
     correctCount = 0;
@@ -288,5 +272,5 @@ function resetGame() {
     updateStatusInfo();
 }
 
-// 初期化処理
+// 初期化
 createLevelButtons();

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flash Number Plus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/flashNumber.css">
+</head>
+
+<body class="fade-in">
+    <div class="game-thumb">
+        <div class="thumb-left game-title">
+            <a href="../game_center.html">
+                <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER">
+            </a>
+        </div>
+    </div>
+    <div class="game-thumb">
+        <div class="thumb-left sub-thumb">
+            <a href="./menu.html">
+                <img src="./images/Header_FlashNumber.png" alt="Flash Number Plus">
+            </a>
+        </div>
+    </div>
+
+    <!-- レベル選択モーダル -->
+    <div id="levelModal" class="modal" style="display: block;">
+        <div class="modal-content">
+            <h3 style="color:#00ffe7; text-shadow:0 0 6px #00ffe7;">SELECT LEVEL</h3>
+            <div id="levelButtons" style="margin-top:20px;">
+                <!-- JavaScriptで生成 -->
+            </div>
+        </div>
+    </div>
+
+    <div id="gameContainer" style="display:none;">
+        <!-- ステータス表示（レベル／何問目） -->
+        <div id="statusInfo"></div>
+
+        <!-- フラッシュ表示 -->
+        <div id="flashNumber"></div>
+        <div id="countdownTimerArea"></div>
+
+        <!-- 操作ボタン -->
+        <button id="startButton">START</button>
+        <div id="inputPanel"></div>
+        <button id="answerButton">ANSWER</button>
+
+        <!-- 結果モーダル -->
+        <div id="resultModal" class="modal">
+            <div class="modal-content">
+                <div id="resultText"></div>
+                <div id="resultValue"></div>
+                <div id="finalScore" style="display:none; margin-top:10px;"></div>
+                <button id="nextButton">NEXT</button>
+                <button id="resetButton" style="display:none; margin-top:15px;">レベル選択</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-footer">
+        <a href="../game_center.html" target="_self">
+            <img src="../images/ConsalLink.png" alt="CL LOGO">
+        </a>
+    </div>
+
+    <script src="./js/flashNumberPlus.js"></script>
+</body>
+
+</html>
