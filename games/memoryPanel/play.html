@@ -326,14 +326,14 @@
                 xAccount: "consallink",
                 xAccountURL: "https://x.com/consallink",
                 images: [
-                    {path: "./images/panel1/001.png", description: "とまらない情熱が、ここにある！<br/>コンサルレッド"},
-                    {path: "./images/panel1/002.png", description: "甘くて強い、それが<br/>コンサルピンク"},
-                    {path: "./images/panel1/003.png", description: "元気はここから！<br/>コンサルオレンジ"},
-                    {path: "./images/panel1/004.png", description: "どこまでも明るくいこう！<br/>コンサルイエロー"},
-                    {path: "./images/panel1/005.png", description: "進め、自然体で！<br/>コンサルグリーン"},
-                    {path: "./images/panel1/006.png", description: "秘めた魅力が光る！<br/>コンサルパープル"},
-                    {path: "./images/panel1/007.png", description: "信頼はブレない色から！<br/>コンサルブルー"},
-                    {path: "./images/panel1/008.png", description: "空を見上げると？<br/>コンサルライトブルー"}
+                    { path: "./images/panel1/001.png", description: "とまらない情熱が、ここにある！<br/>コンサルレッド" },
+                    { path: "./images/panel1/002.png", description: "甘くて強い、それが<br/>コンサルピンク" },
+                    { path: "./images/panel1/003.png", description: "元気はここから！<br/>コンサルオレンジ" },
+                    { path: "./images/panel1/004.png", description: "どこまでも明るくいこう！<br/>コンサルイエロー" },
+                    { path: "./images/panel1/005.png", description: "進め、自然体で！<br/>コンサルグリーン" },
+                    { path: "./images/panel1/006.png", description: "秘めた魅力が光る！<br/>コンサルパープル" },
+                    { path: "./images/panel1/007.png", description: "信頼はブレない色から！<br/>コンサルブルー" },
+                    { path: "./images/panel1/008.png", description: "空を見上げると？<br/>コンサルライトブルー" }
                 ]
             },
             normal2: {
@@ -341,213 +341,211 @@
                 xAccount: "consallink",
                 xAccountURL: "https://x.com/consallink",
                 images: [
-                    {path: "./images/panel2/001.png", description: "気付いてる？<br/>これが本物やで！"},
-                    {path: "./images/panel2/002.png", description: "キミだけが見抜けた<br/>左下の“ぽっかり”"},
-                    {path: "./images/panel2/003.png", description: "この子のさみしさに気づけた<br/>キミに拍手"},
-                    {path: "./images/panel2/004.png", description: "そこがないと始まらない！<br/>ビッグスター"},
-                    {path: "./images/panel2/005.png", description: "なんで逃げたの？<br/>恥ずかしがり屋さん"},
-                    {path: "./images/panel2/006.png", description: "もしかしてそこの星、<br/>さぼってた？"},
-                    {path: "./images/panel2/007.png", description: "気づけたあなただけに<br/>その星あげたい"},
-                    {path: "./images/panel2/008.png", description: "気付いたのすごい！<br/>右下の抜け感"}
+                    { path: "./images/panel2/001.png", description: "気付いてる？<br/>これが本物やで！" },
+                    { path: "./images/panel2/002.png", description: "キミだけが見抜けた<br/>左下の“ぽっかり”" },
+                    { path: "./images/panel2/003.png", description: "この子のさみしさに気づけた<br/>キミに拍手" },
+                    { path: "./images/panel2/004.png", description: "そこがないと始まらない！<br/>ビッグスター" },
+                    { path: "./images/panel2/005.png", description: "なんで逃げたの？<br/>恥ずかしがり屋さん" },
+                    { path: "./images/panel2/006.png", description: "もしかしてそこの星、<br/>さぼってた？" },
+                    { path: "./images/panel2/007.png", description: "気づけたあなただけに<br/>その星あげたい" },
+                    { path: "./images/panel2/008.png", description: "気付いたのすごい！<br/>右下の抜け感" }
                 ]
-            },
-            // 必要に応じて他セットをここに追加可能
+            }
         };
 
         const params = new URLSearchParams(window.location.search);
         const mode = params.get('mode') || 'special1';
-        const currentSet = panelSets[mode] || panelSets['special1'];
+        const currentSet = panelSets[mode];
 
-        // DOMに反映
-        document.querySelector('.image-title').textContent = currentSet.title;
-        document.querySelector('.x-link a').textContent = currentSet.xAccount;
-        document.querySelector('.x-link a').href = currentSet.xAccountURL;
+        if (!currentSet) {
+            const imageTitle = document.querySelector('.image-title');
+            imageTitle.textContent = "404 NOT PAGE";
+            imageTitle.style.color = "#ff4444";
+            imageTitle.style.textShadow = "0 0 8px #ff4444, 0 0 16px #ff4444";
 
-        let panelImages = currentSet.images;
+            document.querySelector('.x-link').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('scoreBoard').style.display = 'none';
+        } else {
+            document.querySelector('.image-title').textContent = currentSet.title;
+            document.querySelector('.x-link a').textContent = currentSet.xAccount;
+            document.querySelector('.x-link a').href = currentSet.xAccountURL;
 
-        let selectedImages = [];
-        let cards = [];
-        let firstCard = null;
-        let secondCard = null;
-        let lockBoard = false;
-        let attempts = 0;
+            let panelImages = currentSet.images;
+            let selectedImages = [];
+            let cards = [];
+            let firstCard = null;
+            let secondCard = null;
+            let lockBoard = false;
+            let attempts = 0;
 
-        const gameContainer = document.getElementById('gameContainer');
-        const attemptsCountEl = document.getElementById('attemptsCount');
-        const resultScreen = document.getElementById('resultScreen');
-        const resultText = document.getElementById('resultText');
-        const restartButton = document.getElementById('restartButton');
+            const gameContainer = document.getElementById('gameContainer');
+            const attemptsCountEl = document.getElementById('attemptsCount');
+            const resultScreen = document.getElementById('resultScreen');
+            const resultText = document.getElementById('resultText');
+            const restartButton = document.getElementById('restartButton');
 
-        function initGame() {
-            gameContainer.innerHTML = '';
-            cards = [];
-            firstCard = null;
-            secondCard = null;
-            lockBoard = false;
-            attempts = 0;
-            attemptsCountEl.textContent = 0;
-            resultScreen.style.display = 'none';
+            function initGame() {
+                gameContainer.innerHTML = '';
+                cards = [];
+                firstCard = null;
+                secondCard = null;
+                lockBoard = false;
+                attempts = 0;
+                attemptsCountEl.textContent = 0;
+                resultScreen.style.display = 'none';
 
-            let available = [...panelImages];
-            selectedImages = [];
-            for (let i = 0; i < 8; i++) {
-                const randomIndex = Math.floor(Math.random() * available.length);
-                selectedImages.push(available.splice(randomIndex, 1)[0]);
+                let available = [...panelImages];
+                selectedImages = [];
+                for (let i = 0; i < 8; i++) {
+                    const randomIndex = Math.floor(Math.random() * available.length);
+                    selectedImages.push(available.splice(randomIndex, 1)[0]);
+                }
+
+                let pairedImages = [...selectedImages, ...selectedImages];
+                pairedImages.sort(() => Math.random() - 0.5);
+
+                pairedImages.forEach((imgObj) => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.dataset.image = imgObj.path;
+                    card.dataset.description = imgObj.description;
+                    const cardInner = document.createElement('div');
+                    cardInner.classList.add('card-inner');
+
+                    const cardFront = document.createElement('div');
+                    cardFront.classList.add('card-front');
+                    cardFront.style.backgroundImage = "url('" + imgObj.path + "')";
+
+                    const cardBack = document.createElement('div');
+                    cardBack.classList.add('card-back');
+
+                    cardInner.appendChild(cardFront);
+                    cardInner.appendChild(cardBack);
+                    card.appendChild(cardInner);
+
+                    card.addEventListener('click', flipCard);
+                    gameContainer.appendChild(card);
+                    cards.push(card);
+                });
             }
 
-            let pairedImages = [...selectedImages, ...selectedImages];
-            pairedImages.sort(() => Math.random() - 0.5);
+            function flipCard() {
+                if (lockBoard || this.classList.contains('flipped')) return;
+                this.classList.add('flipped');
+                if (!firstCard) {
+                    firstCard = this;
+                    return;
+                }
 
-            pairedImages.forEach((imgObj, index) => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.dataset.image = imgObj.path;
-                card.dataset.description = imgObj.description;
-                const cardInner = document.createElement('div');
-                cardInner.classList.add('card-inner');
+                secondCard = this;
+                attempts++;
+                attemptsCountEl.textContent = attempts;
+                lockBoard = true;
+                checkForMatch();
+            }
 
-                const cardFront = document.createElement('div');
-                cardFront.classList.add('card-front');
-                cardFront.style.backgroundImage = "url('" + imgObj.path + "')";
+            function checkForMatch() {
+                let isMatch = firstCard.dataset.image === secondCard.dataset.image;
 
-                const cardBack = document.createElement('div');
-                cardBack.classList.add('card-back');
+                if (isMatch) {
+                    const card1 = firstCard;
+                    const card2 = secondCard;
 
-                cardInner.appendChild(cardFront);
-                cardInner.appendChild(cardBack);
-                card.appendChild(cardInner);
+                    card1.removeEventListener('click', flipCard);
+                    card2.removeEventListener('click', flipCard);
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
 
-                card.addEventListener('click', flipCard);
-                gameContainer.appendChild(card);
-                cards.push(card);
+                    const front1 = card1.querySelector('.card-front');
+                    const front2 = card2.querySelector('.card-front');
+
+                    front1.style.transition = 'transform 0.4s ease';
+                    front2.style.transition = 'transform 0.4s ease';
+
+                    setTimeout(() => {
+                        front1.style.transform = 'rotateY(180deg) scale(1.15)';
+                        front2.style.transform = 'rotateY(180deg) scale(1.15)';
+
+                        setTimeout(() => {
+                            front1.style.transform = 'rotateY(180deg) scale(1)';
+                            front2.style.transform = 'rotateY(180deg) scale(1)';
+
+                            setTimeout(() => {
+                                const matchedImage = card1.dataset.image;
+                                const description = card1.dataset.description;
+
+                                showMatchModal(matchedImage, description, () => {
+                                    resetBoard();
+                                    checkGameOver();
+                                });
+                            }, 300);
+                        }, 400);
+                    }, 300);
+                } else {
+                    setTimeout(() => {
+                        firstCard.classList.remove('flipped');
+                        secondCard.classList.remove('flipped');
+                        resetBoard();
+                    }, 1000);
+                }
+            }
+
+            function resetBoard() {
+                [firstCard, secondCard] = [null, null];
+                lockBoard = false;
+            }
+
+            function checkGameOver() {
+                const allFlipped = cards.every(card => card.classList.contains('flipped'));
+                if (allFlipped) {
+                    let resultMsg = "Game Clear!<br>Attempts: " + attempts;
+                    resultText.innerHTML = resultMsg;
+                    resultScreen.style.display = 'flex';
+                }
+            }
+
+            function showMatchModal(imagePath, description, onClose) {
+                const modal = document.getElementById("matchModal");
+                document.getElementById("matchImage").src = "" + imagePath;
+                document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
+
+                modal.classList.remove("hide");
+                modal.style.display = "flex";
+                setTimeout(() => {
+                    modal.classList.add("show");
+                }, 10);
+
+                modal.dataset.onClose = onClose.toString();
+                window._onMatchClose = onClose;
+            }
+
+            function closeMatchModal() {
+                const modal = document.getElementById("matchModal");
+
+                modal.classList.remove("show");
+                modal.classList.add("fade-out");
+
+                setTimeout(() => {
+                    modal.style.display = "none";
+                    modal.classList.remove("fade-out");
+
+                    if (window._onMatchClose) {
+                        window._onMatchClose();
+                        window._onMatchClose = null;
+                    }
+                }, 400);
+            }
+
+            window.onload = () => {
+                document.body.classList.add("fade-in");
+                initGame();
+            };
+
+            restartButton.addEventListener('click', () => {
+                initGame();
             });
         }
-
-        function flipCard() {
-            if (lockBoard || this.classList.contains('flipped')) return;
-            this.classList.add('flipped');
-            if (!firstCard) {
-                firstCard = this;
-                return;
-            }
-
-            secondCard = this;
-            attempts++;
-            attemptsCountEl.textContent = attempts;
-            lockBoard = true;
-            checkForMatch();
-        }
-
-        function checkForMatch() {
-            let isMatch = firstCard.dataset.image === secondCard.dataset.image;
-
-            if (isMatch) {
-                const card1 = firstCard;
-                const card2 = secondCard;
-
-                card1.removeEventListener('click', flipCard);
-                card2.removeEventListener('click', flipCard);
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-
-                const front1 = card1.querySelector('.card-front');
-                const front2 = card2.querySelector('.card-front');
-
-                // アニメーション前の初期状態を設定
-                front1.style.transition = 'transform 0.4s ease';
-                front2.style.transition = 'transform 0.4s ease';
-
-                // 拡大アニメーション開始
-                setTimeout(() => {
-                    front1.style.transform = 'rotateY(180deg) scale(1.15)';
-                    front2.style.transform = 'rotateY(180deg) scale(1.15)';
-
-                    // 拡大後、元のサイズに戻す
-                    setTimeout(() => {
-                        front1.style.transform = 'rotateY(180deg) scale(1)';
-                        front2.style.transform = 'rotateY(180deg) scale(1)';
-
-                        // 戻しアニメが終わった後にモーダルを表示
-                        setTimeout(() => {
-                            const matchedImage = card1.dataset.image;
-                            const description = card1.dataset.description;
-
-                            showMatchModal(matchedImage, description, () => {
-                                resetBoard();
-                                checkGameOver();
-                            });
-                        }, 300); // 縮小戻し後の待ち時間
-
-                    }, 400); // 拡大表示時間
-
-                }, 300); // 回転完了後のズーム開始タイミング
-
-            } else {
-                // 不一致の場合はカードを元に戻す
-                setTimeout(() => {
-                    firstCard.classList.remove('flipped');
-                    secondCard.classList.remove('flipped');
-                    resetBoard();
-                }, 1000);
-            }
-        }
-
-        function resetBoard() {
-            [firstCard, secondCard] = [null, null];
-            lockBoard = false;
-        }
-
-        function checkGameOver() {
-            const allFlipped = cards.every(card => card.classList.contains('flipped'));
-            if (allFlipped) {
-                let resultMsg = "Game Clear!<br>Attempts: " + attempts;
-                resultText.innerHTML = resultMsg;
-                resultScreen.style.display = 'flex';
-            }
-        }
-
-        function showMatchModal(imagePath, description, onClose) {
-            const modal = document.getElementById("matchModal");
-            document.getElementById("matchImage").src = "" + imagePath;
-            document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
-
-            modal.classList.remove("hide");
-            modal.style.display = "flex";
-            setTimeout(() => {
-                modal.classList.add("show");
-            }, 10);
-
-            modal.dataset.onClose = onClose.toString();
-            window._onMatchClose = onClose;
-        }
-
-        function closeMatchModal() {
-          const modal = document.getElementById("matchModal");
-
-          // フェードアウト用クラス追加
-          modal.classList.remove("show");
-          modal.classList.add("fade-out");
-
-          // アニメーション終了後に非表示・コールバック実行
-          setTimeout(() => {
-            modal.style.display = "none";
-            modal.classList.remove("fade-out");
-
-            if (window._onMatchClose) {
-              window._onMatchClose();
-              window._onMatchClose = null;
-            }
-          }, 400); // ← CSSの transition に合わせた時間
-        }
-
-        window.onload = () => {
-            document.body.classList.add("fade-in");
-            initGame();
-        };
-
-        restartButton.addEventListener('click', () => {
-            initGame();
-        });
 
         function animateZoom(cardFront, callback) {
             cardFront.style.transition = 'transform 0.4s ease';
