@@ -9,7 +9,6 @@ body {
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 .fade-in {
@@ -264,4 +263,25 @@ button:hover {
     border-radius: 10px;
     box-shadow: 0 0 12px #00ffe7;
     cursor: pointer;
+}
+
+.logo-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.logo-footer a {
+    display: inline-block;
+}
+
+.logo-footer img {
+    max-width: 75px;
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.logo-footer img:hover {
+    opacity: 1;
 }
