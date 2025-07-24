@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Quickly Number Select</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/quicklyNumberSelect.css" />
+</head>
+
+<body class="fade-in">
+
+    <!-- ヘッダー -->
+    <div class="game-thumb">
+        <div class="thumb-left game-title">
+            <a href="../game_center.html">
+                <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER" />
+            </a>
+        </div>
+    </div>
+
+    <div class="game-thumb">
+        <div class="thumb-left sub-thumb">
+            <a href="./menu.html">
+                <img src="./images/Header_QuicklyNumberSelect.png" alt="Quickly Number Select" />
+            </a>
+        </div>
+    </div>
+
+    <!-- カード配置 -->
+    <div id="cardContainer"></div>
+
+    <!-- ボタン -->
+    <div class="button-group">
+        <button id="shuffleBtn">START</button>
+    </div>
+
+    <!-- タイマー -->
+    <div id="timer">TIME: 0.00s</div>
+
+    <!-- モーダル -->
+    <div id="resultModal" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <h2>Completion!</h2>
+        <p id="finalTime">Your Time: 0 ms</p>
+        <button id="modalShuffleBtn">SHUFFLE</button>
+      </div>
+    </div>
+
+    <!-- スクリプト -->
+    <script src="./js/quicklyNumberSelect.js"></script>
+</body>
+
+</html>
