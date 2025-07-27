@@ -124,8 +124,8 @@ function handleCardClick(card) {
     const allCards = document.querySelectorAll(".card");
 
     allCards.forEach(c => {
-        c.classList.add("flipped");
         c.classList.add("zoom-flip");
+        c.classList.add("flipped");
 
         setTimeout(() => {
             if (c.dataset.mark === "〇") {
