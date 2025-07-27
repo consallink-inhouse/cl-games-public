@@ -14,6 +14,7 @@ const finalScore = document.getElementById("finalScore");
 const levelModal = document.getElementById("levelModal");
 const levelButtons = document.getElementById("levelButtons");
 const statusInfo = document.getElementById("statusInfo");
+const clearButton = document.getElementById("clearButton");
 
 let currentLevel = 1;
 let digitLength = 1;
@@ -179,11 +180,19 @@ function disableInput(disabled) {
     document.querySelectorAll(".number-button").forEach(btn => {
         btn.disabled = disabled;
     });
+    clearButton.disabled = disabled;
     answerButton.disabled = disabled;
 }
 
 startButton.addEventListener("click", () => {
     startNextQuestion();
+});
+
+clearButton.addEventListener("click", () => {
+    if (!isFlashing) {
+        inputNumber = "";
+        updateInputDisplay();
+    }
 });
 
 function startNextQuestion() {

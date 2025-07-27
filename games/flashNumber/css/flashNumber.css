@@ -100,7 +100,8 @@ body {
 }
 
 #startButton,
-#answerButton {
+#answerButton,
+#clearButton {
     font-size: 16px;
     padding: 10px 20px;
     border: none;
@@ -112,12 +113,12 @@ body {
     margin: 10px;
 }
 
-#startButton {
+#startButton, #clearButton {
     background-color: #00ffe7;
     box-shadow: 0 0 12px #00ffe7, 0 0 24px #00ffe7;
 }
 
-#startButton:hover {
+#startButton:hover, #clearButton:hover {
     box-shadow: 0 0 16px #00ffe7, 0 0 32px #00ffe7;
 }
 

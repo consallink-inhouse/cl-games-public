@@ -14,6 +14,7 @@ const finalScore = document.getElementById("finalScore");
 const levelModal = document.getElementById("levelModal");
 const levelButtons = document.getElementById("levelButtons");
 const statusInfo = document.getElementById("statusInfo");
+const clearButton = document.getElementById("clearButton");
 
 let correctNumber = "";
 let inputNumber = "";
@@ -186,6 +187,7 @@ function disableInput(disabled) {
     document.querySelectorAll(".number-button").forEach(btn => {
         btn.disabled = disabled;
     });
+    clearButton.disabled = disabled;
     answerButton.disabled = disabled;
 }
 
@@ -201,6 +203,14 @@ function generateFixedLengthNumber(length) {
 // STARTボタン押下時
 startButton.addEventListener("click", () => {
     startNextQuestion();
+});
+
+// クリアボタン押下時
+clearButton.addEventListener("click", () => {
+    if (!isFlashing) {
+        inputNumber = "";
+        updateInputDisplay();
+    }
 });
 
 function startNextQuestion() {
