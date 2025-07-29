@@ -1,5 +1,6 @@
 let cardContainer, resultModal, resultMessage, resultStreak, modalNextBtn, statusMessage, streakCounter, modalLevelSelectBtn, probabilityLabel;
 let selectedProbability = 2;
+let resultProbability;
 
 window.onload = () => {
     cardContainer = document.getElementById("cardContainer");
@@ -11,6 +12,7 @@ window.onload = () => {
     streakCounter = document.getElementById("streakCounter");
     modalLevelSelectBtn = document.getElementById("modalLevelSelectBtn");
     probabilityLabel = document.getElementById("probabilityLabel");
+    resultProbability = document.getElementById("resultProbability");
 
     modalLevelSelectBtn.onclick = () => {
         resultModal.style.display = "none";
@@ -170,6 +172,15 @@ function showResult(success) {
     modalNextBtn.style.display = success ? "inline-block" : "none";
 
     statusMessage.style.display = "none";
+
+    if (currentStreak > 0) {
+        const power = Math.pow(selectedProbability, currentStreak);
+        const percentage = (1 / power) * 100;
+        const percentStr = percentage < 0.1 ? "<0.1%" : `${percentage.toFixed(1)}%`;
+        resultProbability.innerHTML = `確率：1/${power}（約${percentStr}）`;
+    } else {
+        resultProbability.innerHTML = "";
+    }
 }
 
 function animateShuffleAndStart() {

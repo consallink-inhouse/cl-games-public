@@ -273,3 +273,11 @@ button:hover {
     80% { left: 2px; top: 0px; }
     100% { left: 0px; top: 0px; }
 }
+
+.result-probability {
+    color: #ffa500;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 4px #ffa500;
+}
