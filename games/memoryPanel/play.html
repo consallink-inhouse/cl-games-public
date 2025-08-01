@@ -102,12 +102,26 @@
             text-shadow: 0 0 6px #ffa500;
         }
 
-        .x-link {
+        .x-link, .sub-title1, .sub-title2 {
             text-align: center;
             margin: 0;
-            font-size: 16px;
             color: #ffa500;
             text-shadow: 0 0 6px #ffa500;
+        }
+
+        .x-link, .sub-title1, .sub-title2 {
+            font-size: 13px;
+        }
+
+        .sub-title1, .sub-title2 {
+            color: rgb(255, 142, 233);
+            text-shadow: 0 0 8px #ff00cc;
+        }
+
+        @media (min-width: 768px) {
+            .sub-title1, .sub-title2 {
+                font-size: 19px;
+            }
         }
 
         .x-link a {
@@ -297,6 +311,9 @@
     </p>
     <br />
 
+    <p class="sub-title1"></p>
+    <p class="sub-title2"></p>
+
     <div id="gameContainer"></div>
     <div id="scoreBoard">
         <p>Attempts: <span id="attemptsCount">0</span></p>
@@ -321,8 +338,44 @@
     <script>
 
         const panelSets = {
+            special1: {
+                title: "「目指せ☆ゲームでご当地制覇！」",
+                subtitle1:"",
+                subtitle2:"",
+                xAccount: "@jusochan1030",
+                xAccountURL: "https://x.com/jusochan1030",
+                images: [
+                    { path: "./images/special1/001.jpg", description: "いい湯ごくらく<br/>三重のひのき風呂" },
+                    { path: "./images/special1/002.jpg", description: "これぞいちごの王様<br/>福岡あまおう苺風呂" },
+                    { path: "./images/special1/003.jpg", description: "しっとりとろける<br/>北海道ミルク風呂" },
+                    { path: "./images/special1/004.jpg", description: "それはそれはさわやかな<br/>瀬戸内のれもん風呂" },
+                    { path: "./images/special1/005.jpg", description: "つややかに心和らぐ香り<br/>山形のお米風呂" },
+                    { path: "./images/special1/006.jpg", description: "ぷりっともぎたて肌<br/>山梨のもも風呂" },
+                    { path: "./images/special1/007.jpg", description: "ほっこりやさしく温かい<br/>愛媛温州みかん風呂" },
+                    { path: "./images/special1/008.jpg", description: "ほっとおちつく<br/>静岡の緑茶風呂" }
+                ]
+            },
+            special2: {
+                title: "「ランチャームの違い、わかる？」",
+                subtitle1:"",
+                subtitle2:"",
+                xAccount: "@asahi_so_prod",
+                xAccountURL: "https://x.com/asahi_so_prod",
+                images: [
+                    { path: "./images/special2/001.jpg", description: "トンカツソースが入れられがち！<br/>ブタだけにね" },
+                    { path: "./images/special2/002.jpg", description: "ランチャームで一番小さい！<br/>ちなみに“魚小”は存在しない。" },
+                    { path: "./images/special2/003.jpg", description: "ランチャーム界トップクラスの大きさ。<br/>醤油ドバドバ派向け！" },
+                    { path: "./images/special2/004.jpg", description: "一番よく見るランチャーム！" },
+                    { path: "./images/special2/005.jpg", description: "丸々と可愛いフォルム！" },
+                    { path: "./images/special2/006.jpg", description: "魚型じゃないけどランチャームです！" },
+                    { path: "./images/special2/007.jpg", description: "出会えたら超レア！<br/>きっとラッキーなことがあるはず☆" },
+                    { path: "./images/special2/008.jpg", description: "少しだけ大きいランチャーム。<br/>この大きさが良いのです。" }
+                ]
+            },
             normal1: {
                 title: "「カラフルリンク」",
+                subtitle1:"",
+                subtitle2:"",
                 xAccount: "consallink",
                 xAccountURL: "https://x.com/consallink",
                 images: [
@@ -338,6 +391,8 @@
             },
             normal2: {
                 title: "「覚えてコンサルリンク」",
+                subtitle1:"",
+                subtitle2:"",
                 xAccount: "consallink",
                 xAccountURL: "https://x.com/consallink",
                 images: [
@@ -364,12 +419,17 @@
             imageTitle.style.textShadow = "0 0 8px #ff4444, 0 0 16px #ff4444";
 
             document.querySelector('.x-link').style.display = 'none';
+            document.querySelector('.sub-title1').style.display = 'none';
+            document.querySelector('.sub-title2').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'none';
             document.getElementById('scoreBoard').style.display = 'none';
         } else {
             document.querySelector('.image-title').textContent = currentSet.title;
             document.querySelector('.x-link a').textContent = currentSet.xAccount;
             document.querySelector('.x-link a').href = currentSet.xAccountURL;
+
+            document.querySelector('.sub-title1').textContent = currentSet.subtitle1;
+            document.querySelector('.sub-title2').textContent = currentSet.subtitle2;
 
             let panelImages = currentSet.images;
             let selectedImages = [];
