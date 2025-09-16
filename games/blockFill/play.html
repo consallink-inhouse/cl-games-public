@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BlockFill - CL Game Center</title>
+    <meta name="description" content="一筆書きで塗りつぶすレトロ風パズル『ブロックフィル』" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 英文: Press Start 2P / 和文: Noto Sans JP -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/blockFill.css" />
+</head>
+
+<body class="is-loading">
+    <div id="app">
+        <header class="hud">
+            <div class="brand">
+                <span class="brand-badge">CL</span>
+                <h1 class="game-title">BlockFill</h1>
+            </div>
+            <div class="hud-right">
+                <div class="level-box">
+                    <label for="levelSelect">LEVEL</label>
+                    <select id="levelSelect" title="レベル選択"></select>
+                </div>
+                <div class="btn-box">
+                    <button id="undoBtn" class="btn neon">UNDO</button>
+                    <button id="restartBtn" class="btn neon">RESTART</button>
+                    <button id="nextBtn" class="btn neon">NEXT ▶</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-wrap">
+            <div class="sidebar">
+                <div class="panel">
+                    <h2>ルール</h2>
+                    <ul>
+                        <li>★から開始して、一筆書きで空マスを塗る</li>
+                        <li>壁（■）は通れない</li>
+                        <li>すべて塗れたらクリア！</li>
+                        <li>誤手で領域を分断する動きは不可</li>
+                    </ul>
+                </div>
+                <div class="panel info">
+                    <div>Moves: <span id="moves">0</span></div>
+                    <div>Filled: <span id="filled">0</span>/<span id="total">0</span></div>
+                </div>
+            </div>
+
+            <div class="board-wrap">
+                <div class="crt-bezel">
+                    <div id="board" class="board" aria-label="ゲームボード" role="application"></div>
+                </div>
+                <div id="msg" class="msg"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="./js/blockFill.js"></script>
+    <script>
+        // 初期ロード演出を軽く
+        window.addEventListener('load', () => {
+            document.body.classList.remove('is-loading');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+:root {
+    --bg: #0b0f16;
+    --panel: #101622;
+    --text: #e9f2ff;
+    --muted: #6e87b1;
+    --neon: #59d6ff;
+    --neon-pink: #ff4bd6;
+    --accent: #32ff83;
+    --danger: #ff6565;
+    --grid-gap: 6px;
+    --cell-size: min(56px, 8.5vmin);
+
+    /* 追加: マスのコントラストを強化 */
+    --cell-empty-top: #0d2b4a;
+    /* 通れるマス（未塗り）上部 */
+    --cell-empty-bottom: #0a1f33;
+    /* 通れるマス（未塗り）下部 */
+    --cell-empty-border: #2aa3ff55;
+
+    --cell-wall-base: #0e0f17;
+    /* 壁ベース色 */
+    --cell-wall-stripe1: #1b1e2a;
+    /* 壁ストライプ1 */
+    --cell-wall-stripe2: #111420;
+    /* 壁ストライプ2 */
+    --cell-wall-border: #5b6b8a66;
+    /* 壁枠 */
+
+    --cell-filled-top: #0e3d28;
+    /* 塗り上部 */
+    --cell-filled-bottom: #09311f;
+    /* 塗り下部 */
+    --cell-filled-border: #32ff8390;
+    /* 塗り枠 */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 50% 0%, #0e1630 0%, #070a12 60%, #05070b 100%), var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+    letter-spacing: .02em;
+}
+
+.game-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(16px, 3.2vw, 28px);
+    margin: 0 0 0 12px;
+    color: var(--neon);
+    text-shadow: 0 0 6px rgba(89, 214, 255, .8), 0 0 18px rgba(89, 214, 255, .35);
+}
+
+.is-loading {
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+body:not(.is-loading) {
+    opacity: 1;
+}
+
+/* HUD */
+.hud {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px clamp(12px, 3vw, 28px);
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .0));
+    backdrop-filter: blur(6px);
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 2px solid var(--neon);
+    border-radius: 10px;
+    color: var(--neon);
+    text-shadow: 0 0 8px rgba(89, 214, 255, .7);
+    box-shadow: inset 0 0 12px rgba(89, 214, 255, .2), 0 0 16px rgba(89, 214, 255, .15);
+}
+
+.hud-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.level-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#levelSelect {
+    background: #0f1725;
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 10px;
+    padding: 8px 10px;
+}
+
+.btn-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    letter-spacing: .06em;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, .18);
+    background: linear-gradient(180deg, #0f1725, #0b1220);
+    color: var(--text);
+    cursor: pointer;
+    transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+    transform: translateY(1px) scale(.99);
+}
+
+.btn.neon {
+    border-color: rgba(89, 214, 255, .6);
+    box-shadow: 0 0 0 0 rgba(89, 214, 255, .0);
+}
+
+.btn.neon:hover {
+    box-shadow: 0 0 8px rgba(89, 214, 255, .4), 0 0 20px rgba(89, 214, 255, .25);
+}
+
+/* Layout */
+.game-wrap {
+    padding: clamp(10px, 2vw, 22px);
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: clamp(12px, 2.5vw, 28px);
+}
+
+@media (max-width: 920px) {
+    .game-wrap {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(255, 255, 255, .03);
+}
+
+.panel h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    margin: 0 0 8px;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px rgba(255, 75, 214, .35);
+}
+
+.panel ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.panel.info {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+}
+
+/* Board */
+.board-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.crt-bezel {
+    padding: clamp(10px, 2vw, 18px);
+    border-radius: 22px;
+    background:
+        radial-gradient(800px 140px at 50% -30%, rgba(89, 214, 255, .15), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(255, 255, 255, .1);
+    box-shadow:
+        0 8px 50px rgba(0, 0, 0, .45),
+        inset 0 0 0 1px rgba(255, 255, 255, .04),
+        0 0 40px rgba(89, 214, 255, .18);
+}
+
+.board {
+    --size: var(--cell-size);
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--size));
+    grid-template-rows: repeat(var(--rows), var(--size));
+    gap: var(--grid-gap);
+    touch-action: none;
+    /* pointer操作のため */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* ===== マスの見た目（コントラスト強化） ===== */
+
+/* 通れるマス（未塗り） */
+.cell {
+    display: block;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border-radius: 12px;
+    border: 2px solid var(--cell-empty-border);
+    background:
+        linear-gradient(180deg, var(--cell-empty-top), var(--cell-empty-bottom));
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .06),
+        0 2px 6px rgba(0, 0, 0, .35);
+    position: relative;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 壁（通れない）: ダーク＋斜線ストライプで一目分かる */
+.cell.wall {
+    border-color: var(--cell-wall-border);
+    background:
+        /* ストライプ */
+        repeating-linear-gradient(45deg,
+            var(--cell-wall-stripe1) 0px,
+            var(--cell-wall-stripe1) 6px,
+            var(--cell-wall-stripe2) 6px,
+            var(--cell-wall-stripe2) 12px),
+        linear-gradient(180deg, var(--cell-wall-base), #0a0b12);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .03),
+        0 1px 4px rgba(0, 0, 0, .5);
+}
+
+/* スタート */
+.cell.start {
+    border-color: #7bf3b6aa;
+    background:
+        radial-gradient(18px 18px at 50% 50%, rgba(255, 255, 255, .18), transparent 60%),
+        linear-gradient(180deg, #10324b, #0b1e2d);
+    box-shadow:
+        0 0 10px rgba(50, 255, 131, .25),
+        inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+.cell.start::after {
+    content: "★";
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(14px, 2.8vmin, 20px);
+    color: var(--accent);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 10px rgba(50, 255, 131, .6);
+}
+
+/* 塗り済み（より明るいネオングリーン） */
+.cell.filled {
+    background: linear-gradient(180deg, var(--cell-filled-top), var(--cell-filled-bottom));
+    border-color: var(--cell-filled-border);
+    box-shadow:
+        0 0 6px rgba(50, 255, 131, .45),
+        0 0 18px rgba(50, 255, 131, .25),
+        inset 0 0 0 1px rgba(50, 255, 131, .28);
+}
+
+/* タッチ時の明確なフィードバック（壁以外） */
+.cell:not(.wall):active {
+    filter: brightness(1.2);
+}
+
+/* メッセージ */
+.msg {
+    min-height: 26px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all .2s ease;
+    text-align: center;
+}
+
+.msg.show {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--neon);
+    text-shadow: 0 0 8px rgba(89, 214, 255, .5);
+}
+
+/* 小さい画面向けの最適化 */
+@media (max-width: 560px) {
+    :root {
+        --cell-size: min(48px, 11.5vmin);
+        --grid-gap: 5px;
+    }
+
+    .panel.info {
+        font-size: 11px;
+    }
+
+    .hud {
+        padding: 10px 12px;
+    }
+
+    .btn {
+        padding: 9px 12px;
+        font-size: 11px;
+    }
+
+    #levelSelect {
+        padding: 7px 9px;
+    }
+}
+
+@media (max-width: 380px) {
+    :root {
+        --cell-size: min(42px, 12.5vmin);
+        --grid-gap: 4px;
+    }
+
+    .btn {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+}
