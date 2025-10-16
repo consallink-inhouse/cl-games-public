@@ -2,58 +2,10 @@
 // タイル: 0=空（塗る対象）, 1=壁（通れない）, 2=スタート（★）
 
 // --- 指定レイアウト ---
-// ・LEVEL1 (5x5)
-// □□□□□
-/* □　□□　 */
-/* □　□□　 */
-/* □□□□　 */
-/* ★□　　  */
-//
-// ・LEVEL2 (5x7)
-// 　　□□□
-/* □□□　□ */
-/* □　　　□ */
-/* ★□□　□ */
-/* □□□□□ */
-/* □　　□□ */
-/* □　　    */
-
-// 上記を数値グリッドに変換（0=□, 1=スペース, 2=★）
 const LEVELS = [
-    {
-        name: "LEVEL 1",
-        grid: [
-            [0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 1],
-            [0, 1, 0, 0, 1],
-            [0, 0, 0, 0, 1],
-            [2, 0, 1, 1, 1],
-        ]
-    },
-    {
-        name: "LEVEL 2",
-        grid: [
-            [1, 1, 0, 0, 0],
-            [0, 0, 0, 1, 0],
-            [0, 1, 1, 1, 0],
-            [2, 0, 0, 1, 0],
-            [0, 0, 0, 0, 0],
-            [0, 1, 1, 0, 0],
-            [0, 1, 1, 1, 1],
-        ]
-    },
-    {
-        name: "LEVEL 3",
-        grid: [
-            [0, 0, 0, 1, 0, 2],
-            [0, 1, 0, 0, 0, 1],
-            [0, 0, 0, 1, 1, 1],
-            [1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1],
-        ]
-    },
-
+    { name: "LEVEL 1", grid: [[0, 0, 0, 0, 0], [0, 1, 0, 0, 1], [0, 1, 0, 0, 1], [0, 0, 0, 0, 1], [2, 0, 1, 1, 1]] },
+    { name: "LEVEL 2", grid: [[1, 1, 0, 0, 0], [0, 0, 0, 1, 0], [0, 1, 1, 1, 0], [2, 0, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 1, 0, 0], [0, 1, 1, 1, 1]] },
+    { name: "LEVEL 3", grid: [[0, 0, 0, 1, 0, 2], [0, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1, 1], [1, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 1]] },
 ];
 
 const STORAGE_KEY = "blockfill_progress_v_custom_v1";
@@ -67,6 +19,10 @@ const movesEl = document.getElementById("moves");
 const filledEl = document.getElementById("filled");
 const totalEl = document.getElementById("total");
 const msgEl = document.getElementById("msg");
+
+// ▶ 追加：タイトル画面
+const titleScreenEl = document.getElementById("titleScreen");
+const startBtn = document.getElementById("startButton");
 
 let state = {
     levelIndex: 0,
@@ -185,12 +141,21 @@ function attachListenersOnce() {
     if (listenersAttached) return;
     listenersAttached = true;
 
-    boardEl.addEventListener("pointerdown", onPointerDown);
+    // ★ Pointer Capture & elementFromPoint でスマホの追従を安定化
+    boardEl.addEventListener("pointerdown", (e) => {
+        onPointerDown(e);
+        try { boardEl.setPointerCapture(e.pointerId); } catch { }
+    });
+
     boardEl.addEventListener("pointermove", (e) => {
         e.preventDefault(); // スクロール抑制
         onPointerMove(e);
     }, { passive: false });
-    window.addEventListener("pointerup", onPointerUp);
+
+    window.addEventListener("pointerup", (e) => {
+        onPointerUp();
+        try { boardEl.releasePointerCapture(e.pointerId); } catch { }
+    });
 
     // iOS系ハイライト抑制
     boardEl.addEventListener("touchstart", () => { }, { passive: true });
@@ -209,10 +174,16 @@ function setMessage(text) {
 
 // --- 判定ユーティリティ ---
 function coordFromEvent(e) {
-    const target = e.target;
-    if (!target || !target.classList || !target.classList.contains("cell")) return null;
+    // 直接セルに乗っていない場合（スマホで指が速い等）は elementFromPoint で補完
+    let target = e.target;
+    if (!target || !target.classList || !target.classList.contains("cell")) {
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        if (el && el.classList && el.classList.contains("cell")) target = el;
+    }
+    if (!target || !target.dataset) return null;
     const x = parseInt(target.dataset.x, 10);
     const y = parseInt(target.dataset.y, 10);
+    if (Number.isNaN(x) || Number.isNaN(y)) return null;
     return { x, y };
 }
 function same(a, b) { return a && b && a.x === b.x && a.y === b.y; }
@@ -249,7 +220,7 @@ function rebuildPaintFromPath() {
     updateHUD();
 }
 
-// --- 分断チェック（未塗りセルが2成分以上に分かれる手は不可） ---
+// --- 分断チェック ---
 function wouldSplitUnfilledIfMove(to) {
     const pathSet = new Set(state.path.map(p => p.x + "," + p.y));
     const toKey = to.x + "," + to.y;
@@ -278,11 +249,10 @@ function wouldSplitUnfilledIfMove(to) {
                 const nx = p.x + dx, ny = p.y + dy;
                 const key = nx + "," + ny;
                 if (!isInside(nx, ny)) continue;
-                if (state.grid[ny][nx] === 1) continue;   // 壁
-                if (pathSet.has(key)) continue;           // 既に塗ったセルは未塗りグラフから除外
+                if (state.grid[ny][nx] === 1) continue;
+                if (pathSet.has(key)) continue;
                 if (seen.has(key)) continue;
-                seen.add(key);
-                q.push({ x: nx, y: ny });
+                seen.add(key); q.push({ x: nx, y: ny });
             }
         }
     }
@@ -341,10 +311,10 @@ function tryMove(to) {
     }
 
     // 分断チェック
-    if (wouldSplitUnfilledIfMove(to)) {
-        onIllegalMoveFeedback();
-        return false;
-    }
+    //    if (wouldSplitUnfilledIfMove(to)) {
+    //        onIllegalMoveFeedback();
+    //        return false;
+    //    }
 
     state.path.push({ x: to.x, y: to.y });
     rebuildPaintFromPath();
@@ -394,9 +364,20 @@ function checkClear() {
 }
 
 // --- 起動 ---
+// タイトル画面の START で起動
 function boot() {
     loadProgress();
     initUI();
     loadLevel(state.levelIndex);
 }
-boot();
+
+// ▶ STARTボタンでゲーム開始（タイトル画面を非表示）
+if (startBtn && titleScreenEl) {
+    startBtn.addEventListener("click", () => {
+        titleScreenEl.style.display = "none";
+        boot();
+    });
+} else {
+    // フォールバック：要素が無い場合は従来通り即起動
+    boot();
+}

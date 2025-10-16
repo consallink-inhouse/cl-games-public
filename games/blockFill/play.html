@@ -6,24 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BlockFill - CL Game Center</title>
     <meta name="description" content="一筆書きで塗りつぶすレトロ風パズル『ブロックフィル』" />
-    <meta name="theme-color" content="#000000" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- 英文: Press Start 2P / 和文: Noto Sans JP -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;600&display=swap"
-        rel="stylesheet">
-
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/blockFill.css" />
 </head>
 
-<body class="is-loading">
-    <div id="app">
+<body class="fade-in is-loading">
+    <!-- ヘッダー（BlockBreakerと統一） -->
+    <div class="game-thumb">
+        <div class="thumb-left game-title">
+            <a href="../game_center.html">
+                <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER" />
+            </a>
+        </div>
+    </div>
+    <div class="game-thumb">
+        <div class="thumb-left sub-thumb">
+            <a href="./menu.html">
+                <img src="./images/Header_BlockFill.png" alt="BlockFill" />
+            </a>
+        </div>
+    </div>
+
+    <div id="gameContainer">
+        <!-- タイトル画面 -->
+        <div id="titleScreen">
+            <h1>BLOCK FILL</h1>
+            <div class="game-description">
+                <p class="description-title">ゲーム説明</p>
+                <ul>
+                    <li>★ からスタートして、一筆書きで空マスを塗りつぶします。</li>
+                    <li>壁（■）は通れません。</li>
+                    <li>未塗り領域を分断する動きはできません。</li>
+                    <li>すべて塗れたらクリア！ NEXTで次のレベルへ。</li>
+                </ul>
+            </div>
+            <button id="startButton">START</button>
+        </div>
+
+        <!-- HUD / Board -->
         <header class="hud">
             <div class="brand">
                 <span class="brand-badge">CL</span>
-                <h1 class="game-title">BlockFill</h1>
+                <h1 class="game-title-text">BlockFill</h1>
             </div>
             <div class="hud-right">
                 <div class="level-box">
@@ -35,26 +59,15 @@
                     <button id="restartBtn" class="btn neon">RESTART</button>
                     <button id="nextBtn" class="btn neon">NEXT ▶</button>
                 </div>
-            </div>
-        </header>
-
-        <main class="game-wrap">
-            <div class="sidebar">
-                <div class="panel">
-                    <h2>ルール</h2>
-                    <ul>
-                        <li>★から開始して、一筆書きで空マスを塗る</li>
-                        <li>壁（■）は通れない</li>
-                        <li>すべて塗れたらクリア！</li>
-                        <li>誤手で領域を分断する動きは不可</li>
-                    </ul>
-                </div>
-                <div class="panel info">
+                <div class="hud-info">
                     <div>Moves: <span id="moves">0</span></div>
                     <div>Filled: <span id="filled">0</span>/<span id="total">0</span></div>
                 </div>
             </div>
+        </header>
 
+        <!-- ★ ルールのサイドバーは削除し、ボードのみ表示 -->
+        <main class="game-wrap game-wrap--board-only">
             <div class="board-wrap">
                 <div class="crt-bezel">
                     <div id="board" class="board" aria-label="ゲームボード" role="application"></div>
@@ -64,9 +77,15 @@
         </main>
     </div>
 
+    <!-- フッター -->
+    <div class="logo-footer">
+        <a href="../game_center.html">
+            <img src="../images/ConsalLink.png" alt="CL LOGO">
+        </a>
+    </div>
+
     <script src="./js/blockFill.js"></script>
     <script>
-        // 初期ロード演出を軽く
         window.addEventListener('load', () => {
             document.body.classList.remove('is-loading');
         });
