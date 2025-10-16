@@ -25,41 +25,55 @@ let levelNumber = document.getElementById("levelNumber");
 
 /* === 背景画像の読み込み（透過で描画） === */
 const bgImage = new Image();
-bgImage.src = "./images/yo-ko-.jpg";
+bgImage.src = "./images/yo-ko-_800x600.jpg";
 let bgLoaded = false;
 bgImage.onload = () => { bgLoaded = true; };
 
 function drawBackground() {
     if (!bgLoaded) return;
-    const cw = canvas.width;
-    const ch = canvas.height;
-    const iw = bgImage.naturalWidth || bgImage.width;
-    const ih = bgImage.naturalHeight || bgImage.height;
-    let scale = Math.max(cw / iw, ch / ih);
-    // 画像を少し縮小（全体的に0.8倍）
-    scale *= 0.8;
 
-    const dw = iw * scale;
-    const dh = ih * scale;
+    const cw = canvas.width;   // キャンバスの横幅
+    const ch = canvas.height;  // キャンバスの縦幅
+    const iw = bgImage.naturalWidth || bgImage.width;   // 686
+    const ih = bgImage.naturalHeight || bgImage.height; // 843
+
+    // ★ 画像はリサイズしない（等倍）
+    const dw = iw;
+    const dh = ih;
+
+    // ★ 横は中央寄せ（左右の余白を均等に）
     const dx = (cw - dw) / 2;
+
+    // ★ 縦は中央基準（多少はみ出てもOK）
     const dy = (ch - dh) / 2;
 
     ctx.save();
-    ctx.globalAlpha = 0.15;
+    ctx.globalAlpha = 0.15; // 透過度
     ctx.drawImage(bgImage, dx, dy, dw, dh);
     ctx.restore();
 }
+
+
 /* === 背景画像ここまで === */
 
 /* === レベルアップ演出用画像（風船） === */
-const itemImage = new Image();
-itemImage.src = "./images/yo-ko-.png";
-let itemImageLoaded = false;
-itemImage.onload = () => { itemImageLoaded = true; };
+const balloonImages = [];
+let balloonLoadedCount = 0;
 
-// 風船はこの画像を使用
-const balloonImage = itemImage;
-let balloonImageLoaded = true; // itemImage と同一のため真
+function markBalloonLoaded() { balloonLoadedCount++; }
+function balloonsReady() { return balloonLoadedCount >= 2; }
+
+// 画像A：通常色
+const balloonImgA = new Image();
+balloonImgA.src = "./images/yo-ko-_800x600.png";
+balloonImgA.onload = markBalloonLoaded;
+balloonImages.push(balloonImgA);
+
+// 画像B：黄色版
+const balloonImgB = new Image();
+balloonImgB.src = "./images/yo-ko-_yellow_800x600.png";
+balloonImgB.onload = markBalloonLoaded;
+balloonImages.push(balloonImgB);
 
 // 風船エフェクト管理配列
 let balloons = [];
@@ -207,27 +221,50 @@ class Item {
 }
 
 /* === 風船（レベルアップ演出）クラス === */
+// Balloon クラス内の constructor はそのまま（または alpha 初期値 0.95 推奨）
+// this.alpha = 0.95;
+
 class Balloon {
     constructor() {
-        this.width = 48;
-        this.height = 48;
+        this.width = 64;
+        this.height = 64;
         this.x = Math.random() * (canvas.width - this.width) + this.width / 2;
-        this.y = canvas.height + this.height; // 画面下から出現
-        this.vy = 1.2 + Math.random() * 1.0; // 上昇速度
+        this.y = canvas.height + this.height;
+        this.vy = 1.2 + Math.random() * 1.5;
         this.t = 0;
-        this.swayAmplitude = 10 + Math.random() * 20; // 横ゆれ幅
-        this.swaySpeed = 0.8 + Math.random() * 1.0;   // 横ゆれ速度
+        this.swayAmplitude = 10 + Math.random() * 25;
+        this.swaySpeed = 0.6 + Math.random() * 1.2;
         this.rotationAmp = 0.08 + Math.random() * 0.06;
-        this.alpha = 0.85;
+        this.alpha = 0.95;
+        this.hue = Math.floor(Math.random() * 360);
+        // 2種類の画像からランダム（既に実装済みの場合はそのまま使ってOK）
+        this.img = balloonImages ? balloonImages[Math.floor(Math.random() * balloonImages.length)] : null;
     }
+
     move(dt) {
         const sec = dt * 0.001;
         this.t += sec;
-        this.y -= this.vy; // 上昇
-        this.x += Math.sin(this.t * this.swaySpeed * Math.PI * 2) * 0.6; // 微小な揺れ
+        this.y -= this.vy;
+        this.x += Math.sin(this.t * this.swaySpeed * Math.PI * 2) * 0.6;
+
+        // ★ フェード制御を変更：上端近くまでは不透明、上端付近でのみフェード
+        const fadeStart = 80; // 画面上から80pxに入ったらフェード開始
+        if (this.y < fadeStart) {
+            // 0〜1で上に行くほど0に近づく
+            const range = fadeStart + this.height + 20; // 少し余裕をもって計算
+            const t = Math.min(1, Math.max(0, (this.y + this.height + 20) / range));
+            this.alpha = t; // t=1(フェード前) → 0(上端外へ)
+        } else {
+            this.alpha = 0.95;
+        }
     }
+
     draw(ctx) {
-        if (!balloonImageLoaded || !itemImageLoaded) return;
+        // 読み込み待ちガード（2種ランダム実装時）
+        if (typeof balloonsReady === "function" && !balloonsReady()) return;
+        const img = this.img || (typeof balloonImage !== "undefined" ? balloonImage : null);
+        if (!img) return;
+
         ctx.save();
         ctx.globalAlpha = this.alpha;
         const angle = Math.sin(this.t * 2.0) * this.rotationAmp;
@@ -241,18 +278,20 @@ class Balloon {
         ctx.moveTo(0, this.height / 2);
         ctx.lineTo(0, this.height / 2 + 14);
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.strokeStyle = `hsla(${this.hue}, 100%, 80%, 0.6)`;
         ctx.stroke();
         ctx.restore();
 
-        // 風船本体
-        ctx.shadowColor = "#ff00ff";
-        ctx.shadowBlur = 10;
-        ctx.drawImage(balloonImage, -this.width / 2, -this.height / 2, this.width, this.height);
+        // 本体
+        ctx.shadowColor = `hsl(${this.hue}, 100%, 70%)`;
+        ctx.shadowBlur = 20;
+        ctx.drawImage(img, -this.width / 2, -this.height / 2, this.width, this.height);
         ctx.shadowBlur = 0;
 
         ctx.restore();
     }
+
+    // ★ 消滅判定は「画面外に出たら」だけにする（alphaでは消さない）
     isOffScreen() {
         return this.y + this.height < -20;
     }
@@ -319,7 +358,7 @@ function showLevelUpAnimation() {
 }
 
 /* === 風船生成 === */
-function spawnLevelUpBalloons(count = 25) {
+function spawnLevelUpBalloons(count = 30 + level * 3) {
     for (let i = 0; i < count; i++) {
         balloons.push(new Balloon());
     }
