@@ -23,6 +23,47 @@ let levelUpScore = 50;
 let levelUpText = document.getElementById("levelUpText");
 let levelNumber = document.getElementById("levelNumber");
 
+/* === 背景画像の読み込み（透過で描画） === */
+const bgImage = new Image();
+bgImage.src = "./images/yo-ko-.jpg";
+let bgLoaded = false;
+bgImage.onload = () => { bgLoaded = true; };
+
+function drawBackground() {
+    if (!bgLoaded) return;
+    const cw = canvas.width;
+    const ch = canvas.height;
+    const iw = bgImage.naturalWidth || bgImage.width;
+    const ih = bgImage.naturalHeight || bgImage.height;
+    let scale = Math.max(cw / iw, ch / ih);
+    // 画像を少し縮小（全体的に0.8倍）
+    scale *= 0.8;
+
+    const dw = iw * scale;
+    const dh = ih * scale;
+    const dx = (cw - dw) / 2;
+    const dy = (ch - dh) / 2;
+
+    ctx.save();
+    ctx.globalAlpha = 0.15;
+    ctx.drawImage(bgImage, dx, dy, dw, dh);
+    ctx.restore();
+}
+/* === 背景画像ここまで === */
+
+/* === レベルアップ演出用画像（風船） === */
+const itemImage = new Image();
+itemImage.src = "./images/yo-ko-.png";
+let itemImageLoaded = false;
+itemImage.onload = () => { itemImageLoaded = true; };
+
+// 風船はこの画像を使用
+const balloonImage = itemImage;
+let balloonImageLoaded = true; // itemImage と同一のため真
+
+// 風船エフェクト管理配列
+let balloons = [];
+
 class Paddle {
     constructor() {
         this.width = 100;
@@ -116,38 +157,48 @@ class Block {
     }
 }
 
+/* === ここを星型描画に“復元” === */
 class Item {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 20;
-        this.height = 20;
+        this.width = 20;   // 元サイズへ
+        this.height = 20;  // 元サイズへ
         this.dy = 2;
         this.rotation = 0;
     }
     move() {
         this.y += this.dy;
-        this.rotation += 0.1;
+        this.rotation += 0.1; // 元の回転速度
     }
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.rotate(this.rotation);
+
+        // 星型（5角形のスパイク）
         ctx.beginPath();
         const spikes = 5;
         const outerRadius = this.width / 2;
         const innerRadius = outerRadius / 2.5;
-        for (let i = 0; i < spikes * 2; i++) {
+
+        // 初期点を明示（moveTo）
+        let angle0 = -Math.PI / 2; // 上を起点に
+        ctx.moveTo(outerRadius * Math.cos(angle0), outerRadius * Math.sin(angle0));
+
+        for (let i = 1; i < spikes * 2; i++) {
             const r = (i % 2 === 0) ? outerRadius : innerRadius;
-            const angle = (i * Math.PI) / spikes;
+            const angle = angle0 + (i * Math.PI) / spikes;
             ctx.lineTo(r * Math.cos(angle), r * Math.sin(angle));
         }
         ctx.closePath();
+
         ctx.fillStyle = "#ff00ff";
         ctx.shadowColor = "#ff00ff";
         ctx.shadowBlur = 10;
         ctx.fill();
         ctx.shadowBlur = 0;
+
         ctx.restore();
     }
     getBounds() {
@@ -155,21 +206,74 @@ class Item {
     }
 }
 
+/* === 風船（レベルアップ演出）クラス === */
+class Balloon {
+    constructor() {
+        this.width = 48;
+        this.height = 48;
+        this.x = Math.random() * (canvas.width - this.width) + this.width / 2;
+        this.y = canvas.height + this.height; // 画面下から出現
+        this.vy = 1.2 + Math.random() * 1.0; // 上昇速度
+        this.t = 0;
+        this.swayAmplitude = 10 + Math.random() * 20; // 横ゆれ幅
+        this.swaySpeed = 0.8 + Math.random() * 1.0;   // 横ゆれ速度
+        this.rotationAmp = 0.08 + Math.random() * 0.06;
+        this.alpha = 0.85;
+    }
+    move(dt) {
+        const sec = dt * 0.001;
+        this.t += sec;
+        this.y -= this.vy; // 上昇
+        this.x += Math.sin(this.t * this.swaySpeed * Math.PI * 2) * 0.6; // 微小な揺れ
+    }
+    draw(ctx) {
+        if (!balloonImageLoaded || !itemImageLoaded) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        const angle = Math.sin(this.t * 2.0) * this.rotationAmp;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(angle);
+
+        // ひも
+        ctx.save();
+        ctx.rotate(-angle);
+        ctx.beginPath();
+        ctx.moveTo(0, this.height / 2);
+        ctx.lineTo(0, this.height / 2 + 14);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.stroke();
+        ctx.restore();
+
+        // 風船本体
+        ctx.shadowColor = "#ff00ff";
+        ctx.shadowBlur = 10;
+        ctx.drawImage(balloonImage, -this.width / 2, -this.height / 2, this.width, this.height);
+        ctx.shadowBlur = 0;
+
+        ctx.restore();
+    }
+    isOffScreen() {
+        return this.y + this.height < -20;
+    }
+}
+
+/* === ユーティリティ === */
 function isIntersecting(r1, r2) {
     return !(r2.x > r1.x + r1.width || r2.x + r2.width < r1.x || r2.y > r1.y + r1.height || r2.y + r2.height < r1.y);
 }
 
 function spawnNewBlockRow() {
-  const cols = 10;
-  const spacing = 65;
-  for (let i = 0; i < cols; i++) {
-    if (Math.random() < 0.5) {
-      const color = Math.random() < 0.05 ? "#ff00cc" : null;
-      const block = new Block(60 + i * spacing, 0, color);
-      block.dy = 0.1 + (level - 1) * 0.5; // レベルがあがった際のスピード
-      blocks.push(block);
+    const cols = 10;
+    const spacing = 65;
+    for (let i = 0; i < cols; i++) {
+        if (Math.random() < 0.5) {
+            const color = Math.random() < 0.05 ? "#ff00cc" : null;
+            const block = new Block(60 + i * spacing, 0, color);
+            block.dy = 0.1 + (level - 1) * 0.5; // レベルがあがった際のスピード
+            blocks.push(block);
+        }
     }
-  }
 }
 
 function showGameOver() {
@@ -184,6 +288,7 @@ function initGame() {
     balls = [new Ball()];
     blocks = [];
     items = [];
+    balloons = []; // 風船エフェクトも初期化
     score = 0;
     gameRunning = true;
     gameOverDisplay.style.display = "none";
@@ -199,105 +304,124 @@ function initGame() {
 }
 
 function showLevelUpAnimation() {
-  levelUpText.classList.remove("fadeOut");
-  void levelUpText.offsetWidth;
-  levelUpText.innerHTML = `LEVEL UP！<br><span id="levelNumber">LEVEL ${level}</span>`;
-  levelUpText.classList.add("active");
-  setTimeout(() => {
-    levelUpText.classList.add("fadeOut");
-    setTimeout(() => levelUpText.classList.remove("active", "fadeOut"), 1000);
-  }, 3000);
+    levelUpText.classList.remove("fadeOut");
+    void levelUpText.offsetWidth;
+    levelUpText.innerHTML = `LEVEL UP！<br><span id="levelNumber">LEVEL ${level}</span>`;
+    levelNumber = document.getElementById("levelNumber");
+    levelUpText.classList.add("active");
+    setTimeout(() => {
+        levelUpText.classList.add("fadeOut");
+        setTimeout(() => levelUpText.classList.remove("active", "fadeOut"), 1000);
+    }, 3000);
+
+    // レベルアップ時に風船を複数体出現
+    spawnLevelUpBalloons(6 + Math.floor(Math.random() * 3)); // 6〜8体
+}
+
+/* === 風船生成 === */
+function spawnLevelUpBalloons(count = 25) {
+    for (let i = 0; i < count; i++) {
+        balloons.push(new Balloon());
+    }
 }
 
 function gameLoop(timestamp) {
-  if (!gameRunning) return;
+    if (!gameRunning) return;
 
-  const deltaTime = timestamp - lastTimestamp;
-  lastTimestamp = timestamp;
-  spawnTimer += deltaTime;
+    const deltaTime = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+    spawnTimer += deltaTime;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // クリア → 背景描画
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
 
-  // 移動処理
-  balls.forEach(ball => ball.move());
-  blocks.forEach(b => b.move());
-  items.forEach(it => it.move());
+    // 移動処理
+    balls.forEach(ball => ball.move());
+    blocks.forEach(b => b.move());
+    items.forEach(it => it.move());
+    balloons.forEach(bl => bl.move(deltaTime)); // 風船も更新
 
-  if (mouseDown && mouseXCache != null) paddle.move(mouseXCache);
-  if (touchX != null) paddle.move(touchX);
+    if (mouseDown && mouseXCache != null) paddle.move(mouseXCache);
+    if (touchX != null) paddle.move(touchX);
 
-  // 衝突：ボールとパドル
-  for (const ball of balls) {
-    if (isIntersecting(ball.getBounds(), paddle.getBounds())) {
-      ball.dy = -Math.abs(ball.dy);
-    }
-  }
-
-  // 衝突：ボールとブロック
-  for (let i = blocks.length - 1; i >= 0; i--) {
-    const block = blocks[i];
-    for (let j = balls.length - 1; j >= 0; j--) {
-      if (isIntersecting(balls[j].getBounds(), block.getBounds())) {
-        if (block.color === "#ff00cc") {
-          items.push(new Item(block.x + block.width / 2, block.y));
+    // 衝突：ボールとパドル
+    for (const ball of balls) {
+        if (isIntersecting(ball.getBounds(), paddle.getBounds())) {
+            ball.dy = -Math.abs(ball.dy);
         }
-        blocks.splice(i, 1);
-        balls[j].dy = -balls[j].dy;
-        score++;
-        break;
-      }
     }
-  }
 
-  // 衝突：ブロックとパドルライン
-  for (const b of blocks) {
-    if (b.y + b.height >= paddle.y) {
-      gameRunning = false;
-      showGameOver();
-      return;
+    // 衝突：ボールとブロック
+    for (let i = blocks.length - 1; i >= 0; i--) {
+        const block = blocks[i];
+        for (let j = balls.length - 1; j >= 0; j--) {
+            if (isIntersecting(balls[j].getBounds(), block.getBounds())) {
+                if (block.color === "#ff00cc") {
+                    items.push(new Item(block.x + block.width / 2, block.y));
+                }
+                blocks.splice(i, 1);
+                balls[j].dy = -balls[j].dy;
+                score++;
+                break;
+            }
+        }
     }
-  }
 
-  // 衝突：アイテムとパドル
-  for (let i = items.length - 1; i >= 0; i--) {
-    if (isIntersecting(items[i].getBounds(), paddle.getBounds())) {
-      balls.push(new Ball());
-      items.splice(i, 1);
-    } else if (items[i].y > canvas.height) {
-      items.splice(i, 1);
+    // 衝突：ブロックとパドルライン
+    for (const b of blocks) {
+        if (b.y + b.height >= paddle.y) {
+            gameRunning = false;
+            showGameOver();
+            return;
+        }
     }
-  }
 
-  // ボールが落ちたか確認（すべて消えるとゲームオーバー）
-  balls = balls.filter(ball => ball.y <= canvas.height);
-  if (balls.length === 0) {
-    gameRunning = false;
-    showGameOver();
-    return;
-  }
+    // 衝突：アイテムとパドル
+    for (let i = items.length - 1; i >= 0; i--) {
+        if (isIntersecting(items[i].getBounds(), paddle.getBounds())) {
+            balls.push(new Ball());
+            items.splice(i, 1);
+        } else if (items[i].y > canvas.height) {
+            items.splice(i, 1);
+        }
+    }
 
-  // レベルアップ処理
-  if (score >= levelUpScore) {
-    level++;
-    levelUpScore += 50;
-    levelNumber.textContent = level;
-    showLevelUpAnimation();
-  }
+    // 落下したボール除外（全消滅でゲームオーバー）
+    balls = balls.filter(ball => ball.y <= canvas.height);
+    if (balls.length === 0) {
+        gameRunning = false;
+        showGameOver();
+        return;
+    }
 
-  // ブロック追加
-  if (spawnTimer >= spawnInterval) {
-    spawnNewBlockRow();
-    spawnTimer = 0;
-  }
+    // レベルアップ処理
+    if (score >= levelUpScore) {
+        level++;
+        levelUpScore += 50;
+        levelNumber.textContent = level;
+        showLevelUpAnimation();
+    }
 
-  // 描画
-  paddle.draw(ctx);
-  balls.forEach(b => b.draw(ctx));
-  blocks.forEach(b => b.draw(ctx));
-  items.forEach(it => it.draw(ctx));
-  scoreDisplay.innerText = "SCORE: " + score;
+    // ブロック追加
+    if (spawnTimer >= spawnInterval) {
+        spawnNewBlockRow();
+        spawnTimer = 0;
+    }
 
-  requestAnimationFrame(gameLoop);
+    // 描画
+    paddle.draw(ctx);
+    balls.forEach(b => b.draw(ctx));
+    blocks.forEach(b => b.draw(ctx));
+    items.forEach(it => it.draw(ctx));
+    balloons.forEach(bl => bl.draw(ctx)); // 風船は最前面
+
+    // 画面外へ出た風船は削除
+    balloons = balloons.filter(bl => !bl.isOffScreen());
+
+    scoreDisplay.innerText = "SCORE: " + score;
+
+    requestAnimationFrame(gameLoop);
 }
 
 canvas.addEventListener("mousedown", () => mouseDown = true);

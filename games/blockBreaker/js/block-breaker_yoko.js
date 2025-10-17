@@ -25,7 +25,7 @@ let levelNumber = document.getElementById("levelNumber");
 
 /* === 背景画像の読み込み（透過で描画） === */
 const bgImage = new Image();
-bgImage.src = "./images/yo-ko-_800x600.jpg";
+bgImage.src = "./images/yoko/yo-ko-_800x600.jpg";
 let bgLoaded = false;
 bgImage.onload = () => { bgLoaded = true; };
 
@@ -65,13 +65,13 @@ function balloonsReady() { return balloonLoadedCount >= 2; }
 
 // 画像A：通常色
 const balloonImgA = new Image();
-balloonImgA.src = "./images/yo-ko-_800x600.png";
+balloonImgA.src = "./images/yoko/yo-ko-_800x600.png";
 balloonImgA.onload = markBalloonLoaded;
 balloonImages.push(balloonImgA);
 
 // 画像B：黄色版
 const balloonImgB = new Image();
-balloonImgB.src = "./images/yo-ko-_yellow_800x600.png";
+balloonImgB.src = "./images/yoko/yo-ko-_yellow_800x600.png";
 balloonImgB.onload = markBalloonLoaded;
 balloonImages.push(balloonImgB);
 
