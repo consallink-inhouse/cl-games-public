@@ -32,7 +32,7 @@ const isMobile = window.innerWidth <= 600;
 
 // ★ PC とスマホで画像を切り替え
 bgImage.src = isMobile
-    ? "./images/fugetsu/thum.jpeg"
+    ? "./images/fugetsu/thum_800x600.jpeg"
     : "./images/fugetsu/thum_800x600.jpeg";
 
 bgImage.onload = () => { bgLoaded = true; };
