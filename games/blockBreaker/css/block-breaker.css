@@ -222,6 +222,8 @@ canvas {
 
     .image-title {
         font-size: 15px;
+        margin-top:-10px;
+        margin-bottom: 5px;
     }
 
     .x-link {

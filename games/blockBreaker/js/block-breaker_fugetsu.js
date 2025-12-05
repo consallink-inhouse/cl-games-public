@@ -23,10 +23,18 @@ let levelUpScore = 50;
 let levelUpText = document.getElementById("levelUpText");
 let levelNumber = document.getElementById("levelNumber");
 
-/* === 背景画像の読み込み（透過で描画） === */
+/* === 背景画像の読み込み（PC / スマホで出し分け） === */
 const bgImage = new Image();
-bgImage.src = "./images/fugetsu/thum.jpeg";
 let bgLoaded = false;
+
+// スマホ判定（幅600以下ならスマホ扱い）
+const isMobile = window.innerWidth <= 600;
+
+// ★ PC とスマホで画像を切り替え
+bgImage.src = isMobile
+    ? "./images/fugetsu/thum_800x600.jpeg"
+    : "./images/fugetsu/thum.jpeg";
+
 bgImage.onload = () => { bgLoaded = true; };
 
 function drawBackground() {
@@ -52,7 +60,6 @@ function drawBackground() {
     ctx.drawImage(bgImage, dx, dy, dw, dh);
     ctx.restore();
 }
-
 
 /* === 背景画像ここまで === */
 
