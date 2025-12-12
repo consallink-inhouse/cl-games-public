@@ -27,7 +27,7 @@ const videoCutin = document.getElementById("videoCutin");
 const cutinVideo = document.getElementById("cutinVideo");
 const bgVideo = document.getElementById("bgVideo");
 
-const VIDEO_TRIGGER_SCORE = 10;
+const VIDEO_TRIGGER_SCORE = 50;
 let videoTriggered = false;
 
 /* === 背景画像の読み込み（透過で描画） === */
