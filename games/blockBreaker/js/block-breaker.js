@@ -23,9 +23,16 @@ let levelUpScore = 50;
 let levelUpText = document.getElementById("levelUpText");
 let levelNumber = document.getElementById("levelNumber");
 
+const videoCutin = document.getElementById("videoCutin");
+const cutinVideo = document.getElementById("cutinVideo");
+const bgVideo = document.getElementById("bgVideo");
+
+const VIDEO_TRIGGER_SCORE = 10;
+let videoTriggered = false;
+
 /* === 背景画像の読み込み（透過で描画） === */
 const bgImage = new Image();
-bgImage.src = "./images/yo-ko-.jpg";
+// bgImage.src = "./images/yo-ko-.jpg";
 let bgLoaded = false;
 bgImage.onload = () => { bgLoaded = true; };
 
@@ -53,7 +60,7 @@ function drawBackground() {
 
 /* === レベルアップ演出用画像（風船） === */
 const itemImage = new Image();
-itemImage.src = "./images/yo-ko-.png";
+//itemImage.src = "./images/yo-ko-.png";
 let itemImageLoaded = false;
 itemImage.onload = () => { itemImageLoaded = true; };
 
@@ -300,6 +307,9 @@ function initGame() {
     levelUpScore = 50;
     if (levelUpText) levelUpText.classList.remove("active");
 
+    videoTriggered = false;
+    hideVideos();
+
     spawnNewBlockRow();
 }
 
@@ -421,6 +431,19 @@ function gameLoop(timestamp) {
 
     scoreDisplay.innerText = "SCORE: " + score;
 
+    // ★スコア100超え：LEVEL UP → カットイン動画（スマホのみ・1回）
+    if (!videoTriggered && score >= VIDEO_TRIGGER_SCORE && isMobileMode()) {
+        videoTriggered = true;
+
+        // ① まず LEVEL UP テキストを表示
+        showLevelUpAnimation();
+
+        // ② 少し溜めてからカットイン動画
+        setTimeout(() => {
+            playCutinThenBackground();
+        }, 50); // ← LEVEL UP を読ませるための溜め（調整可）
+    }
+
     requestAnimationFrame(gameLoop);
 }
 
@@ -448,3 +471,65 @@ retryButton.onclick = () => {
     initGame();
     requestAnimationFrame(gameLoop);
 };
+
+function isMobileMode() {
+    return window.matchMedia("(max-width: 600px)").matches;
+}
+
+function stopAndResetVideo(v) {
+    if (!v) return;
+    try {
+        v.pause();
+        v.currentTime = 0;
+    } catch (e) {}
+}
+
+function hideVideos() {
+    if (videoCutin) videoCutin.classList.remove("show");
+    if (bgVideo) bgVideo.style.opacity = "0";
+    stopAndResetVideo(cutinVideo);
+    stopAndResetVideo(bgVideo);
+}
+
+async function playCutinThenBackground() {
+    if (!isMobileMode()) return;
+    if (!cutinVideo || !bgVideo || !videoCutin) return;
+
+    // カットイン表示
+    videoCutin.classList.add("show");
+
+    // カットイン再生（スマホはmuted+playsinlineで自動再生が通りやすい）
+    try {
+        cutinVideo.currentTime = 0;
+        await cutinVideo.play();
+    } catch (e) {
+        // 自動再生がブロックされても、ゲームは続ける
+        videoCutin.classList.remove("show");
+        return;
+    }
+
+    // 終了したら背景動画へ
+    const endHandler = async () => {
+        cutinVideo.removeEventListener("ended", endHandler);
+        videoCutin.classList.remove("show");
+
+        // 背景動画をうっすら表示してループ再生
+        try {
+            bgVideo.currentTime = 0;
+            await bgVideo.play();
+            bgVideo.style.opacity = "0.28"; // ←お好みで調整
+        } catch (e) {
+            // 背景動画が再生できなくてもゲームは続ける
+        }
+    };
+
+    cutinVideo.addEventListener("ended", endHandler);
+
+    // 念のためタイムアウトでも背景化（動画が短い/endedが来ない保険）
+    setTimeout(() => {
+        if (videoCutin.classList.contains("show")) {
+            try { cutinVideo.pause(); } catch (e) {}
+            endHandler();
+        }
+    }, 4500);
+}

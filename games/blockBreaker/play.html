@@ -25,6 +25,24 @@
         </div>
     </div>
     <div id="gameContainer">
+        <!-- ★追加：スマホだけ動画を使う（cut-in） -->
+        <div id="videoCutin" class="mobile-video-layer">
+            <video id="cutinVideo"
+                   src="./videos/cutin.mp4"
+                   playsinline
+                   muted
+                   preload="auto"></video>
+        </div>
+
+        <!-- ★追加：スマホだけ動画を使う（背景ループ） -->
+        <video id="bgVideo"
+               class="mobile-video-bg"
+               src="./videos/cutin.mp4"
+               playsinline
+               muted
+               loop
+               preload="auto"></video>
+
         <canvas id="gameCanvas" width="800" height="600"></canvas>
         <div id="titleScreen">
             <h1>BLOCK BREAKER</h1>
