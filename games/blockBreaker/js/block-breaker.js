@@ -23,12 +23,8 @@ let levelUpScore = 50;
 let levelUpText = document.getElementById("levelUpText");
 let levelNumber = document.getElementById("levelNumber");
 
-const videoCutin = document.getElementById("videoCutin");
-const cutinVideo = document.getElementById("cutinVideo");
+// ★背景動画（mobile-video-bg のみ）
 const bgVideo = document.getElementById("bgVideo");
-
-const VIDEO_TRIGGER_SCORE = 5;
-let videoTriggered = false;
 
 /* === 背景画像の読み込み（透過で描画） === */
 const bgImage = new Image();
@@ -43,7 +39,6 @@ function drawBackground() {
     const iw = bgImage.naturalWidth || bgImage.width;
     const ih = bgImage.naturalHeight || bgImage.height;
     let scale = Math.max(cw / iw, ch / ih);
-    // 画像を少し縮小（全体的に0.8倍）
     scale *= 0.8;
 
     const dw = iw * scale;
@@ -59,14 +54,23 @@ function drawBackground() {
 /* === 背景画像ここまで === */
 
 /* === レベルアップ演出用画像（風船） === */
-const itemImage = new Image();
-//itemImage.src = "./images/yo-ko-.png";
-let itemImageLoaded = false;
-itemImage.onload = () => { itemImageLoaded = true; };
+const balloonImages = [];
+let balloonLoadedCount = 0;
 
-// 風船はこの画像を使用
-const balloonImage = itemImage;
-let balloonImageLoaded = true; // itemImage と同一のため真
+function markBalloonLoaded() { balloonLoadedCount++; }
+function balloonsReady() { return balloonLoadedCount >= 2; }
+
+// 画像1
+const balloonImgA = new Image();
+balloonImgA.src = "./images/cl_balloon1.png";
+balloonImgA.onload = markBalloonLoaded;
+balloonImages.push(balloonImgA);
+
+// 画像2
+const balloonImgB = new Image();
+balloonImgB.src = "./images/cl_balloon2.png";
+balloonImgB.onload = markBalloonLoaded;
+balloonImages.push(balloonImgB);
 
 // 風船エフェクト管理配列
 let balloons = [];
@@ -164,33 +168,31 @@ class Block {
     }
 }
 
-/* === ここを星型描画に“復元” === */
+/* === 星型アイテム === */
 class Item {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 20;   // 元サイズへ
-        this.height = 20;  // 元サイズへ
+        this.width = 20;
+        this.height = 20;
         this.dy = 2;
         this.rotation = 0;
     }
     move() {
         this.y += this.dy;
-        this.rotation += 0.1; // 元の回転速度
+        this.rotation += 0.1;
     }
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.rotate(this.rotation);
 
-        // 星型（5角形のスパイク）
         ctx.beginPath();
         const spikes = 5;
         const outerRadius = this.width / 2;
         const innerRadius = outerRadius / 2.5;
 
-        // 初期点を明示（moveTo）
-        let angle0 = -Math.PI / 2; // 上を起点に
+        let angle0 = -Math.PI / 2;
         ctx.moveTo(outerRadius * Math.cos(angle0), outerRadius * Math.sin(angle0));
 
         for (let i = 1; i < spikes * 2; i++) {
@@ -216,25 +218,41 @@ class Item {
 /* === 風船（レベルアップ演出）クラス === */
 class Balloon {
     constructor() {
-        this.width = 48;
-        this.height = 48;
+        this.width = 85;
+        this.height = 85;
         this.x = Math.random() * (canvas.width - this.width) + this.width / 2;
-        this.y = canvas.height + this.height; // 画面下から出現
-        this.vy = 1.2 + Math.random() * 1.0; // 上昇速度
+        this.y = canvas.height + this.height;
+        this.vy = 1.2 + Math.random() * 1.5;
         this.t = 0;
-        this.swayAmplitude = 10 + Math.random() * 20; // 横ゆれ幅
-        this.swaySpeed = 0.8 + Math.random() * 1.0;   // 横ゆれ速度
+        this.swayAmplitude = 10 + Math.random() * 25;
+        this.swaySpeed = 0.6 + Math.random() * 1.2;
         this.rotationAmp = 0.08 + Math.random() * 0.06;
-        this.alpha = 0.85;
+        this.alpha = 0.95;
+        this.hue = Math.floor(Math.random() * 360);
+        this.img = balloonImages ? balloonImages[Math.floor(Math.random() * balloonImages.length)] : null;
     }
+
     move(dt) {
         const sec = dt * 0.001;
         this.t += sec;
-        this.y -= this.vy; // 上昇
-        this.x += Math.sin(this.t * this.swaySpeed * Math.PI * 2) * 0.6; // 微小な揺れ
+        this.y -= this.vy;
+        this.x += Math.sin(this.t * this.swaySpeed * Math.PI * 2) * 0.6;
+
+        const fadeStart = 80;
+        if (this.y < fadeStart) {
+            const range = fadeStart + this.height + 20;
+            const t = Math.min(1, Math.max(0, (this.y + this.height + 20) / range));
+            this.alpha = t;
+        } else {
+            this.alpha = 0.95;
+        }
     }
+
     draw(ctx) {
-        if (!balloonImageLoaded || !itemImageLoaded) return;
+        if (typeof balloonsReady === "function" && !balloonsReady()) return;
+        const img = this.img;
+        if (!img) return;
+
         ctx.save();
         ctx.globalAlpha = this.alpha;
         const angle = Math.sin(this.t * 2.0) * this.rotationAmp;
@@ -248,18 +266,19 @@ class Balloon {
         ctx.moveTo(0, this.height / 2);
         ctx.lineTo(0, this.height / 2 + 14);
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.strokeStyle = `hsla(${this.hue}, 100%, 80%, 0.6)`;
         ctx.stroke();
         ctx.restore();
 
-        // 風船本体
-        ctx.shadowColor = "#ff00ff";
-        ctx.shadowBlur = 10;
-        ctx.drawImage(balloonImage, -this.width / 2, -this.height / 2, this.width, this.height);
+        // 本体
+        ctx.shadowColor = `hsl(${this.hue}, 100%, 70%)`;
+        ctx.shadowBlur = 20;
+        ctx.drawImage(img, -this.width / 2, -this.height / 2, this.width, this.height);
         ctx.shadowBlur = 0;
 
         ctx.restore();
     }
+
     isOffScreen() {
         return this.y + this.height < -20;
     }
@@ -267,7 +286,12 @@ class Balloon {
 
 /* === ユーティリティ === */
 function isIntersecting(r1, r2) {
-    return !(r2.x > r1.x + r1.width || r2.x + r2.width < r1.x || r2.y > r1.y + r1.height || r2.y + r2.height < r1.y);
+    return !(
+        r2.x > r1.x + r1.width ||
+        r2.x + r2.width < r1.x ||
+        r2.y > r1.y + r1.height ||
+        r2.y + r2.height < r1.y
+    );
 }
 
 function spawnNewBlockRow() {
@@ -277,7 +301,7 @@ function spawnNewBlockRow() {
         if (Math.random() < 0.5) {
             const color = Math.random() < 0.05 ? "#ff00cc" : null;
             const block = new Block(60 + i * spacing, 0, color);
-            block.dy = 0.1 + (level - 1) * 0.5; // レベルがあがった際のスピード
+            block.dy = 0.1 + (level - 1) * 0.5;
             blocks.push(block);
         }
     }
@@ -295,7 +319,7 @@ function initGame() {
     balls = [new Ball()];
     blocks = [];
     items = [];
-    balloons = []; // 風船エフェクトも初期化
+    balloons = [];
     score = 0;
     gameRunning = true;
     gameOverDisplay.style.display = "none";
@@ -307,8 +331,8 @@ function initGame() {
     levelUpScore = 50;
     if (levelUpText) levelUpText.classList.remove("active");
 
-    videoTriggered = false;
-    hideVideos();
+    // ★背景動画リセット（ゲーム開始時に再生するため）
+    resetBackgroundVideo();
 
     spawnNewBlockRow();
 }
@@ -324,8 +348,9 @@ function showLevelUpAnimation() {
         setTimeout(() => levelUpText.classList.remove("active", "fadeOut"), 1000);
     }, 3000);
 
-    // レベルアップ時に風船を複数体出現
-    spawnLevelUpBalloons(6 + Math.floor(Math.random() * 3)); // 6〜8体
+//    spawnLevelUpBalloons(6 + Math.floor(Math.random() * 3));
+    spawnLevelUpBalloons(18 + Math.floor(Math.random() * 5)); // 18〜22体
+
 }
 
 /* === 風船生成 === */
@@ -342,27 +367,25 @@ function gameLoop(timestamp) {
     lastTimestamp = timestamp;
     spawnTimer += deltaTime;
 
-    // クリア → 背景描画
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
 
-    // 移動処理
     balls.forEach(ball => ball.move());
     blocks.forEach(b => b.move());
     items.forEach(it => it.move());
-    balloons.forEach(bl => bl.move(deltaTime)); // 風船も更新
+    balloons.forEach(bl => bl.move(deltaTime));
 
     if (mouseDown && mouseXCache != null) paddle.move(mouseXCache);
     if (touchX != null) paddle.move(touchX);
 
-    // 衝突：ボールとパドル
+    // ボール×パドル
     for (const ball of balls) {
         if (isIntersecting(ball.getBounds(), paddle.getBounds())) {
             ball.dy = -Math.abs(ball.dy);
         }
     }
 
-    // 衝突：ボールとブロック
+    // ボール×ブロック
     for (let i = blocks.length - 1; i >= 0; i--) {
         const block = blocks[i];
         for (let j = balls.length - 1; j >= 0; j--) {
@@ -378,7 +401,7 @@ function gameLoop(timestamp) {
         }
     }
 
-    // 衝突：ブロックとパドルライン
+    // ブロック×パドルライン（ゲームオーバー）
     for (const b of blocks) {
         if (b.y + b.height >= paddle.y) {
             gameRunning = false;
@@ -387,7 +410,7 @@ function gameLoop(timestamp) {
         }
     }
 
-    // 衝突：アイテムとパドル
+    // アイテム×パドル
     for (let i = items.length - 1; i >= 0; i--) {
         if (isIntersecting(items[i].getBounds(), paddle.getBounds())) {
             balls.push(new Ball());
@@ -397,7 +420,7 @@ function gameLoop(timestamp) {
         }
     }
 
-    // 落下したボール除外（全消滅でゲームオーバー）
+    // 落下ボール除外（全消滅でゲームオーバー）
     balls = balls.filter(ball => ball.y <= canvas.height);
     if (balls.length === 0) {
         gameRunning = false;
@@ -405,7 +428,7 @@ function gameLoop(timestamp) {
         return;
     }
 
-    // レベルアップ処理
+    // レベルアップ
     if (score >= levelUpScore) {
         level++;
         levelUpScore += 50;
@@ -424,29 +447,16 @@ function gameLoop(timestamp) {
     balls.forEach(b => b.draw(ctx));
     blocks.forEach(b => b.draw(ctx));
     items.forEach(it => it.draw(ctx));
-    balloons.forEach(bl => bl.draw(ctx)); // 風船は最前面
+    balloons.forEach(bl => bl.draw(ctx));
 
-    // 画面外へ出た風船は削除
     balloons = balloons.filter(bl => !bl.isOffScreen());
 
     scoreDisplay.innerText = "SCORE: " + score;
 
-    // ★スコア100超え：LEVEL UP → カットイン動画（スマホのみ・1回）
-    if (!videoTriggered && score >= VIDEO_TRIGGER_SCORE && isMobileMode()) {
-        videoTriggered = true;
-
-        // ① まず LEVEL UP テキストを表示
-        showLevelUpAnimation();
-
-        // ② 少し溜めてからカットイン動画
-        setTimeout(() => {
-            playCutinThenBackground();
-        }, 50); // ← LEVEL UP を読ませるための溜め（調整可）
-    }
-
     requestAnimationFrame(gameLoop);
 }
 
+/* === 入力 === */
 canvas.addEventListener("mousedown", () => mouseDown = true);
 canvas.addEventListener("mouseup", () => mouseDown = false);
 canvas.addEventListener("mouseleave", () => mouseDown = false);
@@ -461,75 +471,49 @@ canvas.addEventListener("touchmove", e => {
 });
 canvas.addEventListener("touchend", () => touchX = null);
 
+/* === START / RETRY === */
 startButton.onclick = () => {
     titleScreen.style.display = "none";
     initGame();
+
+    // ★ゲーム開始時に背景動画を再生（スマホのみ）
+    startBackgroundVideo();
+
     requestAnimationFrame(gameLoop);
 };
 
 retryButton.onclick = () => {
     initGame();
+
+    // ★リトライ開始時も背景動画を再生（スマホのみ）
+    startBackgroundVideo();
+
     requestAnimationFrame(gameLoop);
 };
 
+/* ===== 背景動画（mobile-video-bg）のみ制御 ===== */
 function isMobileMode() {
     return window.matchMedia("(max-width: 600px)").matches;
 }
 
-function stopAndResetVideo(v) {
-    if (!v) return;
-    try {
-        v.pause();
-        v.currentTime = 0;
-    } catch (e) {}
-}
-
-function hideVideos() {
-    if (videoCutin) videoCutin.classList.remove("show");
-    if (bgVideo) bgVideo.style.opacity = "0";
-    stopAndResetVideo(cutinVideo);
-    stopAndResetVideo(bgVideo);
-}
-
-async function playCutinThenBackground() {
+async function startBackgroundVideo() {
     if (!isMobileMode()) return;
-    if (!cutinVideo || !bgVideo || !videoCutin) return;
+    if (!bgVideo) return;
 
-    // カットイン表示
-    videoCutin.classList.add("show");
-
-    // カットイン再生（スマホはmuted+playsinlineで自動再生が通りやすい）
     try {
-        cutinVideo.currentTime = 0;
-        await cutinVideo.play();
+        bgVideo.currentTime = 0;      // 毎回先頭から（不要なら削除OK）
+        await bgVideo.play();
+        bgVideo.style.opacity = "0.28";
     } catch (e) {
-        // 自動再生がブロックされても、ゲームは続ける
-        videoCutin.classList.remove("show");
-        return;
+        // 自動再生がブロックされてもゲームは続ける
     }
+}
 
-    // 終了したら背景動画へ
-    const endHandler = async () => {
-        cutinVideo.removeEventListener("ended", endHandler);
-        videoCutin.classList.remove("show");
-
-        // 背景動画をうっすら表示してループ再生
-        try {
-            bgVideo.currentTime = 0;
-            await bgVideo.play();
-            bgVideo.style.opacity = "0.28"; // ←お好みで調整
-        } catch (e) {
-            // 背景動画が再生できなくてもゲームは続ける
-        }
-    };
-
-    cutinVideo.addEventListener("ended", endHandler);
-
-    // 念のためタイムアウトでも背景化（動画が短い/endedが来ない保険）
-    setTimeout(() => {
-        if (videoCutin.classList.contains("show")) {
-            try { cutinVideo.pause(); } catch (e) {}
-            endHandler();
-        }
-    }, 4500);
+function resetBackgroundVideo() {
+    if (!bgVideo) return;
+    try {
+        bgVideo.pause();
+        bgVideo.currentTime = 0;
+    } catch (e) { }
+    bgVideo.style.opacity = "0";
 }

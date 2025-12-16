@@ -43,7 +43,7 @@ body {
     top: 30%;
     left: 0;
     width: 100%;
-/*    background: rgba(0, 0, 0, 0.85);*/
+    /* background: rgba(0, 0, 0, 0.85); */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -204,7 +204,6 @@ canvas {
     z-index: 5;
 }
 
-
 @media (max-width: 600px) {
     #titleScreen h1 {
         font-size: 24px;
@@ -217,12 +216,12 @@ canvas {
     }
 
     #gameContainer {
-      height: 55vh;
+        height: 55vh;
     }
 
     .image-title {
         font-size: 15px;
-        margin-top:-10px;
+        margin-top: -10px;
         margin-bottom: 5px;
     }
 
@@ -313,16 +312,15 @@ canvas {
     opacity: 1;
 }
 
-/* ===== スマホ専用 動画レイヤ ===== */
-.mobile-video-bg,
-.mobile-video-layer {
-    display: none; /* デフォルト（PC）は使わない */
+/* ===== スマホ専用 背景動画（bgVideo）のみ ===== */
+.mobile-video-bg {
+    display: none;
+    /* PCは使わない */
 }
 
 /* スマホのみ有効 */
 @media (max-width: 600px) {
-    .mobile-video-bg,
-    .mobile-video-layer {
+    .mobile-video-bg {
         display: block;
         position: absolute;
         left: 0;
@@ -330,54 +328,13 @@ canvas {
         width: 100%;
         height: 100%;
         pointer-events: none;
-    }
 
-    /* 背景動画（ゲーム中ずっと背面） */
-    .mobile-video-bg {
         z-index: 1;
         object-fit: cover;
-        opacity: 0;               /* 最初は非表示 */
+
+        opacity: 0;
+        /* 初期は非表示（JSで再生開始時に出す） */
         transition: opacity 0.6s ease;
-    }
-
-    /* カットイン（中央に表示するためのオーバーレイ） */
-    .mobile-video-layer {
-        z-index: 20;
-        display: none;            /* JSで出す */
-        align-items: center;
-        justify-content: center;
-        background: rgba(0,0,0,0.35);
-    }
-
-    .mobile-video-layer.show {
-        display: flex;
-        animation: cutinBackdropIn 220ms ease-out both;
-    }
-
-    .mobile-video-layer video {
-        width: 88%;
-        max-width: 520px;
-
-        max-height: 30vh;     /* ←前回の高さ制限（そのまま） */
-        object-fit: cover;    /* ←前回の崩れ防止（そのまま） */
-
-        border-radius: 12px;
-        box-shadow: 0 0 18px rgba(255,0,204,0.8), 0 0 28px rgba(0,255,231,0.6);
-
-        /* ★カットイン演出：右からスライド＋オーバーシュート＋少し回転 */
-        transform: translateX(120%) skewX(-10deg) rotate(2deg) scale(0.98);
-        animation: cutinSlideIn 520ms cubic-bezier(.2, .9, .2, 1.02) both,
-                   cutinGlitch 320ms ease-out 1 both;
-        will-change: transform, filter;
-    }
-
-    @keyframes cutinFadeIn {
-        from { opacity: 0; }
-        to   { opacity: 1; }
-    }
-
-    @keyframes cutinPop {
-        to { transform: scale(1); }
     }
 }
 
@@ -385,50 +342,4 @@ canvas {
 #gameContainer canvas {
     position: relative;
     z-index: 5;
-}
-
-@media (max-width: 600px) {
-  .mobile-video-layer::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(115deg,
-          rgba(0,255,231,0.0) 0%,
-          rgba(0,255,231,0.12) 35%,
-          rgba(255,0,204,0.18) 55%,
-          rgba(0,0,0,0.0) 80%);
-      transform: translateX(120%);
-      opacity: 0;
-      filter: blur(0.5px);
-  }
-
-  .mobile-video-layer.show::before {
-      animation: speedLines 520ms cubic-bezier(.2,.9,.2,1.02) both;
-  }
-}
-
-@keyframes cutinBackdropIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-@keyframes cutinSlideIn {
-    0%   { transform: translateX(120%) skewX(-10deg) rotate(2deg) scale(0.98); filter: saturate(1.2) contrast(1.1); }
-    70%  { transform: translateX(-6%)  skewX(0deg)   rotate(0deg) scale(1.02); }
-    100% { transform: translateX(0%)   skewX(0deg)   rotate(0deg) scale(1.0); filter: none; }
-}
-
-@keyframes speedLines {
-    0%   { transform: translateX(120%); opacity: 0; }
-    40%  { opacity: 1; }
-    100% { transform: translateX(-20%); opacity: 0; }
-}
-
-/* ほんの少しだけ“カットイン感”を出すグリッチ */
-@keyframes cutinGlitch {
-    0%   { filter: none; }
-    25%  { filter: drop-shadow(2px 0 rgba(0,255,231,0.35)) drop-shadow(-2px 0 rgba(255,0,204,0.25)); }
-    55%  { filter: drop-shadow(1px 0 rgba(0,255,231,0.25)) drop-shadow(-1px 0 rgba(255,0,204,0.18)); }
-    100% { filter: none; }
 }
