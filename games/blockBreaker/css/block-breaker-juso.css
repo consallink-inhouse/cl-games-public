@@ -117,7 +117,7 @@ body {
 }
 
 .sub-thumb {
-    margin-top: -25px;
+    margin-top: -3px;
 }
 
 .x-link {
@@ -222,11 +222,11 @@ canvas {
     .image-title {
         font-size: 15px;
         margin-top: -10px;
-        margin-bottom: 5px;
     }
 
     .x-link {
         font-size: 15px;
+        margin-bottom: 10px;
     }
 
     .thumb-left-special img {
