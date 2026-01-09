@@ -117,7 +117,7 @@ body {
 }
 
 .sub-thumb {
-    margin-top: -3px;
+    margin-top: 2px;
 }
 
 .x-link {
@@ -126,6 +126,8 @@ body {
     font-size: 16px;
     color: #ffa500;
     text-shadow: 0 0 6px #ffa500;
+    margin-bottom: 10px;
+
 }
 
 .x-link a {
@@ -226,7 +228,6 @@ canvas {
 
     .x-link {
         font-size: 15px;
-        margin-bottom: 10px;
     }
 
     .thumb-left-special img {
