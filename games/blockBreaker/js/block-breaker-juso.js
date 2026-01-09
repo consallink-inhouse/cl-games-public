@@ -60,10 +60,6 @@ function markBalloonLoaded() { balloonLoadedCount++; }
 function balloonsReady() { return balloonLoadedCount >= 2; }
 
 let balloonImg = new Image();
-balloonImg.src = "./images/cl_balloon1.png";
-balloonImg.onload = markBalloonLoaded;
-balloonImages.push(balloonImg);
-
 balloonImg = new Image();
 balloonImg.src = "./images/juso/001.png";
 balloonImg.onload = markBalloonLoaded;
