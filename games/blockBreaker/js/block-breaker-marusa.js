@@ -60,15 +60,24 @@ function markBalloonLoaded() { balloonLoadedCount++; }
 function balloonsReady() { return balloonLoadedCount >= 2; }
 
 let balloonImg = new Image();
-balloonImg = new Image();
+const width = 100;
+const height = Math.round(width * 1335 / 2048);
 balloonImg.src = "./images/marusa/001.png";
 balloonImg.onload = markBalloonLoaded;
-balloonImages.push(balloonImg);
+balloonImages.push({
+    img: balloonImg,
+    width: width,
+    height: height
+});
 
 balloonImg = new Image();
 balloonImg.src = "./images/marusa/002.png";
 balloonImg.onload = markBalloonLoaded;
-balloonImages.push(balloonImg);
+balloonImages.push({
+    img: balloonImg,
+    width: 85,
+    height: 85
+});
 
 // 風船エフェクト管理配列
 let balloons = [];
@@ -216,10 +225,15 @@ class Item {
 /* === 風船（レベルアップ演出）クラス === */
 class Balloon {
     constructor() {
-        this.width = 85;
-        this.height = 85;
+        const data = balloonImages[Math.floor(Math.random() * balloonImages.length)];
+
+        this.img = data.img;
+        this.width = data.width;
+        this.height = data.height;
+
         this.x = Math.random() * (canvas.width - this.width) + this.width / 2;
         this.y = canvas.height + this.height;
+
         this.vy = 1.2 + Math.random() * 1.5;
         this.t = 0;
         this.swayAmplitude = 10 + Math.random() * 25;
@@ -227,7 +241,6 @@ class Balloon {
         this.rotationAmp = 0.08 + Math.random() * 0.06;
         this.alpha = 0.95;
         this.hue = Math.floor(Math.random() * 360);
-        this.img = balloonImages ? balloonImages[Math.floor(Math.random() * balloonImages.length)] : null;
     }
 
     move(dt) {
