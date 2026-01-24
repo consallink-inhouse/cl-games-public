@@ -47,7 +47,7 @@ let started = false;
 let timerId = null;
 let timeSec = 0;
 
-// 以前の疑似ダブルクリック判定用変数（残っていても動作に影響はありません）
+// for double click flag
 let clickTimer = null;
 let clickCount = 0;
 const DOUBLE_CLICK_MS = 240;
@@ -57,6 +57,7 @@ const ZOOMS = [1, 1.25, 1.5];
 let zoomIndex = 0;
 
 function applyZoom() {
+    // 既存classを外して付け直し
     boardWrapEl.classList.remove('zoom-1', 'zoom-125', 'zoom-150');
 
     const z = ZOOMS[zoomIndex];
@@ -68,9 +69,6 @@ function applyZoom() {
         zoomToggleBtn.textContent = `ZOOM: ${z === 1 ? 'OFF' : 'x' + z}`;
     }
 }
-
-// ====== dblclick高速フラグ：誤オープン抑止 ======
-let suppressClickUntil = 0;
 
 // ---------- Helpers ----------
 function setStatus(txt) {
@@ -229,30 +227,27 @@ function buildBoardUI() {
             t.textContent = '';
             d.appendChild(t);
 
-            // シングル：即オープン（遅延なし）
+            // 左クリック：open（ただしダブルクリックはフラグ）
             d.addEventListener('click', (e) => {
                 if (!started || gameOver) return;
-                if (e.button !== 0) return;
-
-                // dblclick直後は click を無視（誤オープン防止）
-                if (Date.now() < suppressClickUntil) return;
+                if (e.button !== 0) return; // left only
 
                 const cx = Number(d.dataset.x);
                 const cy = Number(d.dataset.y);
-                openCell(cx, cy);
-            });
 
-            // ダブルクリック/ダブルタップ：即フラグ（高速）
-            d.addEventListener('dblclick', (e) => {
-                e.preventDefault();
-                if (!started || gameOver) return;
+                // ダブルクリック判定（フラグにしたい）
+                clickCount++;
+                if (clickTimer) clearTimeout(clickTimer);
 
-                // 直後の click を抑制
-                suppressClickUntil = Date.now() + 250;
-
-                const cx = Number(d.dataset.x);
-                const cy = Number(d.dataset.y);
-                toggleFlag(cx, cy);
+                clickTimer = setTimeout(() => {
+                    if (clickCount >= 2) {
+                        toggleFlag(cx, cy);
+                    } else {
+                        openCell(cx, cy);
+                    }
+                    clickCount = 0;
+                    clickTimer = null;
+                }, DOUBLE_CLICK_MS);
             });
 
             // 右クリック：flag
@@ -489,7 +484,6 @@ function resetRuntime() {
     firstClickDone = false;
     gameOver = false;
 
-    // 旧変数（残していてもOK）
     clickCount = 0;
     if (clickTimer) {
         clearTimeout(clickTimer);
@@ -510,12 +504,12 @@ function startGame() {
     started = true;
     newGameBtn.disabled = false;
 
-    // ★ZOOMボタンを有効化
+    // ★追加：ZOOMボタンを有効化（開始後）
     if (zoomToggleBtn) zoomToggleBtn.disabled = false;
 
     boardWrapEl.classList.remove('hidden');
 
-    // ★初期はOFF（=zoom-1）で反映
+    // ★追加：初期はOFF（=zoom-1）で反映
     zoomIndex = 0;
     applyZoom();
 
@@ -532,7 +526,7 @@ function newGame() {
     prepareBoard();
     setStatus('READY');
 
-    // ★盤面を左上へ戻す
+    // ★追加：盤面を左上へ戻す
     boardWrapEl.scrollLeft = 0;
     boardWrapEl.scrollTop = 0;
 }
@@ -544,7 +538,7 @@ function showStartModalOnLoad() {
     newGameBtn.disabled = true;
     started = false;
 
-    // ★開始前はZOOM不可
+    // ★追加：開始前はZOOM不可
     if (zoomToggleBtn) {
         zoomToggleBtn.disabled = true;
         zoomToggleBtn.textContent = 'ZOOM: OFF';
@@ -572,7 +566,7 @@ restartButton.addEventListener('click', () => {
     boardWrapEl.classList.remove('hidden');
 });
 
-// ★ZOOMトグル
+// ★追加：ZOOMトグル
 if (zoomToggleBtn) {
     zoomToggleBtn.addEventListener('click', () => {
         if (!started) return;
@@ -582,7 +576,7 @@ if (zoomToggleBtn) {
 }
 
 window.addEventListener('keydown', (e) => {
-    // ESC：開始前だけ閉じられる
+    // ESC：開始前だけ閉じられる（要件により調整可能）
     if (e.key === 'Escape' && !started) {
         hideSettings();
     }
