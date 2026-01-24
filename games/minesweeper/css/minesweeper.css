@@ -446,3 +446,35 @@ button:disabled {
 }
 
 .logo-footer img:hover { opacity: 1; }
+
+
+.game-title {
+    margin-bottom: -15px;
+    margin-top: -10px;
+}
+
+/* ====== ① boardWrapをスクロールコンテナ化 ====== */
+#boardWrap {
+  /* 既存の装飾はそのままでOK */
+  overflow: auto;                 /* 横/縦スクロール */
+  -webkit-overflow-scrolling: touch; /* iOS慣性スクロール */
+  max-height: 72vh;               /* 画面内に収める（必要に応じて調整） */
+}
+
+/* boardは「内容サイズのまま」保持させる（縮めない） */
+#board {
+  justify-content: start; /* centerだとスクロール時に妙な余白が出やすい */
+  width: max-content;
+  height: max-content;
+  transform-origin: top left;
+}
+
+/* ====== ② ZOOM切替：boardWrapにクラスを付けて拡大 ====== */
+#boardWrap.zoom-1 #board { transform: scale(1); }
+#boardWrap.zoom-125 #board { transform: scale(1.25); }
+#boardWrap.zoom-150 #board { transform: scale(1.5); }
+
+/* スマホ時の見やすさ（任意の微調整） */
+@media (max-width: 768px) {
+  #boardWrap { max-height: 70vh; }
+}
