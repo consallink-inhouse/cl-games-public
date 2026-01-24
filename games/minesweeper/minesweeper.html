@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neon Minesweeper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="./css/minesweeper.css" />
+</head>
+
+<body>
+  <!-- 共通ヘッダー（参考ソース踏襲） -->
+  <div class="game-thumb">
+    <div class="thumb-left game-title">
+      <a href="../game_center.html">
+        <img src="../images/header/HeaderLogo.png" alt="CL-GAME CENTER" />
+      </a>
+    </div>
+  </div>
+
+  <div class="game-thumb">
+    <div class="thumb-left">
+      <a href="./menu.html">
+        <img src="./images/Header_Minesweeper.png" alt="Minesweeper" onerror="this.style.display='none';" />
+      </a>
+    </div>
+  </div>
+
+  <!-- HUD（ステータスだけは常に見える） -->
+  <div class="hud">
+    <div class="hud-row">
+      <div class="stat"><span class="label">TIME</span><span class="value" id="timeVal">0</span></div>
+      <div class="stat"><span class="label">MINES</span><span class="value" id="mineVal">0</span></div>
+      <div class="stat"><span class="label">FLAGS</span><span class="value" id="flagVal">0</span></div>
+      <div class="stat"><span class="label">WALLS</span><span class="value" id="wallVal">0</span></div>
+      <div class="stat"><span class="label">STATUS</span><span class="value" id="statusVal">READY</span></div>
+    </div>
+
+    <div class="control">
+      <button id="openSettingsBtn">GAME SETTINGS</button>
+      <button id="newGameBtn" disabled>NEW GAME</button>
+    </div>
+  </div>
+
+  <!-- 盤面 -->
+  <div id="boardWrap" class="hidden">
+    <div id="board" aria-label="Minesweeper board"></div>
+  </div>
+
+  <!-- 設定モーダル -->
+  <div id="settingsModal" class="modal" role="dialog" aria-modal="true" aria-label="Game Settings">
+    <div class="modal-card">
+      <h2 class="modal-title">GAME SETTINGS</h2>
+      <p class="modal-sub">難易度と壁の密度を選んで START</p>
+
+      <div class="modal-form">
+        <label class="modal-label">DIFFICULTY</label>
+        <select id="difficulty">
+          <option value="easy">EASY (9×9 / 10)</option>
+          <option value="medium">MEDIUM (16×16 / 40)</option>
+          <option value="hard">HARD (30×16 / 99)</option>
+        </select>
+
+        <label class="modal-label">WALL RATE</label>
+        <select id="wallRate">
+          <option value="0.00">0%</option>
+          <option value="0.04">4%</option>
+          <option value="0.07" selected>7%</option>
+          <option value="0.10">10%</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button id="startBtn">START</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 結果モーダル（GAME OVER / CLEAR） -->
+  <div id="resultScreen" role="dialog" aria-modal="true" aria-label="Result">
+    <h2 id="resultText"></h2>
+    <p class="sub" id="resultSub"></p>
+    <button id="restartButton">RESTART</button>
+  </div>
+
+  <!-- クリア演出レイヤ（紙吹雪風） -->
+  <div id="celebrateLayer" class="celebrate-layer"></div>
+
+  <div class="logo-footer">
+    <a href="../game_center.html">
+      <img src="../images/ConsalLink.png" alt="CL LOGO" />
+    </a>
+  </div>
+
+  <script src="./js/minesweeper.js"></script>
+</body>
+</html>
