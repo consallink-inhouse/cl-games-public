@@ -7,6 +7,7 @@ const scoreDisplay = document.getElementById("scoreDisplay");
 const gameOverDisplay = document.getElementById("gameOverDisplay");
 const finalScoreText = document.getElementById("finalScoreText");
 const finalLevelText = document.getElementById("finalLevelText");
+const gameContainer = document.getElementById("gameContainer");
 
 let paddle, balls, blocks = [], items = [];
 let score = 0, gameRunning = false;
@@ -477,8 +478,8 @@ canvas.addEventListener("touchend", () => touchX = null);
 /* === START / RETRY === */
 startButton.onclick = () => {
     titleScreen.style.display = "none";
+    gameContainer.classList.add("bg-active");
     initGame();
-
     requestAnimationFrame(gameLoop);
 };
 

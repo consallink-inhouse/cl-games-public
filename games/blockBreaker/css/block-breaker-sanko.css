@@ -135,6 +135,7 @@ body {
     text-decoration: underline;
 }
 
+/* デフォルト：背景なし */
 #gameContainer {
     position: relative;
     width: 90vw;
@@ -146,13 +147,16 @@ body {
     box-shadow: 0 0 18px #00ffe7;
     border-radius: 10px;
 
-    /* ★ 追加：固定背景画像 */
+    background: #000; /* START前は黒 */
+}
+
+/* ゲーム開始後に背景画像を表示 */
+#gameContainer.bg-active {
     background-image: url("../images/sanko/back.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
-
 
 canvas {
     display: block;
@@ -352,13 +356,21 @@ canvas {
     z-index: 5;
 }
 
-/* 背景画像の上に薄い黒を被せる */
 #gameContainer::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.28); /* ←濃さ調整はここ */
-    border-radius: 10px;            /* #gameContainerと揃える */
-    z-index: 2;                     /* 背景の上、Canvasより下 */
-    pointer-events: none;           /* 操作の邪魔をしない */
+    background: rgba(0, 0, 0, 0.28);
+    border-radius: 10px;
+    z-index: 2;
+    pointer-events: none;
+
+    opacity: 0;                 /* 初期は非表示 */
+    transition: opacity 0.6s ease;
 }
+
+/* 背景有効時にフェードイン */
+#gameContainer.bg-active::before {
+    opacity: 1;
+}
+
