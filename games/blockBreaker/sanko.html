@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Block Breaker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/block-breaker-sanko.css" />
+</head>
+
+<body class="fade-in">
+    <div class="game-thumb">
+        <div class="thumb-left sub-thumb">
+            <a href="./menu.html">
+                <img src="./images/Header_BlockBreaker.png" alt="Block Breaker" />
+            </a>
+        </div>
+    </div>
+    <p class="image-title">「あなたの心をサーモン塩辛ジャック！」</p>
+    <p class="x-link account">
+        Xアカウント：<a href="https://x.com/sanko_mamakari" target="_blank">@sanko_mamakari</a>
+    </p>
+    <div id="gameContainer">
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="titleScreen">
+            <h1>BLOCK BREAKER</h1>
+            <div class="game-description">
+              <p class="description-title">ゲーム説明</p>
+              <ul>
+                無限にブロックが生成され続けるブロック崩しゲームです。<br/>
+                すべてのボールが地面に落ちるとゲームオーバーとなります。<br/>
+                紫のブロックを壊すと星型アイテムが出現し、取得するとボールが増えます。<br/>
+                ブロックの出現は完全ランダムです。<br/>
+                スコアが50点上がるごとにレベルアップし、ブロックの落下スピードも上昇します。
+              </ul>
+            </div>
+            <button id="startButton">START</button>
+        </div>
+        <div id="gameOverDisplay">
+            <h2 id="gameOverText">Game Over</h2>
+            <div id="finalScoreText"></div>
+            <div id="finalLevelText"></div>
+            <button id="retryButton">RETRY</button>
+        </div>
+        <div id="scoreDisplay">SCORE: 0</div>
+        <div id="levelUpText">Level UP!<br><span id="levelNumber">1</span></div>
+
+    </div>
+    <script src="./js/block-breaker-sanko.js"></script>
+
+</body>
+
+</html>
