@@ -514,7 +514,7 @@ async function startBackgroundVideo() {
     try {
         bgVideo.currentTime = 0;      // 毎回先頭から（不要なら削除OK）
         await bgVideo.play();
-        bgVideo.style.opacity = "0.28";
+        bgVideo.style.opacity = "0.7";
     } catch (e) {
         // 自動再生がブロックされてもゲームは続ける
     }
