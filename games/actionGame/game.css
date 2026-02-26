@@ -79,6 +79,7 @@ body {
     justify-content: center;
 }
 
+/* game container is now column: stage + controls + tips */
 .game {
     width: min(980px, 96vw);
     border: 2px solid rgba(0, 255, 231, .7);
@@ -87,6 +88,15 @@ body {
     box-shadow: 0 0 18px rgba(0, 255, 231, .45);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* stage is relative so overlay/hearts can sit on it */
+.stage {
+    position: relative;
+    width: 100%;
+    background: #000;
 }
 
 #gameCanvas {
@@ -96,7 +106,7 @@ body {
     background: #000;
 }
 
-/* Hearts (bottom-right) */
+/* Hearts (bottom-right of stage) */
 .hearts {
     position: absolute;
     right: 12px;
@@ -114,7 +124,6 @@ body {
     color: #ff4d7d;
     text-shadow: 0 0 10px rgba(255, 77, 125, .65), 0 0 18px rgba(255, 0, 204, .35);
     filter: drop-shadow(0 0 10px rgba(255, 77, 125, .25));
-    transform-origin: center;
 }
 
 .heart.is-lost {
@@ -123,7 +132,7 @@ body {
     filter: none;
 }
 
-/* Overlay */
+/* Overlay (on stage) */
 .overlay {
     position: absolute;
     inset: 0;
@@ -150,8 +159,6 @@ body {
     padding: 18px 16px;
     background: rgba(8, 8, 16, .92);
     box-shadow: 0 0 18px rgba(0, 255, 231, .25);
-    transform: translateY(6px) scale(.99);
-    opacity: .98;
 }
 
 .overlay__title {
@@ -288,15 +295,12 @@ body {
     }
 }
 
+/* Tips now sit below stage/controls */
 .tips {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    pointer-events: none;
-    z-index: 4;
+    padding: 10px;
 }
 
 .tip {
@@ -308,20 +312,15 @@ body {
     border-radius: 999px;
 }
 
+/* Mobile controls are BELOW the canvas (by default hidden on PC) */
 .mobile {
-    position: absolute;
-    inset: auto 10px 10px 10px;
     display: none;
     justify-content: space-between;
     align-items: flex-end;
     gap: 10px;
-    pointer-events: none;
-    z-index: 6;
-}
-
-.pad,
-.ab {
-    pointer-events: auto;
+    padding: 10px;
+    border-top: 1px solid rgba(0, 255, 231, .18);
+    background: rgba(0, 0, 0, .18);
 }
 
 .pad {
@@ -372,8 +371,46 @@ body {
     text-shadow: 0 0 10px rgba(0, 255, 231, .55);
 }
 
-@media (max-width: 900px) {
+/* ======= ① 縦スマホ：十字キー＆ボタンはゲーム画面の下 ======= */
+@media (max-width: 900px) and (orientation: portrait) {
     .mobile {
         display: flex;
     }
+}
+
+/* ======= ② 横スマホ：ゲーム画面の高さを少し狭くする ======= */
+@media (max-width: 900px) and (orientation: landscape){
+  /* コントローラは表示する */
+  .mobile{
+    display:flex;
+    position:absolute;          /* stage上に重ねる */
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:6;
+    padding:0;                  /* 重ねるので余白は最小 */
+    border-top:none;
+    background: transparent;    /* canvasを隠さない */
+    pointer-events:none;        /* クリックはボタンだけに */
+  }
+  .pad, .ab{ pointer-events:auto; }
+
+  /* gameは相対位置のままでOK（absoluteの基準になる） */
+  .game{ position:relative; }
+
+  /* stageは高さ固定をやめる（canvasを小さくしない） */
+  .stage{
+    height:auto;
+  }
+
+  /* canvasは従来どおり幅100%で大きく表示 */
+  #gameCanvas{
+    width:100%;
+    height:auto;
+  }
+
+  /* 横のときはtipsが邪魔なら控えめに（任意） */
+  .tips{
+    padding:8px 10px 58px; /* 下のボタンと被りにくくする */
+  }
 }

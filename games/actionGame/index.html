@@ -25,32 +25,36 @@
 
     <main class="wrap">
         <div id="gameContainer" class="game">
-            <canvas id="gameCanvas" width="960" height="540"></canvas>
 
-            <!-- Hearts -->
-            <div id="hearts" class="hearts" aria-label="life"></div>
+            <!-- ===== Stage (canvas area) ===== -->
+            <div class="stage">
+                <canvas id="gameCanvas" width="960" height="540"></canvas>
 
-            <!-- Title / Pause / Result overlay -->
-            <div id="overlay" class="overlay is-visible">
-                <div class="overlay__card">
-                    <h1 class="overlay__title" id="overlayTitle">SPEED ACTION</h1>
+                <!-- Hearts (bottom-right of stage) -->
+                <div id="hearts" class="hearts" aria-label="life"></div>
 
-                    <p class="overlay__text" id="overlayText">
-                        PC：←→ 移動 / ↑ ジャンプ / ↓ しゃがむ / Space ダッシュ<br />
-                        スマホ：十字キー / A ジャンプ / B ダッシュ<br />
-                        ルール：コインを全て回収するとゴール可能。タイムを競おう！
-                    </p>
+                <!-- Overlay (on stage) -->
+                <div id="overlay" class="overlay is-visible">
+                    <div class="overlay__card">
+                        <h1 class="overlay__title" id="overlayTitle">SPEED ACTION</h1>
 
-                    <div class="overlay__score" id="overlayScore" style="display:none;"></div>
+                        <p class="overlay__text" id="overlayText">
+                            PC：←→ 移動 / ↑ ジャンプ / ↓ しゃがむ / Space ダッシュ<br />
+                            スマホ：十字キー / A ジャンプ / B ダッシュ<br />
+                            ルール：コインを全て回収するとゴール可能。タイムを競おう！
+                        </p>
 
-                    <div class="overlay__buttons">
-                        <button id="btnStart" class="btn">START</button>
-                        <button id="btnReset" class="btn btn--ghost">RESET</button>
+                        <div class="overlay__score" id="overlayScore" style="display:none;"></div>
+
+                        <div class="overlay__buttons">
+                            <button id="btnStart" class="btn">START</button>
+                            <button id="btnReset" class="btn btn--ghost">RESET</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Mobile controls -->
+            <!-- ===== Mobile controls (below stage) ===== -->
             <div id="mobileControls" class="mobile">
                 <div class="pad">
                     <button class="pad__btn" data-key="left">◀</button>
@@ -72,6 +76,7 @@
                 <span class="tip">スマホ: B = Dash / A = Jump</span>
                 <span class="tip">P = Pause</span>
             </div>
+
         </div>
     </main>
 
