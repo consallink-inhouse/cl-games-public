@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SPEED ACTION</title>
+    <link rel="stylesheet" href="./game.css" />
+</head>
+
+<body>
+    <header class="top">
+        <div class="brand">
+            <div class="brand__title">SPEED ACTION</div>
+        </div>
+
+        <div class="hud">
+            <div class="hud__item">TIME: <span id="hudTime">0</span></div>
+            <div class="hud__item">COIN: <span id="hudCoin">0</span>/<span id="hudCoinTotal">0</span></div>
+            <div class="hud__item">BEST: <span id="hudBest">--</span></div>
+            <div class="hud__item hud__item--hint"><span id="hudGoalHint">GOAL: LOCKED</span></div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div id="gameContainer" class="game">
+
+            <!-- ===== Stage (canvas area) ===== -->
+            <div class="stage">
+                <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+                <!-- Hearts (bottom-right of stage) -->
+                <div id="hearts" class="hearts" aria-label="life"></div>
+
+                <!-- Overlay (on stage) -->
+                <div id="overlay" class="overlay is-visible">
+                    <div class="overlay__card">
+                        <h1 class="overlay__title" id="overlayTitle">SPEED ACTION</h1>
+
+                        <p class="overlay__text" id="overlayText">
+                            コインを全て回収してゴールを目指せ！
+                        </p>
+
+                        <div class="overlay__score" id="overlayScore" style="display:none;"></div>
+
+                        <div class="overlay__buttons">
+                            <button id="btnStart" class="btn">START</button>
+                            <button id="btnReset" class="btn btn--ghost">RESET</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Mobile controls (below stage) ===== -->
+            <div id="mobileControls" class="mobile">
+                <div class="pad">
+                    <button class="pad__btn" data-key="left">◀</button>
+                    <div class="pad__mid">
+                        <button class="pad__btn" data-key="up">▲</button>
+                        <button class="pad__btn" data-key="down">▼</button>
+                    </div>
+                    <button class="pad__btn" data-key="right">▶</button>
+                </div>
+
+                <div class="ab">
+                    <button class="ab__btn ab__btn--b" data-key="dash">B</button>
+                    <button class="ab__btn ab__btn--a" data-key="jump">A</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="./game.js"></script>
+</body>
+
+</html>

@@ -300,7 +300,6 @@ body {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    padding: 10px;
 }
 
 .tip {
@@ -354,8 +353,8 @@ body {
 }
 
 .ab__btn {
-    width: 64px;
-    height: 64px;
+    width: 55px;
+    height: 55px;
     border-radius: 999px;
     border: 1px solid rgba(255, 0, 204, .45);
     background: rgba(0, 0, 0, .35);
@@ -409,8 +408,4 @@ body {
     height:auto;
   }
 
-  /* 横のときはtipsが邪魔なら控えめに（任意） */
-  .tips{
-    padding:8px 10px 58px; /* 下のボタンと被りにくくする */
-  }
 }

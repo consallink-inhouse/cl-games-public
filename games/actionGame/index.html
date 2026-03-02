@@ -4,83 +4,241 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SPEED ACTION</title>
+    <title>SPEED ACTION - STAGE SELECT</title>
     <link rel="stylesheet" href="./game.css" />
+
+    <style>
+        /* index専用の最小追加スタイル（game.cssを汚さない） */
+        .select-wrap {
+            padding: 18px 12px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .select-title {
+            font-size: 18px;
+            font-weight: 1000;
+            letter-spacing: .08em;
+            color: var(--neon1);
+            text-shadow: 0 0 10px rgba(0, 255, 231, .55);
+            margin: 2px 0 0;
+        }
+
+        .select-sub {
+            margin: 0;
+            font-size: 12px;
+            color: rgba(234, 234, 255, .8);
+            line-height: 1.6;
+        }
+
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        @media (max-width: 820px) {
+            .stage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stage-card {
+            border: 1px solid rgba(0, 255, 231, .35);
+            border-radius: 14px;
+            background: rgba(0, 0, 0, .35);
+            padding: 14px 14px 12px;
+            box-shadow: 0 0 14px rgba(0, 255, 231, .12);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stage-card__top {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .stage-no {
+            font-weight: 1000;
+            letter-spacing: .06em;
+            color: var(--neon2);
+            text-shadow: 0 0 10px rgba(255, 0, 204, .45);
+            font-size: 16px;
+        }
+
+        .stage-best {
+            font-size: 12px;
+            font-weight: 900;
+            color: rgba(234, 234, 255, .92);
+            border: 1px solid rgba(0, 255, 231, .22);
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, .35);
+            white-space: nowrap;
+        }
+
+        .stage-desc {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: rgba(234, 234, 255, .82);
+        }
+
+        .stage-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2px;
+        }
+
+        .btn--small {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .btn--danger {
+            color: #fff;
+            background: var(--danger);
+            box-shadow: 0 0 12px rgba(255, 59, 107, .45), 0 0 24px rgba(255, 0, 204, .18);
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: 6px;
+        }
+
+        .note {
+            font-size: 11px;
+            color: rgba(234, 234, 255, .75);
+            text-align: center;
+            line-height: 1.6;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
     <header class="top">
         <div class="brand">
             <div class="brand__title">SPEED ACTION</div>
-            <div class="brand__sub">Original side-scroller (non-infringing homage)</div>
+            <div class="brand__sub">STAGE SELECT</div>
         </div>
 
         <div class="hud">
-            <div class="hud__item">TIME: <span id="hudTime">0</span></div>
-            <div class="hud__item">COIN: <span id="hudCoin">0</span>/<span id="hudCoinTotal">0</span></div>
-            <div class="hud__item">BEST: <span id="hudBest">--</span></div>
-            <div class="hud__item hud__item--hint"><span id="hudGoalHint">GOAL: LOCKED</span></div>
+            <div class="hud__item">BEST(L1): <span id="best1">--</span></div>
+            <div class="hud__item">BEST(L2): <span id="best2">--</span></div>
+            <div class="hud__item">BEST(L3): <span id="best3">--</span></div>
         </div>
     </header>
 
     <main class="wrap">
-        <div id="gameContainer" class="game">
+        <div class="game">
+            <div class="select-wrap">
+                <h1 class="select-title">ステージを選択</h1>
+                <p class="select-sub">
+                    各ステージは「コイン全回収→ゴール」でクリア。<br />
+                    BESTは端末（localStorage）に保存されます。
+                </p>
 
-            <!-- ===== Stage (canvas area) ===== -->
-            <div class="stage">
-                <canvas id="gameCanvas" width="960" height="540"></canvas>
-
-                <!-- Hearts (bottom-right of stage) -->
-                <div id="hearts" class="hearts" aria-label="life"></div>
-
-                <!-- Overlay (on stage) -->
-                <div id="overlay" class="overlay is-visible">
-                    <div class="overlay__card">
-                        <h1 class="overlay__title" id="overlayTitle">SPEED ACTION</h1>
-
-                        <p class="overlay__text" id="overlayText">
-                            PC：←→ 移動 / ↑ ジャンプ / ↓ しゃがむ / Space ダッシュ<br />
-                            スマホ：十字キー / A ジャンプ / B ダッシュ<br />
-                            ルール：コインを全て回収するとゴール可能。タイムを競おう！
-                        </p>
-
-                        <div class="overlay__score" id="overlayScore" style="display:none;"></div>
-
-                        <div class="overlay__buttons">
-                            <button id="btnStart" class="btn">START</button>
-                            <button id="btnReset" class="btn btn--ghost">RESET</button>
+                <div class="stage-grid">
+                    <!-- STAGE 1 -->
+                    <section class="stage-card">
+                        <div class="stage-card__top">
+                            <div class="stage-no">STAGE 1</div>
+                            <div class="stage-best">BEST: <span id="cardBest1">--</span></div>
                         </div>
-                    </div>
+                        <p class="stage-desc">基本操作に慣れるためのチュートリアル寄りステージ。</p>
+                        <div class="stage-actions">
+                            <!-- ★ 1面のファイル名が違う場合はここだけ直してください -->
+                            <a class="btn btn--small" href="./stage1.html">PLAY</a>
+                        </div>
+                    </section>
+
+                    <!-- STAGE 2 -->
+                    <section class="stage-card">
+                        <div class="stage-card__top">
+                            <div class="stage-no">STAGE 2</div>
+                            <div class="stage-best">BEST: <span id="cardBest2">--</span></div>
+                        </div>
+                        <p class="stage-desc">落下穴＋敵増加。コイン回収のルート取りが重要。</p>
+                        <div class="stage-actions">
+                            <a class="btn btn--small" href="./stage2.html">PLAY</a>
+                        </div>
+                    </section>
+
+                    <!-- STAGE 3 -->
+                    <section class="stage-card">
+                        <div class="stage-card__top">
+                            <div class="stage-no">STAGE 3</div>
+                            <div class="stage-best">BEST: <span id="cardBest3">--</span></div>
+                        </div>
+                        <p class="stage-desc">落下穴多め＋敵密度高め。ダッシュと踏みが鍵。</p>
+                        <div class="stage-actions">
+                            <a class="btn btn--small" href="./stage3.html">PLAY</a>
+                        </div>
+                    </section>
                 </div>
-            </div>
 
-            <!-- ===== Mobile controls (below stage) ===== -->
-            <div id="mobileControls" class="mobile">
-                <div class="pad">
-                    <button class="pad__btn" data-key="left">◀</button>
-                    <div class="pad__mid">
-                        <button class="pad__btn" data-key="up">▲</button>
-                        <button class="pad__btn" data-key="down">▼</button>
-                    </div>
-                    <button class="pad__btn" data-key="right">▶</button>
+                <div class="footer-actions">
+                    <button id="btnClearBest" class="btn btn--ghost btn--small">BESTをリセット</button>
+                    <a class="btn btn--danger btn--small" href="./stage1.html">今すぐ開始</a>
                 </div>
 
-                <div class="ab">
-                    <button class="ab__btn ab__btn--b" data-key="dash">B</button>
-                    <button class="ab__btn ab__btn--a" data-key="jump">A</button>
-                </div>
+                <p class="note">
+                    ※ BESTリセットはこの端末の記録のみ削除します。<br />
+                    ※ 1面ファイル名が現状 index.html と違う場合は、STAGE1 のリンクだけ変更してください。
+                </p>
             </div>
-
-            <div class="tips">
-                <span class="tip">PC: Space = Dash</span>
-                <span class="tip">スマホ: B = Dash / A = Jump</span>
-                <span class="tip">P = Pause</span>
-            </div>
-
         </div>
     </main>
 
-    <script src="./game.js"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            const key = (n) => `speed_action_best_time_L${n}`;
+            const fmt = (v) => (v && Number.isFinite(v) && v > 0) ? `${v.toFixed(2)}s` : "--";
+
+            function readBest(n) {
+                const raw = localStorage.getItem(key(n));
+                const num = raw ? Number(raw) : null;
+                return (num && Number.isFinite(num) && num > 0) ? num : null;
+            }
+
+            function refresh() {
+                const b1 = readBest(1);
+                const b2 = readBest(2);
+                const b3 = readBest(3);
+
+                document.getElementById("best1").textContent = fmt(b1);
+                document.getElementById("best2").textContent = fmt(b2);
+                document.getElementById("best3").textContent = fmt(b3);
+
+                document.getElementById("cardBest1").textContent = fmt(b1);
+                document.getElementById("cardBest2").textContent = fmt(b2);
+                document.getElementById("cardBest3").textContent = fmt(b3);
+            }
+
+            document.getElementById("btnClearBest").addEventListener("click", () => {
+                localStorage.removeItem(key(1));
+                localStorage.removeItem(key(2));
+                localStorage.removeItem(key(3));
+                refresh();
+                alert("BEST記録をリセットしました。");
+            });
+
+            refresh();
+        })();
+    </script>
 </body>
 
 </html>
