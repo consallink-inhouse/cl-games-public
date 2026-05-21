@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACTICL — チーム管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/company.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo">
+      <a href="index.html">
+        <div class="logo-text">⚡ TACTICL</div>
+        <div class="logo-sub">社会人サッカー戦術プラットフォーム</div>
+      </a>
+    </div>
+
+    <div class="nav">
+      <div class="nav-section">メイン</div>
+      <a class="nav-item" href="index.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        ダッシュボード
+      </a>
+      <a class="nav-item" href="schedule.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        スケジュール
+        <span class="nav-badge">3</span>
+      </a>
+
+      <div class="nav-section">チーム管理</div>
+      <a class="nav-item active" href="company.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        チーム管理
+      </a>
+      <a class="nav-item" href="members.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        メンバー管理
+      </a>
+      <a class="nav-item" href="formation.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="8" r="2"/><circle cx="20" cy="8" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="8" x2="9" y2="11"/><line x1="15" y1="11" x2="18" y2="8"/><line x1="6" y1="18" x2="9" y2="13"/><line x1="15" y1="13" x2="18" y2="18"/></svg>
+        フォーメーション
+      </a>
+
+      <div class="nav-section">対外活動</div>
+      <a class="nav-item" href="companies.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        チーム一覧
+      </a>
+      <a class="nav-item" href="score.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20h12"/><path d="M12 20V4"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="7" r="2"/></svg>
+        試合状況
+      </a>
+      <a class="nav-item" href="records.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        成績管理
+      </a>
+
+      <div class="nav-section">コミュニケーション</div>
+      <a class="nav-item" href="chat.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        チャット
+        <span class="nav-badge">5</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="company-tag">
+        <div class="company-avatar">CL</div>
+        <div>
+          <div class="company-name">CLFC</div>
+          <div class="company-plan">フリープラン</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <img src="image/clfc_logo.png" alt="CLFC Logo" class="page-title-logo">
+      <div class="page-title">チーム管理</div>
+      <div class="topbar-actions">
+        <div class="notif-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-dot"></div>
+        </div>
+        <button class="btn btn-primary">保存する</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this, 'tab-company-info')">チーム情報</div>
+        <div class="tab" onclick="switchTab(this, 'tab-teams')">サブチーム</div>
+        <div class="tab" onclick="switchTab(this, 'tab-rep')">代表者管理</div>
+      </div>
+
+      <div id="tab-company-info">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">チーム情報</div>
+            <button class="btn btn-primary">保存する</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>チーム名 *</label>
+                <input type="text" value="CLFC" placeholder="チーム名">
+              </div>
+              <div class="form-group">
+                <label>チーム所属人数</label>
+                <input type="number" value="16" min="1" max="100">
+              </div>
+              <div class="form-group">
+                <label>都道府県</label>
+                <select>
+                  <option>北海道</option>
+                  <option>東京都</option>
+                  <option>神奈川県</option>
+                  <option selected>大阪府</option>
+                  <option>愛知県</option>
+                  <option>福岡県</option>
+                  <option>その他</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>カテゴリ</label>
+                <select>
+                  <option selected>社会人クラブ</option>
+                  <option>大学OB</option>
+                  <option>地域リーグ</option>
+                  <option>その他</option>
+                </select>
+              </div>
+
+              <div class="form-group full">
+                <div class="sns-section-title">🌐 ホームページ・SNS</div>
+              </div>
+              <div class="form-group">
+                <label>🌐 ホームページ</label>
+                <input type="url" value="https://www.cl-football-club.com/" placeholder="https://">
+              </div>
+              <div class="form-group">
+                <label><span style="color:#06c755">💬</span> LINE</label>
+                <input type="url" value="" placeholder="https://lin.ee/...">
+              </div>
+              <div class="form-group">
+                <label><span style="color:#e1306c">📷</span> Instagram</label>
+                <input type="url" value="https://www.instagram.com/clfc_official7/" placeholder="https://www.instagram.com/...">
+              </div>
+              <div class="form-group">
+                <label><span style="color:#fff">𝕏</span> X (旧Twitter)</label>
+                <input type="url" value="https://x.com/CLFC_official" placeholder="https://x.com/...">
+              </div>
+
+              <div class="form-group full">
+                <label>チーム紹介</label>
+                <textarea>大阪を拠点とする社会人サッカークラブ「CLFC」です。20代〜30代を中心に、平日夜・週末を活用して活動。地域のリーグ戦への参加に加え、対外練習試合・交流大会を通じて他チームとの交流も積極的に行っています。経験者から初心者まで、サッカーが好きな仲間を募集中！</textarea>
+              </div>
+              <div class="form-group full">
+                <label>チームロゴ</label>
+                <div class="logo-upload" onclick="alert('画像アップロード（実装時）')">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  クリックして画像をアップロード
+                </div>
+              </div>
+              <div class="form-group">
+                <label>公開設定</label>
+                <select>
+                  <option selected>全公開</option>
+                  <option>フォロワーのみ</option>
+                  <option>非公開</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-teams" style="display:none">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <button class="btn btn-primary" onclick="openModal('modal-add-team')">＋ チーム追加</button>
+        </div>
+        <div class="team-list">
+          <div class="team-card">
+            <div class="team-color" style="background:#00ff88"></div>
+            <div class="team-info">
+              <div class="team-name">CLFC（Aチーム）</div>
+              <div class="team-meta">メンバー 10名 ・ 創設 2021年 ・ 活動エリア：東京都</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline" style="padding:6px 12px;font-size:11px" onclick="openEditTeam('A')">編集</button>
+              <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px">詳細</button>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-color" style="background:#00e5ff"></div>
+            <div class="team-info">
+              <div class="team-name">CLFC（Bチーム）</div>
+              <div class="team-meta">メンバー 6名 ・ 創設 2023年 ・ 活動エリア：東京都</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline" style="padding:6px 12px;font-size:11px" onclick="openEditTeam('B')">編集</button>
+              <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px">詳細</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-rep" style="display:none">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">代表者情報</div>
+            <button class="btn btn-primary">保存する</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>代表者氏名 *</label>
+                <input type="text" value="山田 太郎" placeholder="氏名">
+              </div>
+              <div class="form-group">
+                <label>役職</label>
+                <input type="text" value="総務部 部長" placeholder="役職">
+              </div>
+              <div class="form-group">
+                <label>連絡先メール *</label>
+                <input type="email" value="info@consallink.co.jp" placeholder="example@team.com">
+              </div>
+              <div class="form-group">
+                <label>電話番号</label>
+                <input type="tel" value="03-1234-5678" placeholder="03-XXXX-XXXX">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: チーム追加 -->
+<div class="modal-overlay" id="modal-add-team">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">チームを追加</div>
+      <div class="modal-close" onclick="closeModal('modal-add-team')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>チーム名 *</label><input type="text" placeholder="例：CLFC（Cチーム）"></div>
+        <div class="form-group"><label>チームカラー</label><input type="color" value="#00ff88" style="height:40px;padding:4px"></div>
+        <div class="form-group"><label>創設年</label><input type="number" value="2025" min="2000" max="2030"></div>
+        <div class="form-group full"><label>活動エリア</label><input type="text" placeholder="例：東京都渋谷区"></div>
+        <div class="form-group full"><label>ホームコート</label><input type="text" placeholder="例：渋谷区民体育館"></div>
+        <div class="form-group full"><label>レベル</label>
+          <select>
+            <option>初心者歓迎</option>
+            <option>中級者</option>
+            <option>上級者</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-team')">キャンセル</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-add-team')">追加する</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: チーム編集 -->
+<div class="modal-overlay" id="modal-edit-team">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">チームを編集</div>
+      <div class="modal-close" onclick="closeModal('modal-edit-team')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>チーム名 *</label><input type="text" id="editTeamName" value=""></div>
+        <div class="form-group"><label>チームカラー</label><input type="color" id="editTeamColor" value="#00ff88" style="height:40px;padding:4px"></div>
+        <div class="form-group"><label>創設年</label><input type="number" id="editTeamYear" value="2021" min="2000" max="2030"></div>
+        <div class="form-group"><label>メンバー数</label><input type="number" id="editTeamCount" value="10" min="1"></div>
+        <div class="form-group"><label>活動エリア</label><input type="text" id="editTeamArea" value="東京都"></div>
+        <div class="form-group full"><label>ホームコート</label><input type="text" id="editTeamHome" value="渋谷区民体育館"></div>
+        <div class="form-group full"><label>レベル</label>
+          <select id="editTeamLevel">
+            <option>初心者歓迎</option>
+            <option selected>中級者</option>
+            <option>上級者</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>備考</label><textarea id="editTeamMemo" placeholder="チームの紹介や活動方針..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" style="margin-right:auto" onclick="if(confirm('このチームを削除しますか？')) closeModal('modal-edit-team')">削除</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-team')">キャンセル</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-edit-team')">保存する</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/company.js"></script>
+</body>
+</html>

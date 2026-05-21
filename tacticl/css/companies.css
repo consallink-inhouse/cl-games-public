@@ -1,0 +1,167 @@
+/* ===================================================================
+   companies.css - 企業・チーム一覧画面
+   =================================================================== */
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.company-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.company-card:hover { border-color: var(--border-neon); transform: translateY(-2px); }
+
+.company-card-header {
+  height: 60px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 16px 10px;
+}
+
+.company-card-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid var(--bg-card);
+  position: absolute;
+  bottom: -20px;
+  left: 16px;
+}
+
+.follow-btn {
+  margin-left: auto;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-neon);
+  background: transparent;
+  color: var(--neon-green);
+  transition: all 0.2s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.follow-btn:hover, .follow-btn.following {
+  background: var(--neon-green);
+  color: var(--bg-dark);
+}
+
+.company-card-body { padding: 28px 16px 16px; }
+.company-card-name { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
+.company-card-team { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+
+.company-card-stats {
+  display: flex;
+  gap: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.cstat { text-align: center; flex: 1; }
+.cstat-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--neon-green); }
+.cstat-lbl { font-size: 10px; color: var(--text-muted); }
+
+.level-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.level-beginner { background: rgba(0,229,255,0.1); color: var(--neon-cyan); border: 1px solid rgba(0,229,255,0.25); }
+.level-mid { background: rgba(240,255,0,0.1); color: var(--neon-yellow); border: 1px solid rgba(240,255,0,0.2); }
+.level-pro { background: rgba(255,68,68,0.1); color: #ff8080; border: 1px solid rgba(255,68,68,0.25); }
+
+@media (max-width: 768px) {
+  .companies-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== 企業詳細モーダル ===== */
+.company-detail { display: flex; flex-direction: column; gap: 20px; }
+
+.company-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.company-detail-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.company-detail-headinfo { flex: 1; min-width: 0; }
+.company-detail-name { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+.company-detail-team { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; flex-wrap: wrap; }
+
+.company-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.company-detail-row { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; }
+.company-detail-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; min-width: 80px; }
+.company-detail-value { font-size: 13px; color: var(--text-primary); }
+
+.company-detail-section { display: flex; flex-direction: column; gap: 8px; }
+.company-detail-section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--neon-green);
+  text-transform: uppercase;
+}
+.company-detail-description { font-size: 13px; line-height: 1.7; color: var(--text-primary); }
+
+.company-detail-record {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.record-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+.record-val { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+.record-lbl { font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+  .company-detail-grid { grid-template-columns: 1fr; }
+}

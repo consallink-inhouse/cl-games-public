@@ -1,0 +1,514 @@
+/* ===================================================================
+   score.css - 試合状況管理画面
+   =================================================================== */
+
+/* === 試合バー（試合選択 + 情報） === */
+.match-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.match-bar-left { display: flex; align-items: center; gap: 10px; }
+.match-bar-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
+.match-bar-select {
+  min-width: 280px;
+  font-size: 13px;
+}
+.match-bar-right { flex: 1; min-width: 200px; }
+.match-bar-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.match-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+.match-tag-type {
+  border-color: rgba(255,68,68,0.3);
+  color: #ff8080;
+  background: rgba(255,68,68,0.08);
+}
+
+/* === スコアボード（コンパクト） === */
+.scoreboard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.scoreboard-compact { padding: 14px 20px; }
+
+.score-teams {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+.score-team { flex: 1; }
+.score-team-name { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.score-num {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 54px;
+  font-weight: 700;
+  color: var(--neon-green);
+  line-height: 1;
+}
+
+.score-vs { font-family: 'Rajdhani', sans-serif; font-size: 22px; color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
+.score-controls { display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
+
+.score-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.score-btn-plus { background: var(--neon-green); color: var(--bg-dark); }
+.score-btn-plus:hover { background: #00ff99; transform: scale(1.1); }
+.score-btn-minus { background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color); }
+.score-btn-minus:hover { border-color: var(--border-neon); color: var(--neon-green); }
+
+/* === タイマー === */
+.match-timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 4px;
+}
+.timer-display {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  letter-spacing: 3px;
+}
+.match-half-label { font-size: 11px; color: var(--text-muted); text-align: center; }
+.timer-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* === イベントタブ === */
+.event-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+.event-tab {
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.event-tab:hover { color: var(--text-primary); background: var(--bg-card-hover); }
+.event-tab.active {
+  color: var(--neon-green);
+  border-bottom-color: var(--neon-green);
+}
+
+.event-panel { display: none; padding: 14px 16px; }
+.event-panel.active { display: block; }
+
+.event-panel-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+/* === イベントログ === */
+.event-log { display: flex; flex-direction: column; gap: 6px; }
+
+.event-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: 56px 32px 1fr 90px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border-left: 3px solid var(--border-color);
+  font-size: 13px;
+}
+.event-row.event-home { border-left-color: var(--neon-green); }
+.event-row.event-away { border-left-color: #ff8080; }
+.event-time {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  color: var(--neon-yellow);
+}
+.event-icon { text-align: center; font-size: 18px; }
+.event-main { display: flex; flex-direction: column; }
+.event-primary { font-weight: 500; }
+.event-secondary { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.event-side { font-size: 11px; color: var(--text-muted); text-align: right; }
+.event-note {
+  grid-column: 3 / 5;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* === 累積カード集計 === */
+.card-summary {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.card-summary-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--neon-green);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.card-sum-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.card-sum-row:last-child { border-bottom: none; }
+.card-sum-name { font-size: 13px; }
+.card-sum-counts { display: flex; gap: 12px; }
+.card-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+.card-mini-btn {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+.card-mini-btn:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+.card-mini-label { font-size: 12px; }
+.card-mini-val {
+  min-width: 18px;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.card-counter-y .card-mini-val { color: var(--neon-yellow); }
+.card-counter-r .card-mini-val { color: #ff8080; }
+
+/* === 統合（横長）フィールド === */
+.unified-field-wrap {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.unified-field-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.unified-field-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.unified-field {
+  width: 100%;
+  aspect-ratio: 1.95;
+  background: var(--field-green);
+  border-radius: 8px;
+  position: relative;
+  border: 2px solid rgba(255,255,255,0.3);
+  overflow: hidden;
+}
+.unified-field::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  pointer-events: none;
+}
+/* 縦のセンターライン */
+.unified-field::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 6px; bottom: 6px;
+  width: 1px;
+  background: rgba(255,255,255,0.3);
+  pointer-events: none;
+}
+/* センターサークル */
+.unified-field-center-circle {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 13%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* ペナルティエリア（大ボックス） */
+.unified-field-penarea {
+  position: absolute;
+  top: 22%; bottom: 22%;
+  width: 14%;
+  border: 1px solid rgba(255,255,255,0.3);
+  pointer-events: none;
+}
+.unified-field-penarea.left  { left: 6px;  border-left: none; }
+.unified-field-penarea.right { right: 6px; border-right: none; }
+/* ゴールエリア（小ボックス） */
+.unified-field-goalarea {
+  position: absolute;
+  top: 36%; bottom: 36%;
+  width: 6%;
+  border: 1px solid rgba(255,255,255,0.3);
+  pointer-events: none;
+}
+.unified-field-goalarea.left  { left: 6px;  border-left: none; }
+.unified-field-goalarea.right { right: 6px; border-right: none; }
+/* ゴール */
+.unified-field-goal {
+  position: absolute;
+  top: 44%; bottom: 44%;
+  width: 8px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+.unified-field-goal.left  { left: -2px;  border-left: none; }
+.unified-field-goal.right { right: -2px; border-right: none; }
+/* ペナルティスポット */
+.unified-field-penspot {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.unified-field-penspot.left  { left: 11%; }
+.unified-field-penspot.right { right: 11%; }
+
+/* === デュアルフィールド（旧、念のため残置） === */
+.dual-field-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+.dual-field-side { display: flex; flex-direction: column; gap: 8px; }
+.dual-field-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.home-label { color: var(--neon-green); }
+.away-label { color: #ff8080; }
+
+.dual-field {
+  width: 100%;
+  aspect-ratio: 0.66;
+  background: var(--field-green);
+  border-radius: 8px;
+  position: relative;
+  border: 2px solid rgba(255,255,255,0.15);
+  overflow: hidden;
+}
+.dual-field::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
+.dual-field::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 6px; right: 6px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}
+
+.mini-token {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(0,0,0,0.55);
+  border: 2px solid var(--neon-green);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  min-width: 38px;
+  cursor: grab;
+  transition: transform 0.2s, box-shadow 0.2s;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.mini-token.mini-token-dragging {
+  cursor: grabbing;
+  transition: none;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  opacity: 0.9;
+}
+.mini-token-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; color: var(--neon-green); }
+.mini-token-name { font-size: 9px; color: #fff; }
+.mini-token:hover { transform: translate(-50%, -50%) scale(1.1); z-index: 5; }
+
+.mini-token.mini-away { border-color: #ff8080; }
+.mini-token.mini-away .mini-token-number { color: #ff8080; }
+.mini-token.mini-token-highlight { border-color: #ff00aa; box-shadow: 0 0 8px rgba(255,0,170,0.5); }
+.mini-token.mini-token-highlight .mini-token-number { color: #ff66cc; }
+.mini-token.mini-has-comment { box-shadow: 0 0 8px rgba(255,140,0,0.6); }
+
+.mini-comment-dot {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent-orange);
+  color: #fff;
+  font-size: 10px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-event-dot {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  border: 1px solid var(--neon-green);
+  color: #fff;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+/* === 味方選手モーダル（イベントカウンター） === */
+.home-player-event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.home-player-event-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+.home-player-event-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.home-player-event-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.home-player-event-val {
+  min-width: 28px;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--neon-green);
+}
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+.home-player-recent {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
+  font-size: 11px;
+  color: var(--text-muted);
+  max-height: 140px;
+  overflow-y: auto;
+}
+.home-player-recent-item {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 8px;
+}
+.home-player-recent-item:last-child { border-bottom: none; }
+
+/* === レスポンシブ === */
+@media (max-width: 768px) {
+  .dual-field-wrap { grid-template-columns: 1fr; }
+  .score-num { font-size: 44px; }
+  .timer-display { font-size: 28px; }
+  .event-row { grid-template-columns: 48px 28px 1fr; }
+  .event-side { display: none; }
+  .unified-field { aspect-ratio: 1.7; }
+  .mini-token { min-width: 32px; padding: 1px 4px; }
+  .mini-token-number { font-size: 12px; }
+  .mini-token-name { font-size: 8px; }
+}

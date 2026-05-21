@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACTICL — 試合状況</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/score.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo">
+      <a href="index.html">
+        <div class="logo-text">⚡ TACTICL</div>
+        <div class="logo-sub">社会人サッカー戦術プラットフォーム</div>
+      </a>
+    </div>
+
+    <div class="nav">
+      <div class="nav-section">メイン</div>
+      <a class="nav-item" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>ダッシュボード</a>
+      <a class="nav-item" href="schedule.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>スケジュール<span class="nav-badge">3</span></a>
+      <div class="nav-section">チーム管理</div>
+      <a class="nav-item" href="company.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>チーム管理</a>
+      <a class="nav-item" href="members.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>メンバー管理</a>
+      <a class="nav-item" href="formation.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="8" r="2"/><circle cx="20" cy="8" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="8" x2="9" y2="11"/><line x1="15" y1="11" x2="18" y2="8"/><line x1="6" y1="18" x2="9" y2="13"/><line x1="15" y1="13" x2="18" y2="18"/></svg>フォーメーション</a>
+      <div class="nav-section">対外活動</div>
+      <a class="nav-item" href="companies.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>チーム一覧</a>
+      <a class="nav-item active" href="score.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20h12"/><path d="M12 20V4"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="7" r="2"/></svg>試合状況</a>
+      <a class="nav-item" href="records.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>成績管理</a>
+      <div class="nav-section">コミュニケーション</div>
+      <a class="nav-item" href="chat.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>チャット<span class="nav-badge">5</span></a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="company-tag">
+        <div class="company-avatar">CL</div>
+        <div>
+          <div class="company-name">CLFC</div>
+          <div class="company-plan">フリープラン</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <img src="image/clfc_logo.png" alt="CLFC Logo" class="page-title-logo">
+      <div class="page-title">試合状況</div>
+      <div class="topbar-actions">
+        <div class="notif-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-dot"></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-new-match')">＋ 試合作成</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- ===== 試合選択 + 試合情報 ===== -->
+      <div class="match-bar">
+        <div class="match-bar-left">
+          <label class="match-bar-label">試合選択</label>
+          <select id="matchSelect" class="match-bar-select"></select>
+        </div>
+        <div class="match-bar-right" id="matchBarInfo"></div>
+      </div>
+
+      <!-- ===== スコアボード (コンパクト) ===== -->
+      <div class="scoreboard scoreboard-compact">
+        <div class="score-teams">
+          <div class="score-team">
+            <div class="score-team-name" id="homeTeamName">CLFC</div>
+            <div class="score-num" id="scoreHome">0</div>
+            <div class="score-controls">
+              <button class="score-btn score-btn-minus" onclick="updateScore('home', -1)">−</button>
+              <button class="score-btn score-btn-plus" onclick="updateScore('home', 1)">＋</button>
+            </div>
+          </div>
+          <div class="score-vs">VS</div>
+          <div class="score-team">
+            <div class="score-team-name" id="awayTeamName">対戦相手</div>
+            <div class="score-num" id="scoreAway">0</div>
+            <div class="score-controls">
+              <button class="score-btn score-btn-minus" onclick="updateScore('away', -1)">−</button>
+              <button class="score-btn score-btn-plus" onclick="updateScore('away', 1)">＋</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="match-timer-row">
+          <div>
+            <div class="timer-display" id="timerDisplay">45:00</div>
+            <div class="match-half-label" id="halfLabel">前半</div>
+          </div>
+          <div class="timer-controls">
+            <button class="btn btn-primary" id="timerBtn" onclick="toggleTimer()">▶ スタート</button>
+            <button class="btn btn-ghost" onclick="resetTimer()">リセット</button>
+            <button class="btn btn-outline" onclick="toggleHalf()" id="halfBtn">▶ 後半へ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== イベントログタブ ===== -->
+      <div class="section-card">
+        <div class="event-tabs">
+          <div class="event-tab active" data-tab="goals" onclick="switchEventTab('goals')">⚽ 得点 (<span id="goalsCount">0</span>)</div>
+          <div class="event-tab" data-tab="cards" onclick="switchEventTab('cards')">🟨🟥 カード (<span id="cardsCount">0</span>)</div>
+          <div class="event-tab" data-tab="subs"  onclick="switchEventTab('subs')">🔄 交代 (<span id="subsCount">0</span>)</div>
+        </div>
+
+        <!-- 得点パネル -->
+        <div class="event-panel active" id="panel-goals">
+          <div class="event-panel-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-add-goal')">＋ 得点登録</button>
+          </div>
+          <div id="goalLog" class="event-log"></div>
+        </div>
+
+        <!-- カードパネル -->
+        <div class="event-panel" id="panel-cards">
+          <div class="event-panel-actions">
+            <button class="btn btn-outline" style="background:rgba(240,255,0,0.1);color:var(--neon-yellow);border-color:rgba(240,255,0,0.4)" onclick="openCardModal('Y')">🟨 イエロー</button>
+            <button class="btn btn-outline" style="background:rgba(255,68,68,0.1);color:#ff8080;border-color:rgba(255,68,68,0.4)" onclick="openCardModal('R')">🟥 レッド</button>
+          </div>
+          <div class="card-summary">
+            <div class="card-summary-title">累積カード（自チーム）</div>
+            <div id="cardSummary"></div>
+          </div>
+          <div id="cardLog" class="event-log"></div>
+        </div>
+
+        <!-- 交代パネル -->
+        <div class="event-panel" id="panel-subs">
+          <div class="event-panel-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-add-sub')">＋ 交代登録</button>
+          </div>
+          <div id="subLog" class="event-log"></div>
+        </div>
+      </div>
+
+      <!-- ===== 統合ピッチビュー ===== -->
+      <div class="section-card" style="margin-top:20px">
+        <div class="section-header">
+          <div class="section-title">⚔ ピッチビュー</div>
+          <div style="font-size:11px;color:var(--text-muted)">味方クリックでイベント記録 / 相手クリックで編集</div>
+        </div>
+        <div class="unified-field-wrap">
+          <div class="unified-field-labels">
+            <div class="unified-field-label home-label">🟢 <span id="homeSideLabel">CLFC</span>（味方）</div>
+            <div class="unified-field-label away-label" id="awayFieldLabel">🔴 対戦相手</div>
+          </div>
+          <div class="unified-field" id="unifiedField"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: 得点登録 -->
+<div class="modal-overlay" id="modal-add-goal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">得点を登録</div><div class="modal-close" onclick="closeModal('modal-add-goal')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>時間（分）</label><input type="number" id="goalTime" min="0" max="120" value=""></div>
+        <div class="form-group"><label>チーム</label>
+          <select id="goalTeam">
+            <option value="home">CLFC</option>
+            <option value="away">対戦相手</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>得点者</label>
+          <select id="goalScorer"></select>
+        </div>
+        <div class="form-group full"><label>アシスト（任意）</label>
+          <select id="goalAssist">
+            <option value="">（なし）</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>メモ</label><input type="text" id="goalNote" placeholder="例：コーナーキックから ヘディング"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-goal')">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitGoal()">登録する</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: カード登録 -->
+<div class="modal-overlay" id="modal-add-card">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="cardModalTitle">🟨 イエローカード登録</div><div class="modal-close" onclick="closeModal('modal-add-card')">✕</div></div>
+    <div class="modal-body">
+      <input type="hidden" id="cardType" value="Y">
+      <div class="form-grid">
+        <div class="form-group"><label>時間（分）</label><input type="number" id="cardTime" min="0" max="120"></div>
+        <div class="form-group"><label>チーム</label>
+          <select id="cardTeam"><option value="home">CLFC</option><option value="away">対戦相手</option></select>
+        </div>
+        <div class="form-group full"><label>選手</label>
+          <select id="cardPlayer"></select>
+        </div>
+        <div class="form-group full"><label>理由・メモ</label><input type="text" id="cardNote" placeholder="例：ラフタックル"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-card')">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitCard()">登録する</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 交代登録 -->
+<div class="modal-overlay" id="modal-add-sub">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">🔄 選手交代</div><div class="modal-close" onclick="closeModal('modal-add-sub')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>時間（分）</label><input type="number" id="subTime" min="0" max="120"></div>
+        <div class="form-group"><label>チーム</label>
+          <select id="subTeam"><option value="home">CLFC</option><option value="away">対戦相手</option></select>
+        </div>
+        <div class="form-group"><label>OUT 選手</label><select id="subOut"></select></div>
+        <div class="form-group"><label>IN 選手</label><select id="subIn"></select></div>
+        <div class="form-group full"><label>メモ</label><input type="text" id="subNote" placeholder="例：負傷交代"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-sub')">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitSub()">登録する</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 味方選手 イベント -->
+<div class="modal-overlay" id="modal-home-player">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="homePlayerModalTitle">🟢 味方選手 イベント</div>
+      <div class="modal-close" onclick="closeModal('modal-home-player')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="homePlayerId" value="">
+      <div class="home-player-event-list">
+        <div class="home-player-event-row">
+          <div class="home-player-event-label">⚽ 得点</div>
+          <div class="home-player-event-counter">
+            <button class="card-mini-btn" onclick="adjustHomePlayerGoal(-1)">−</button>
+            <span class="home-player-event-val" id="homePlayerGoalCount">0</span>
+            <button class="card-mini-btn" onclick="adjustHomePlayerGoal(1)">+</button>
+          </div>
+        </div>
+        <div class="home-player-event-row">
+          <div class="home-player-event-label">🟨 イエローカード</div>
+          <div class="home-player-event-counter">
+            <button class="card-mini-btn" onclick="adjustHomePlayerCard('Y', -1)">−</button>
+            <span class="home-player-event-val" id="homePlayerYCount">0</span>
+            <button class="card-mini-btn" onclick="adjustHomePlayerCard('Y', 1)">+</button>
+          </div>
+        </div>
+        <div class="home-player-event-row">
+          <div class="home-player-event-label">🟥 レッドカード</div>
+          <div class="home-player-event-counter">
+            <button class="card-mini-btn" onclick="adjustHomePlayerCard('R', -1)">−</button>
+            <span class="home-player-event-val" id="homePlayerRCount">0</span>
+            <button class="card-mini-btn" onclick="adjustHomePlayerCard('R', 1)">+</button>
+          </div>
+        </div>
+        <div class="home-player-event-row">
+          <div class="home-player-event-label">🔄 選手交代（OUT回数）</div>
+          <div class="home-player-event-counter">
+            <span class="home-player-event-val" id="homePlayerSubCount">0</span>
+            <button class="btn btn-outline btn-sm" onclick="openSubFromHomePlayer()">交代登録</button>
+          </div>
+        </div>
+      </div>
+      <div class="home-player-recent" id="homePlayerRecentEvents"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-home-player')">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 相手選手 編集 -->
+<div class="modal-overlay" id="modal-away-player">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">🔴 相手選手 編集</div><div class="modal-close" onclick="closeModal('modal-away-player')">✕</div></div>
+    <div class="modal-body">
+      <input type="hidden" id="awayPlayerIdx" value="">
+      <div class="form-grid">
+        <div class="form-group"><label>背番号</label><input type="number" id="awayPlayerNumber" min="1" max="99"></div>
+        <div class="form-group"><label>名前</label><input type="text" id="awayPlayerName" placeholder="例：佐藤"></div>
+        <div class="form-group full"><label>ポジション</label><input type="text" id="awayPlayerPos" placeholder="例：CF" disabled></div>
+        <div class="form-group full"><label>👁 観察コメント（試合中メモ・ハーフタイム共有用）</label>
+          <textarea id="awayPlayerComment" placeholder="例：左サイドの突破力が高い。スピードに注意。右足の精度は低い..." style="min-height:90px"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-away-player')">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitAwayPlayer()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 新規試合 -->
+<div class="modal-overlay" id="modal-new-match">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">＋ 新規試合作成</div><div class="modal-close" onclick="closeModal('modal-new-match')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>対戦相手</label><input type="text" placeholder="例：横浜キッカーズ"></div>
+        <div class="form-group"><label>日時</label><input type="datetime-local"></div>
+        <div class="form-group"><label>会場</label><input type="text" placeholder="例：駒沢オリンピック公園"></div>
+        <div class="form-group full"><label>備考</label><textarea placeholder="メモ"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-match')">キャンセル</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-new-match')">作成</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/score.js"></script>
+</body>
+</html>

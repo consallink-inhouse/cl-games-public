@@ -1,0 +1,60 @@
+/* ===================================================================
+   dashboard.css - ダッシュボード画面
+   =================================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+}
+
+.match-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.2s;
+}
+
+.match-item:hover { background: var(--bg-card-hover); }
+.match-item:last-child { border-bottom: none; }
+
+.match-date {
+  width: 44px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.match-day { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--neon-green); line-height: 1; }
+.match-month { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+
+.match-info { flex: 1; }
+.match-teams { font-size: 13px; font-weight: 500; }
+.match-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.activity-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.activity-text { font-size: 12px; line-height: 1.6; }
+.activity-time { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+@media (max-width: 768px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}

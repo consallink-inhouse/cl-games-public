@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACTICL — チーム一覧</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/companies.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo">
+      <a href="index.html">
+        <div class="logo-text">⚡ TACTICL</div>
+        <div class="logo-sub">社会人サッカー戦術プラットフォーム</div>
+      </a>
+    </div>
+
+    <div class="nav">
+      <div class="nav-section">メイン</div>
+      <a class="nav-item" href="index.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        ダッシュボード
+      </a>
+      <a class="nav-item" href="schedule.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        スケジュール
+        <span class="nav-badge">3</span>
+      </a>
+
+      <div class="nav-section">チーム管理</div>
+      <a class="nav-item" href="company.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        チーム管理
+      </a>
+      <a class="nav-item" href="members.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        メンバー管理
+      </a>
+      <a class="nav-item" href="formation.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="8" r="2"/><circle cx="20" cy="8" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="8" x2="9" y2="11"/><line x1="15" y1="11" x2="18" y2="8"/><line x1="6" y1="18" x2="9" y2="13"/><line x1="15" y1="13" x2="18" y2="18"/></svg>
+        フォーメーション
+      </a>
+
+      <div class="nav-section">対外活動</div>
+      <a class="nav-item active" href="companies.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        チーム一覧
+      </a>
+      <a class="nav-item" href="score.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20h12"/><path d="M12 20V4"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="7" r="2"/></svg>
+        試合状況
+      </a>
+      <a class="nav-item" href="records.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        成績管理
+      </a>
+
+      <div class="nav-section">コミュニケーション</div>
+      <a class="nav-item" href="chat.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        チャット
+        <span class="nav-badge">5</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="company-tag">
+        <div class="company-avatar">CL</div>
+        <div>
+          <div class="company-name">CLFC</div>
+          <div class="company-plan">フリープラン</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <img src="image/clfc_logo.png" alt="CLFC Logo" class="page-title-logo">
+      <div class="page-title">チーム一覧</div>
+      <div class="topbar-actions">
+        <div class="notif-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-dot"></div>
+        </div>
+        <button class="btn btn-primary">🔍 マッチング申請</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="search-bar">
+        <div style="position:relative;flex:1">
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted)">🔍</span>
+          <input type="text" placeholder="チーム名で検索..." style="padding-left:32px;width:100%">
+        </div>
+        <select style="width:140px">
+          <option>全エリア</option>
+          <option>東京都</option>
+          <option>神奈川県</option>
+          <option>大阪府</option>
+        </select>
+        <select style="width:140px">
+          <option>全レベル</option>
+          <option>初心者歓迎</option>
+          <option>中級者</option>
+          <option>上級者</option>
+        </select>
+      </div>
+
+      <div class="companies-grid" id="companiesGrid"></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: 企業詳細 -->
+<div class="modal-overlay" id="modal-company-detail">
+  <div class="modal modal-large">
+    <div class="modal-header">
+      <div class="modal-title">企業情報</div>
+      <div class="modal-close" onclick="closeModal('modal-company-detail')">✕</div>
+    </div>
+    <div class="modal-body" id="companyDetailBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-company-detail')">閉じる</button>
+      <button class="btn btn-primary">📋 試合申請</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/companies.js"></script>
+</body>
+</html>

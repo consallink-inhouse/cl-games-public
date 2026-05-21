@@ -1,0 +1,253 @@
+/* ===================================================================
+   records.css - 成績管理画面
+   =================================================================== */
+
+.records-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ranking-item:last-child { border-bottom: none; }
+
+.rank-num {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.rank-1 { color: #ffd700; }
+.rank-2 { color: #c0c0c0; }
+.rank-3 { color: #cd7f32; }
+.rank-other { color: var(--text-muted); }
+
+.rank-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.rank-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rank-info { flex: 1; }
+.rank-name { font-size: 13px; font-weight: 500; }
+.rank-team { font-size: 11px; color: var(--text-muted); }
+.rank-val {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--neon-green);
+}
+
+.win-rate-bar {
+  height: 6px;
+  background: var(--bg-surface);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.win-rate-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-green-dim), var(--neon-green));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .records-layout { grid-template-columns: 1fr; }
+}
+
+/* ===== 試合履歴のクリック行 ===== */
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.match-row:last-child { margin-bottom: 0; }
+.match-row:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-neon);
+}
+
+.match-row-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 92px;
+  flex-shrink: 0;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.match-row-opp {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.match-row-score {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  width: 64px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.match-row-result {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.match-row-tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+.match-row-chevron {
+  color: var(--text-muted);
+  font-size: 20px;
+  font-weight: 300;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .match-row { gap: 8px; padding: 8px 10px; }
+  .match-row-date { width: 70px; font-size: 11px; }
+  .match-row-score { width: 56px; font-size: 16px; }
+  .match-row-opp { font-size: 12px; }
+}
+
+/* ===== 試合詳細モーダル ===== */
+.match-detail { display: flex; flex-direction: column; gap: 18px; }
+
+.match-detail-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+.match-detail-result {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.match-detail-date { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+
+.match-detail-scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+.match-side { flex: 1; text-align: center; }
+.match-side-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 1px; }
+.match-side-score {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--neon-green);
+  line-height: 1;
+}
+.match-vs { font-family: 'Rajdhani', sans-serif; font-size: 20px; color: var(--text-muted); }
+
+.match-detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+.match-detail-row { display: flex; gap: 12px; align-items: baseline; }
+.match-detail-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; min-width: 120px; }
+.match-detail-value { font-size: 13px; color: var(--text-primary); }
+
+.match-detail-section { display: flex; flex-direction: column; gap: 10px; }
+.match-detail-section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--neon-green);
+  text-transform: uppercase;
+}
+
+.match-goals-list { display: flex; flex-direction: column; gap: 4px; }
+.match-goal-row {
+  display: grid;
+  grid-template-columns: 60px 110px 1fr 100px;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  font-size: 13px;
+  border-left: 3px solid var(--border-color);
+}
+.match-goal-row.goal-home { border-left-color: var(--neon-green); }
+.match-goal-row.goal-away { border-left-color: #ff8080; }
+.match-goal-time { font-family: 'Rajdhani', sans-serif; font-weight: 700; color: var(--neon-yellow); }
+.match-goal-team { color: var(--text-muted); font-size: 11px; }
+.match-goal-scorer { font-weight: 500; }
+.match-goal-assist { font-size: 11px; color: var(--text-secondary); text-align: right; }
+
+.match-detail-note {
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
