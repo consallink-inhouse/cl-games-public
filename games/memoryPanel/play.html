@@ -250,6 +250,7 @@
             box-shadow: 0 0 24px #00ffe7, 0 0 48px rgba(0, 255, 231, 0.25), inset 0 0 20px rgba(0, 255, 231, 0.05);
             max-width: 88%;
             text-align: center;
+            opacity: 0; /* アニメーション開始前は非表示 */
         }
 
         #matchModal.show .modal-inner {
@@ -278,9 +279,8 @@
         }
 
         @keyframes imageHologram {
-            0%   { transform: scaleY(0.05) scale(0.9); opacity: 0;   filter: brightness(4) saturate(3) hue-rotate(40deg); }
-            40%  { transform: scaleY(1.05) scale(1);   opacity: 0.8; filter: brightness(1.8) saturate(1.5); }
-            100% { transform: scaleY(1)    scale(1);   opacity: 1;   filter: brightness(1)   saturate(1); }
+            from { transform: scale(0.82); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
         }
 
         /* ── 説明テキスト: 遅延フェードアップ ── */
@@ -436,8 +436,8 @@
         }
 
         @keyframes cardDealIn {
-            from { transform: scale(0.25) rotate(-20deg); opacity: 0; }
-            to   { transform: scale(1)    rotate(0deg);   opacity: 1; }
+            from { transform: scale(0.25); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
         }
     </style>
 </head>
@@ -715,11 +715,10 @@
                 document.getElementById("matchImage").src = "" + imagePath;
                 document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
 
-                modal.classList.remove("fade-out");
+                modal.classList.remove("fade-out", "show");
                 modal.style.display = "flex";
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    modal.classList.add("show");
-                }));
+                void modal.offsetWidth; // reflow を強制してアニメーションをリセット
+                modal.classList.add("show");
 
                 modal.dataset.onClose = onClose.toString();
                 window._onMatchClose = onClose;
@@ -773,28 +772,21 @@
                     }, delay);
                 });
 
-                // Phase 2: 全カード裏返し終了後にネオンバースト
-                const burstDelay = (3 + 3) * 55 + 380;
+                // Phase 2: 全カード裏返し終了後に新ゲーム生成 → ディールイン
+                const dealDelay = (3 + 3) * 55 + 380;
                 setTimeout(() => {
-                    const burst = document.createElement('div');
-                    burst.id = 'restartBurst';
-                    document.body.appendChild(burst);
-                    setTimeout(() => {
-                        burst.remove();
-                        // Phase 3: 新ゲーム生成 → ディールイン
-                        initGame();
-                        requestAnimationFrame(() => {
-                            const newCards = document.querySelectorAll('.card');
-                            newCards.forEach((card, i) => {
-                                const col = i % 4;
-                                const row = Math.floor(i / 4);
-                                card.style.animationDelay = (col + row) * 45 + 'ms';
-                                card.classList.add('dealing-in');
-                            });
-                            restartButton.disabled = false;
+                    initGame();
+                    requestAnimationFrame(() => {
+                        const newCards = document.querySelectorAll('.card');
+                        newCards.forEach((card, i) => {
+                            const col = i % 4;
+                            const row = Math.floor(i / 4);
+                            card.style.animationDelay = (col + row) * 45 + 'ms';
+                            card.classList.add('dealing-in');
                         });
-                    }, 550);
-                }, burstDelay);
+                        restartButton.disabled = false;
+                    });
+                }, dealDelay);
             }
 
             restartButton.addEventListener('click', restartWithAnimation);
