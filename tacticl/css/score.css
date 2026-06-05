@@ -386,12 +386,12 @@
   background: rgba(0,0,0,0.55);
   border: 2px solid var(--neon-green);
   color: #fff;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 10px;
-  line-height: 1.2;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.25;
   white-space: nowrap;
-  min-width: 38px;
+  min-width: 52px;
   cursor: grab;
   transition: transform 0.2s, box-shadow 0.2s;
   touch-action: none;
@@ -405,8 +405,8 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   opacity: 0.9;
 }
-.mini-token-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; color: var(--neon-green); }
-.mini-token-name { font-size: 9px; color: #fff; }
+.mini-token-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 18px; color: var(--neon-green); }
+.mini-token-name { font-size: 11px; color: #fff; }
 .mini-token:hover { transform: translate(-50%, -50%) scale(1.1); z-index: 5; }
 
 .mini-token.mini-away { border-color: #ff8080; }
@@ -508,7 +508,7 @@
   .event-row { grid-template-columns: 48px 28px 1fr; }
   .event-side { display: none; }
   .unified-field { aspect-ratio: 1.7; }
-  .mini-token { min-width: 32px; padding: 1px 4px; }
-  .mini-token-number { font-size: 12px; }
-  .mini-token-name { font-size: 8px; }
+  .mini-token { min-width: 44px; padding: 3px 6px; }
+  .mini-token-number { font-size: 15px; }
+  .mini-token-name { font-size: 9px; }
 }

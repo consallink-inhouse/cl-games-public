@@ -167,10 +167,28 @@
       <input type="hidden" id="editMemberIdx" value="">
 
       <div class="edit-member-top">
-        <div class="edit-member-avatar"><img id="editMemberPreview" src="" alt=""></div>
-        <div class="edit-member-actions">
-          <button class="btn btn-outline" type="button">📷 画像を変更</button>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG/PNG・推奨 400×400 以上</div>
+        <div class="edit-member-avatar" title="クリックで画像を変更" onclick="document.getElementById('editMemberImageInput').click()">
+          <img id="editMemberPreview" src="" alt="">
+          <div class="edit-member-avatar-overlay">📷 変更</div>
+        </div>
+        <input type="file" id="editMemberImageInput" accept="image/*" style="display:none" onchange="onEditMemberImageChange(event)">
+        <div class="edit-member-fields-right">
+          <div class="form-group">
+            <label>表示名 *</label>
+            <input type="text" id="editMemberName">
+          </div>
+          <div class="form-group">
+            <label>利き足</label>
+            <select id="editMemberFoot">
+              <option>右足</option>
+              <option>左足</option>
+              <option>両足</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>経験年数</label>
+            <input type="number" id="editMemberExp" min="0" max="40">
+          </div>
         </div>
       </div>
 
@@ -178,10 +196,6 @@
         <div class="form-group">
           <label>背番号 *</label>
           <input type="number" id="editMemberNumber" min="1" max="99">
-        </div>
-        <div class="form-group">
-          <label>表示名 *</label>
-          <input type="text" id="editMemberName">
         </div>
         <div class="form-group">
           <label>ポジション</label>
@@ -195,18 +209,6 @@
         <div class="form-group">
           <label>詳細ポジション</label>
           <input type="text" id="editMemberPosDetail" placeholder="例: MF（右）">
-        </div>
-        <div class="form-group">
-          <label>利き足</label>
-          <select id="editMemberFoot">
-            <option>右足</option>
-            <option>左足</option>
-            <option>両足</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>経験年数</label>
-          <input type="number" id="editMemberExp" min="0" max="40">
         </div>
         <div class="form-group">
           <label>得点（シーズン）</label>

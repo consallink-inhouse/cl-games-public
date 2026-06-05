@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TACTICL — チーム運営をシンプルに、フットボールをもっと強く。</title>
+<meta name="description" content="社会人サッカーチームのための戦術プラットフォーム TACTICL の紹介ページ。スケジュール・メンバー・フォーメーション・試合データを一元管理。">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/intro.css">
+</head>
+<body>
+
+<div class="intro-page">
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="intro-header">
+    <div class="intro-logo">
+      <img src="image/TACTICL.png" alt="TACTICL">
+      <div>
+        <div class="intro-logo-text">TACTICL</div>
+        <div class="intro-logo-sub">社会人サッカー戦術プラットフォーム</div>
+      </div>
+    </div>
+    <div class="intro-header-actions">
+      <a href="index.html" class="intro-cta intro-cta-ghost">アプリを開く</a>
+      <a href="#tab-screens" class="intro-cta" onclick="switchTab('screens', event)">画面を見る →</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-tag">FOR AMATEUR FOOTBALL CLUBS</div>
+    <h1 class="hero-title">
+      チーム運営を、シンプルに。<br>
+      フットボールを、<span class="accent">もっと強く。</span>
+    </h1>
+    <p class="hero-sub">
+      連絡・出欠・スコア・戦術。<br>
+      バラバラだったチーム運営をひとつに。<br>
+      試合データを蓄積し、AIで解析し、勝てる社会人サッカーチームを作るための戦術プラットフォーム。
+    </p>
+    <div class="hero-cta-row">
+      <a href="index.html" class="intro-cta">⚡ アプリを試す</a>
+      <a href="#tab-screens" class="intro-cta intro-cta-ghost" onclick="switchTab('screens', event)">📱 機能を見る</a>
+    </div>
+  </section>
+
+  <!-- ===== タブナビ ===== -->
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" data-tab="overview"   onclick="switchTab('overview', event)"><span class="tab-btn-num">01</span>概要</button>
+    <button class="tab-btn"        data-tab="background" onclick="switchTab('background', event)"><span class="tab-btn-num">02</span>背景・課題</button>
+    <button class="tab-btn"        data-tab="target"     onclick="switchTab('target', event)"><span class="tab-btn-num">03</span>ターゲットと改善</button>
+    <button class="tab-btn"        data-tab="screens"    onclick="switchTab('screens', event)"><span class="tab-btn-num">04</span>画面紹介</button>
+    <button class="tab-btn"        data-tab="roadmap"    onclick="switchTab('roadmap', event)"><span class="tab-btn-num">05</span>今後の展望</button>
+  </nav>
+
+  <!-- ===== 01. 概要 ===== -->
+  <section class="tab-panel active" id="tab-overview">
+    <h2 class="section-h"><span class="accent">01.</span> 概要 — TACTICL とは</h2>
+    <p class="section-lead">
+      TACTICL（タクティクル）は、社会人サッカーチームのための戦術・運営プラットフォームです。<br>
+      日々の練習スケジュールから試合中のリアルタイム記録、戦術ボード、成績管理まで、これまでLINEやExcel、紙やホワイトボードに散らばっていたチームの情報を、ひとつの画面にまとめます。
+    </p>
+
+    <div class="feature-grid">
+      <div class="intro-card">
+        <div class="intro-card-icon">📊</div>
+        <div class="intro-card-title">ダッシュボード</div>
+        <div class="intro-card-text">勝率・得点・直近の試合結果を一目で把握。<br>チームの今が分かる。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">📅</div>
+        <div class="intro-card-title">スケジュール</div>
+        <div class="intro-card-text">月間カレンダーで練習・試合・ミーティングを一元管理。<br>出欠まで集約。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">👥</div>
+        <div class="intro-card-title">メンバー管理</div>
+        <div class="intro-card-text">背番号・ポジション・成績を選手カードで可視化。<br>検索・フィルタも自在。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">⚙</div>
+        <div class="intro-card-title">フォーメーション</div>
+        <div class="intro-card-text">ドラッグ&ドロップで戦術ボードを作成。<br>縦/横ピッチ切替、保存スロット完備。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">⚔</div>
+        <div class="intro-card-title">試合状況</div>
+        <div class="intro-card-text">タイマー、スコア、得点・カード・交代を試合中にリアルタイム入力。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">🏅</div>
+        <div class="intro-card-title">成績管理</div>
+        <div class="intro-card-text">得点・アシストランキング、試合履歴を蓄積。<br>次の戦術の根拠に。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">🌐</div>
+        <div class="intro-card-title">チーム一覧</div>
+        <div class="intro-card-text">対戦相手の探索・申し込みを効率化。<br>チーム間交流のハブに。</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">💬</div>
+        <div class="intro-card-title">チャット</div>
+        <div class="intro-card-text">チーム内連絡をプラットフォーム内に統合。<br>情報の散逸を防止。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02. 背景・課題 ===== -->
+  <section class="tab-panel" id="tab-background">
+    <h2 class="section-h"><span class="accent">02.</span> 背景 — なぜ TACTICL を作ったのか</h2>
+    <p class="section-lead">
+      社会人サッカーの現場には、プロのような専用ツールがありません。<br>
+      多くのチームがLINE・Excel・紙を寄せ集めて運営し、代表や監督が「裏側の作業」に追われて、本来の<strong style="color:var(--neon-green)">「フットボールを楽しむ」「強くなる」</strong>ことに時間を割けていません。<br>
+      TACTICL は、社会人チーム運営に潜む 5 つの根本的な課題を解決するために生まれました。
+    </p>
+
+    <!-- ===== 私たちの立場 ===== -->
+    <h3 class="section-h" style="font-size:22px;margin-top:8px;margin-bottom:8px">私たちの立場 — TACTICL を作るのは「現場の人間」です</h3>
+    <p class="section-lead" style="margin-bottom:24px">
+      TACTICL は、机上で考えたサービスではありません。<br>
+      <strong style="color:var(--neon-green)">自社内で実際に社会人サッカーチームを運営している</strong>私たちが、毎週現場で感じる課題を、ひとつずつ機能にしています。
+    </p>
+
+    <div class="grid-2" style="margin-bottom:40px">
+      <div class="intro-card">
+        <div class="intro-card-icon">⚽</div>
+        <div class="intro-card-title">サッカー好きが集う組織</div>
+        <div class="intro-card-text">
+          弊社では社員・役員にサッカーを愛するメンバーが多く、戦術論議や試合観戦が日常的に交わされる文化があります。<br>
+          フットボールへの情熱が、プロダクトの細部にまで宿っています。
+        </div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">🏆</div>
+        <div class="intro-card-title">自社で社会人チームを運営</div>
+        <div class="intro-card-text">
+          弊社内に社会人サッカーチームを立ち上げ、実際に運営しています。<br>
+          週ごとのスケジュール調整、メンバー管理、対戦相手探しの大変さを、毎週リアルに体感中です。
+        </div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">🔧</div>
+        <div class="intro-card-title">現場の悩みを機能に</div>
+        <div class="intro-card-text">
+          「運営しているからこそ分かる」リアルな課題を起点に開発。<br>
+          理論先行ではなく、<strong style="color:var(--neon-green)">「あったら助かる」を「あって当たり前」</strong>にする実用性の高い機能だけを実装しています。
+        </div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon">🚀</div>
+        <div class="intro-card-title">マルチスポーツ展開へ</div>
+        <div class="intro-card-text">
+          今後は社会人サッカーに限らず、<strong style="color:var(--neon-green)">フットサル、その他のアマチュアスポーツ</strong>にも順次対応予定。<br>
+          アマチュアスポーツ運営のスタンダードを目指していきます。
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-h" style="font-size:22px;margin-top:8px;margin-bottom:8px">5つの根本課題と、TACTICL の解決アプローチ</h3>
+    <p class="section-lead" style="margin-bottom:24px">
+      現場で繰り返し直面する課題を 5 つに整理し、それぞれに対する解決策をプロダクトに落とし込んでいます。
+    </p>
+
+    <div class="pain-list">
+
+      <div class="pain-row">
+        <div class="pain-num">01</div>
+        <div class="pain-before">
+          連絡は <strong>LINE</strong>、出欠は <strong>Excel</strong>、戦術は <strong>紙</strong>。<br>
+          情報が散らばり、誰も最新を把握できない。
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-after">
+          スケジュール・メンバー・戦術・記録をすべて<strong>ひとつのアプリ</strong>に集約。<br>
+          チーム全員が同じ画面を見て動ける。
+        </div>
+      </div>
+
+      <div class="pain-row">
+        <div class="pain-num">02</div>
+        <div class="pain-before">
+          試合中の記録は<strong>後でまとめて入力</strong>。<br>
+          細かい時間や交代理由は思い出せず、記録の精度が下がる。
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-after">
+          試合状況画面で<strong>その場で1タップ入力</strong>。<br>
+          タイマー、スコア、得点、カード、交代を試合と同時に記録。
+        </div>
+      </div>
+
+      <div class="pain-row">
+        <div class="pain-num">03</div>
+        <div class="pain-before">
+          フォーメーション検討は<strong>ホワイトボードや紙</strong>。<br>
+          写真に撮っても誰のものか分からなくなり、共有・再利用が困難。
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-after">
+          ドラッグ&ドロップで作る<strong>デジタル戦術ボード</strong>。<br>
+          複数パターンを保存・呼び出しでき、戦術メモも一緒に残せる。
+        </div>
+      </div>
+
+      <div class="pain-row">
+        <div class="pain-num">04</div>
+        <div class="pain-before">
+          対戦相手探しは <strong>個人のツテと SNS</strong>。<br>
+          日程合わせも個別連絡で、運営側の負担が大きい。
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-after">
+          チーム一覧から<strong>レベル・エリア・日程</strong>でマッチング。<br>
+          相手チームのプロフィールと過去成績を見て申し込める。
+        </div>
+      </div>
+
+      <div class="pain-row">
+        <div class="pain-num">05</div>
+        <div class="pain-before">
+          試合動画とメモはあるのに、<strong>見返されないまま蓄積</strong>。<br>
+          せっかくのデータがチームの成長に活かされていない。
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-after">
+          試合データを構造化して蓄積し、<strong>AIが弱点と改善案を解析</strong>。<br>
+          「次に何を強化すれば勝てるか」が見えるチームへ。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== 03. ターゲットと改善 ===== -->
+  <section class="tab-panel" id="tab-target">
+    <h2 class="section-h"><span class="accent">03.</span> ターゲットユーザーと改善ポイント</h2>
+    <p class="section-lead">
+      代表・運営、監督・コーチ、メンバー、これから始める人。<br>
+      立場ごとに「困っていること」は違います。<br>
+      TACTICL はそれぞれの役割に最適化された画面と機能で、チーム全体の運営コストを下げます。
+    </p>
+
+    <div class="grid-2">
+      <div class="intro-card target-card" data-emoji="👔">
+        <div class="target-card-name">代表・運営者</div>
+        <div class="target-card-role">REPRESENTATIVE / ORGANIZER</div>
+        <ul class="target-card-uses">
+          <li>スケジュール調整・出欠把握の自動化</li>
+          <li>メンバー名簿・連絡先の一元管理</li>
+          <li>対戦相手探し・チーム間連絡の効率化</li>
+          <li>会費・参加費の管理（今後対応）</li>
+        </ul>
+      </div>
+
+      <div class="intro-card target-card" data-emoji="🎯">
+        <div class="target-card-name">監督・コーチ</div>
+        <div class="target-card-role">MANAGER / COACH</div>
+        <ul class="target-card-uses">
+          <li>戦術ボードのデジタル作成・保存・共有</li>
+          <li>試合中のリアルタイム記録</li>
+          <li>選手の成績・傾向を成績画面で把握</li>
+          <li>蓄積データから次の戦術を組み立て</li>
+        </ul>
+      </div>
+
+      <div class="intro-card target-card" data-emoji="⚽">
+        <div class="target-card-name">一般メンバー選手</div>
+        <div class="target-card-role">PLAYER</div>
+        <ul class="target-card-uses">
+          <li>練習・試合の日程と場所をすぐ確認</li>
+          <li>自分の出欠・参加表明をワンタップで</li>
+          <li>自分の成績（得点・アシスト）を可視化</li>
+          <li>チーム内チャットで連絡を見逃さない</li>
+        </ul>
+      </div>
+
+      <div class="intro-card target-card" data-emoji="🌱">
+        <div class="target-card-name">これからチームを始める人</div>
+        <div class="target-card-role">STARTING A NEW CLUB</div>
+        <ul class="target-card-uses">
+          <li>運営フォーマットをゼロから組み立てなくて良い</li>
+          <li>メンバー募集・チーム一覧で仲間を見つける</li>
+          <li>初試合からのデータが自然と蓄積</li>
+          <li>運営テンプレートで失敗しにくい</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-h" style="font-size:22px;margin-top:48px;margin-bottom:8px">改善ポイント</h3>
+    <p class="section-lead" style="margin-bottom:0">
+      従来の「LINE＋Excel＋紙＋頭の中」を、TACTICL は次のように置き換えます。
+    </p>
+
+    <div class="improve-grid">
+      <div class="improve-card">
+        <div class="improve-card-title">⚡ 一元化</div>
+        <div class="improve-card-text">複数のツールを横断しなくても、すべての情報がひとつの画面に。<br>代表者の負荷を大幅に削減。</div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card-title">📍 リアルタイム性</div>
+        <div class="improve-card-text">試合中・練習中の情報をその場で記録。<br>後でまとめて入力する手間と精度低下を排除。</div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card-title">🧠 データドリブン</div>
+        <div class="improve-card-text">試合結果を構造化して蓄積し、AIで解析。<br>「勘」だけに頼らない戦術判断を支援。</div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card-title">🤝 チーム間交流</div>
+        <div class="improve-card-text">対戦相手探し・申し込み・連絡のオンライン化で、活動の幅を広げやすく。</div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card-title">📱 モバイル対応</div>
+        <div class="improve-card-text">スマホでもPCでも同じ操作感。<br>ピッチサイドからでも記録・確認ができる。</div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card-title">🔁 再利用性</div>
+        <div class="improve-card-text">作成したフォーメーション、過去の試合データ、選手プロフィールはすべて保存・再活用可能。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04. 画面紹介 ===== -->
+  <section class="tab-panel" id="tab-screens">
+    <h2 class="section-h"><span class="accent">04.</span> 画面紹介 — TACTICL を覗いてみる</h2>
+    <p class="section-lead">
+      実際の画面を再現したミニチュアプレビューで、TACTICL の主要画面を紹介します。<br>
+      各画面の役割と主な使い方をあわせて解説しているので、システム全体の流れがつかめます。
+    </p>
+
+    <!-- 1. ダッシュボード -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">📊</div>
+        <div class="screen-card-title">ダッシュボード</div>
+        <div class="screen-card-num">SCREEN 01</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="ダッシュボード画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">DASHBOARD</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">＋ 新規作成</div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-stat-grid">
+                <div class="mock-stat"><div class="mock-stat-lbl">総試合数</div><div class="mock-stat-val">42</div><div class="mock-stat-sub">+8 試合</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">勝率</div><div class="mock-stat-val">68%</div><div class="mock-stat-sub">19勝5敗4分</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">総得点</div><div class="mock-stat-val">87</div><div class="mock-stat-sub">平均 3.1</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">総失点</div><div class="mock-stat-val">43</div><div class="mock-stat-sub">平均 1.5</div></div>
+              </div>
+              <div class="mock-section">
+                <div class="mock-section-title">最近の活動</div>
+                <div class="mock-row"><span class="mock-row-tag win">勝</span><div class="mock-row-flex">vs 横浜キッカーズ</div><div class="mock-row-strong">3-1</div></div>
+                <div class="mock-row"><span class="mock-row-tag lose">敗</span><div class="mock-row-flex">vs SportsWorks United</div><div class="mock-row-strong">1-2</div></div>
+                <div class="mock-row"><span class="mock-row-tag win">勝</span><div class="mock-row-flex">vs BizSports FC</div><div class="mock-row-strong">4-0</div></div>
+                <div class="mock-row"><span class="mock-row-tag draw">分</span><div class="mock-row-flex">vs Tokyo Reds FC</div><div class="mock-row-strong">2-2</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            ログイン直後に表示されるトップ画面。<br>
+            総試合数・勝率・直近の試合結果・次の予定など、<strong>チームの「今」が一目で分かる</strong>サマリービュー。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>サマリーカードで全体KPIを確認</li>
+              <li>「次の予定」から練習・試合へ移動</li>
+              <li>「最近の活動」をクリックで詳細へ</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">KPI</span>
+            <span class="screen-tag">サマリー</span>
+            <span class="screen-tag">クイックアクセス</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. スケジュール -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">📅</div>
+        <div class="screen-card-title">スケジュール</div>
+        <div class="screen-card-num">SCREEN 02</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="スケジュール画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">SCHEDULE</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">＋ 予定追加</div>
+            </div>
+            <div class="mock-main">
+              <div style="display:flex;gap:8px;align-items:center;font-size:9px;color:var(--text-muted)">
+                ‹ <span style="font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--text-primary);letter-spacing:1px">2025年 1月</span> ›
+                <span style="margin-left:auto;display:flex;gap:4px">
+                  <span style="padding:1px 6px;border-radius:8px;background:rgba(0,229,255,0.15);color:var(--neon-cyan);font-size:7px">練習</span>
+                  <span style="padding:1px 6px;border-radius:8px;background:rgba(255,68,68,0.15);color:#ff8080;font-size:7px">試合</span>
+                  <span style="padding:1px 6px;border-radius:8px;background:rgba(240,255,0,0.1);color:var(--neon-yellow);font-size:7px">MTG</span>
+                </span>
+              </div>
+              <div class="mock-cal">
+                <div class="mock-cal-head">
+                  <div class="mock-cal-dow">日</div><div class="mock-cal-dow">月</div><div class="mock-cal-dow">火</div><div class="mock-cal-dow">水</div><div class="mock-cal-dow">木</div><div class="mock-cal-dow">金</div><div class="mock-cal-dow">土</div>
+                </div>
+                <div class="mock-cal-body">
+                  <div class="mock-cal-cell other">29</div><div class="mock-cal-cell other">30</div><div class="mock-cal-cell other">31</div>
+                  <div class="mock-cal-cell">1</div><div class="mock-cal-cell">2</div><div class="mock-cal-cell">3</div>
+                  <div class="mock-cal-cell">4<div class="mock-cal-ev practice">練習</div></div>
+                  <div class="mock-cal-cell">5</div><div class="mock-cal-cell">6</div>
+                  <div class="mock-cal-cell">7<div class="mock-cal-ev meeting">MTG</div></div>
+                  <div class="mock-cal-cell">8</div><div class="mock-cal-cell">9</div><div class="mock-cal-cell">10</div>
+                  <div class="mock-cal-cell">11<div class="mock-cal-ev practice">練習</div></div>
+                  <div class="mock-cal-cell">12</div><div class="mock-cal-cell">13</div><div class="mock-cal-cell">14</div>
+                  <div class="mock-cal-cell">15</div><div class="mock-cal-cell">16</div><div class="mock-cal-cell">17</div>
+                  <div class="mock-cal-cell">18<div class="mock-cal-ev match">vs 横浜</div></div>
+                  <div class="mock-cal-cell">19</div><div class="mock-cal-cell">20</div><div class="mock-cal-cell today">21</div><div class="mock-cal-cell">22</div><div class="mock-cal-cell">23</div><div class="mock-cal-cell">24</div>
+                  <div class="mock-cal-cell">25<div class="mock-cal-ev match">大会</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            月間カレンダーで練習・試合・ミーティングを一元管理。<br>
+            種別フィルタで「試合だけ」「練習だけ」の絞り込みも。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>「＋ 予定追加」で日時・場所・種別を入力</li>
+              <li>セル内の予定をクリックで詳細・地図表示</li>
+              <li>上部フィルタで種別を絞り込み</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">カレンダー</span>
+            <span class="screen-tag">出欠</span>
+            <span class="screen-tag">地図連携</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. メンバー管理 -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">👥</div>
+        <div class="screen-card-title">メンバー管理</div>
+        <div class="screen-card-num">SCREEN 03</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="メンバー管理画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">MEMBERS</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">＋ メンバー追加</div>
+            </div>
+            <div class="mock-main">
+              <div style="display:flex;gap:6px;font-size:8px">
+                <div style="flex:1;padding:3px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;color:var(--text-muted)">🔍 検索...</div>
+                <div style="padding:3px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;color:var(--text-secondary)">全ポジション ▾</div>
+              </div>
+              <div class="mock-members">
+                <div class="mock-member"><div class="mock-member-num">#10</div><div class="mock-member-avatar">Z</div><div class="mock-member-name">イブラヒモビッチ</div><div class="mock-member-pos">FW</div></div>
+                <div class="mock-member"><div class="mock-member-num">#11</div><div class="mock-member-avatar">R</div><div class="mock-member-name">ロッベン</div><div class="mock-member-pos">MF</div></div>
+                <div class="mock-member"><div class="mock-member-num">#18</div><div class="mock-member-avatar" style="background:linear-gradient(135deg,rgba(255,0,170,0.4),rgba(255,0,170,0.1));color:#ff66cc;border-color:#ff00aa">吉</div><div class="mock-member-name">吉村 彰吾</div><div class="mock-member-pos" style="background:rgba(255,0,170,0.12);color:#ff66cc;border-color:rgba(255,0,170,0.45)">MF</div></div>
+                <div class="mock-member"><div class="mock-member-num">#6</div><div class="mock-member-avatar">I</div><div class="mock-member-name">イニエスタ</div><div class="mock-member-pos">MF</div></div>
+                <div class="mock-member"><div class="mock-member-num">#3</div><div class="mock-member-avatar">R</div><div class="mock-member-name">R.カルロス</div><div class="mock-member-pos">DF</div></div>
+                <div class="mock-member"><div class="mock-member-num">#5</div><div class="mock-member-avatar">P</div><div class="mock-member-name">プジョル</div><div class="mock-member-pos">DF</div></div>
+                <div class="mock-member"><div class="mock-member-num">#1</div><div class="mock-member-avatar">B</div><div class="mock-member-name">ブッフォン</div><div class="mock-member-pos">GK</div></div>
+                <div class="mock-member"><div class="mock-member-num">#30</div><div class="mock-member-avatar">M</div><div class="mock-member-name">メッシ</div><div class="mock-member-pos">FW</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            背番号・ポジション・利き足・経験年数・成績を選手カードで可視化。<br>
+            カードクリックで編集モーダルが開き、画像も差し替え可能。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>「＋ メンバー追加」で新規登録</li>
+              <li>カードクリックで編集モーダル</li>
+              <li>画像をクリックして顔写真を変更</li>
+              <li>検索・ポジションフィルタで絞り込み</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">名簿</span>
+            <span class="screen-tag">プロフィール</span>
+            <span class="screen-tag">画像管理</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. フォーメーション -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">⚙</div>
+        <div class="screen-card-title">フォーメーション</div>
+        <div class="screen-card-num">SCREEN 04</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="フォーメーション画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">FORMATION</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">保存</div>
+            </div>
+            <div class="mock-main" style="display:grid;grid-template-columns:1.6fr 1fr;gap:10px;overflow:hidden">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div style="display:flex;gap:6px;align-items:center;font-size:8px;color:var(--text-muted)">
+                  <span style="padding:1px 6px;background:var(--bg-card);border:1px solid var(--border-neon);border-radius:3px;color:var(--neon-green);font-family:Rajdhani,sans-serif">4-4-2</span>
+                  <span style="padding:1px 6px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:3px;font-family:Rajdhani,sans-serif">4-3-3</span>
+                  <span style="padding:1px 6px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:3px;font-family:Rajdhani,sans-serif">3-5-2</span>
+                  <span style="margin-left:auto;padding:1px 6px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:3px">縦</span>
+                  <span style="padding:1px 6px;background:rgba(0,255,136,0.1);border:1px solid var(--border-neon);border-radius:3px;color:var(--neon-green)">横</span>
+                </div>
+                <div class="mock-pitch" style="aspect-ratio:1.6">
+                  <div class="mock-pitch-circle"></div>
+                  <!-- 味方 4-4-2 横向き：GKは左、FWは中央近く -->
+                  <div class="mock-token" style="left:8%;top:50%">1</div>
+                  <div class="mock-token" style="left:22%;top:15%">2</div>
+                  <div class="mock-token" style="left:24%;top:38%">5</div>
+                  <div class="mock-token" style="left:24%;top:62%">4</div>
+                  <div class="mock-token" style="left:22%;top:85%">3</div>
+                  <div class="mock-token" style="left:38%;top:15%">14</div>
+                  <div class="mock-token" style="left:40%;top:38%">6</div>
+                  <div class="mock-token" style="left:40%;top:62%;border-color:#ff00aa;color:#ff66cc">18</div>
+                  <div class="mock-token" style="left:38%;top:85%">11</div>
+                  <div class="mock-token" style="left:48%;top:32%">9</div>
+                  <div class="mock-token" style="left:48%;top:68%">10</div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:8px;min-width:0;overflow:hidden">
+                <div style="padding:6px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px">
+                  <div style="color:var(--text-muted);letter-spacing:1px;margin-bottom:4px">スロット</div>
+                  <div style="color:var(--neon-green)">▸ メイン布陣</div>
+                  <div style="color:var(--text-muted);margin-top:2px">▸ ハイプレス用</div>
+                </div>
+                <div style="padding:6px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;flex:1">
+                  <div style="color:var(--text-muted);letter-spacing:1px;margin-bottom:4px">ベンチ</div>
+                  <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(0,255,136,0.2)"></span>#8 ジェラード</div>
+                  <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(0,255,136,0.2)"></span>#22 カカ</div>
+                  <div style="display:flex;align-items:center;gap:4px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(0,255,136,0.2)"></span>#15 ピケ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            ドラッグ&ドロップで作る戦術ボード。<br>
+            4-4-2 / 4-3-3 / 3-5-2 / 4-2-3-1 のプリセットに対応。<br>
+            縦/横ピッチ切替（PCは横、スマホは縦が初期値）、保存スロット・戦術メモも完備。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>プリセットを選択（例：4-4-2）</li>
+              <li>選手アイコンをドラッグして配置調整</li>
+              <li>ベンチメンバーをピッチへドロップで交代</li>
+              <li>「保存」で複数パターンをスロットに保存</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">戦術ボード</span>
+            <span class="screen-tag">D&amp;D</span>
+            <span class="screen-tag">保存スロット</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 試合状況 -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">⚔</div>
+        <div class="screen-card-title">試合状況</div>
+        <div class="screen-card-num">SCREEN 05</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="試合状況画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">MATCH</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">＋ 試合作成</div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-score">
+                <div class="mock-score-team"><div class="mock-score-team-name">CLFC</div><div class="mock-score-num">2</div></div>
+                <div class="mock-score-vs">VS</div>
+                <div class="mock-score-team"><div class="mock-score-team-name">横浜キッカーズ</div><div class="mock-score-num">1</div></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:8px;color:var(--text-muted)">
+                <span style="font-family:Rajdhani,sans-serif;font-size:14px;color:var(--neon-cyan);letter-spacing:2px">23:45</span>
+                <span>前半</span>
+                <span style="padding:2px 8px;background:var(--neon-green);color:var(--bg-dark);border-radius:3px;font-weight:700">▶ 停止</span>
+              </div>
+              <div class="mock-tabs">
+                <div class="mock-tab active">⚽ 得点 (3)</div>
+                <div class="mock-tab">🟨🟥 カード (1)</div>
+                <div class="mock-tab">🔄 交代 (0)</div>
+              </div>
+              <div class="mock-pitch-mini">
+                <!-- 味方 -->
+                <div class="mock-token" style="left:4%;top:50%;width:18px;height:18px;font-size:8px">1</div>
+                <div class="mock-token" style="left:12%;top:18%;width:18px;height:18px;font-size:8px">2</div>
+                <div class="mock-token" style="left:14%;top:42%;width:18px;height:18px;font-size:8px">5</div>
+                <div class="mock-token" style="left:14%;top:58%;width:18px;height:18px;font-size:8px">4</div>
+                <div class="mock-token" style="left:12%;top:82%;width:18px;height:18px;font-size:8px">3</div>
+                <div class="mock-token" style="left:24%;top:30%;width:18px;height:18px;font-size:8px">14</div>
+                <div class="mock-token" style="left:26%;top:50%;width:18px;height:18px;font-size:8px">6</div>
+                <div class="mock-token" style="left:26%;top:70%;width:18px;height:18px;font-size:8px;border-color:#ff00aa;color:#ff66cc">18</div>
+                <div class="mock-token" style="left:36%;top:35%;width:18px;height:18px;font-size:8px">9</div>
+                <div class="mock-token" style="left:36%;top:65%;width:18px;height:18px;font-size:8px">10</div>
+                <!-- 相手 -->
+                <div class="mock-token away" style="left:96%;top:50%;width:18px;height:18px;font-size:8px">1</div>
+                <div class="mock-token away" style="left:88%;top:25%;width:18px;height:18px;font-size:8px">2</div>
+                <div class="mock-token away" style="left:86%;top:50%;width:18px;height:18px;font-size:8px">5</div>
+                <div class="mock-token away" style="left:88%;top:75%;width:18px;height:18px;font-size:8px">3</div>
+                <div class="mock-token away" style="left:74%;top:30%;width:18px;height:18px;font-size:8px">8</div>
+                <div class="mock-token away" style="left:74%;top:70%;width:18px;height:18px;font-size:8px">6</div>
+                <div class="mock-token away" style="left:62%;top:40%;width:18px;height:18px;font-size:8px">9</div>
+                <div class="mock-token away" style="left:62%;top:60%;width:18px;height:18px;font-size:8px">10</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            タイマー、スコア、得点・カード・交代をリアルタイム記録。<br>
+            ピッチビュー上で味方クリック→イベント記録、相手クリック→観察メモ、ドラッグで配置変更まで対応。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>試合セレクトから対象試合を選ぶ</li>
+              <li>タイマー開始、スコア＋/− で得点を記録</li>
+              <li>ピッチビューの味方をクリックでイベント入力</li>
+              <li>選手アイコンをドラッグで配置調整</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">リアルタイム</span>
+            <span class="screen-tag">ピッチビュー</span>
+            <span class="screen-tag">D&amp;D</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 成績管理 -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">🏅</div>
+        <div class="screen-card-title">成績管理</div>
+        <div class="screen-card-num">SCREEN 06</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="成績管理画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">RECORDS</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">📊 エクスポート</div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-stat-grid">
+                <div class="mock-stat"><div class="mock-stat-lbl">試合数</div><div class="mock-stat-val">28</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">勝率</div><div class="mock-stat-val">68%</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">総得点</div><div class="mock-stat-val">87</div></div>
+                <div class="mock-stat"><div class="mock-stat-lbl">総失点</div><div class="mock-stat-val">43</div></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0">
+                <div class="mock-section">
+                  <div class="mock-section-title">🏅 得点ランキング</div>
+                  <div class="mock-rank"><div class="mock-rank-num r1">🥇</div><div class="mock-rank-name">イブラヒモビッチ</div><div class="mock-rank-val">45</div></div>
+                  <div class="mock-rank"><div class="mock-rank-num r1">🥇</div><div class="mock-rank-name">メッシ</div><div class="mock-rank-val">45</div></div>
+                  <div class="mock-rank"><div class="mock-rank-num r3">🥉</div><div class="mock-rank-name">C.ロナウド</div><div class="mock-rank-val">41</div></div>
+                </div>
+                <div class="mock-section">
+                  <div class="mock-section-title">🎯 アシストランキング</div>
+                  <div class="mock-rank"><div class="mock-rank-num r1">🥇</div><div class="mock-rank-name">イニエスタ</div><div class="mock-rank-val">32</div></div>
+                  <div class="mock-rank"><div class="mock-rank-num r2">🥈</div><div class="mock-rank-name">ジェラード</div><div class="mock-rank-val">23</div></div>
+                  <div class="mock-rank"><div class="mock-rank-num r3">🥉</div><div class="mock-rank-name">メッシ</div><div class="mock-rank-val">21</div></div>
+                </div>
+              </div>
+              <div class="mock-section" style="flex:none">
+                <div class="mock-section-title">試合結果履歴</div>
+                <div class="mock-row"><span style="font-family:Rajdhani,sans-serif;font-size:8px;color:var(--text-muted);width:60px">2025-01-19</span><div class="mock-row-flex">vs 横浜キッカーズ</div><div class="mock-row-strong">3-1</div><span style="color:var(--neon-green);font-family:Rajdhani,sans-serif;font-weight:700">勝</span></div>
+                <div class="mock-row"><span style="font-family:Rajdhani,sans-serif;font-size:8px;color:var(--text-muted);width:60px">2025-01-12</span><div class="mock-row-flex">vs SportsWorks</div><div class="mock-row-strong">1-2</div><span style="color:#ff8080;font-family:Rajdhani,sans-serif;font-weight:700">敗</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            シーズン累計、得点・アシストランキング、試合結果履歴を蓄積。<br>
+            行クリックで試合詳細（得点ログ・MVP・レビュー）が開きます。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>シーズン KPI（試合数・勝率・得失点）をチェック</li>
+              <li>得点・アシストランキングで個人成績を確認</li>
+              <li>試合結果履歴の行をクリックで詳細表示</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">ランキング</span>
+            <span class="screen-tag">履歴</span>
+            <span class="screen-tag">レビュー</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. チーム一覧 -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">🌐</div>
+        <div class="screen-card-title">チーム一覧</div>
+        <div class="screen-card-num">SCREEN 07</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="チーム一覧画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>チーム一覧</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>成績</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">TEAMS</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">対戦申込</div>
+            </div>
+            <div class="mock-main">
+              <div style="display:flex;gap:6px;font-size:8px">
+                <div style="flex:1;padding:3px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;color:var(--text-muted)">🔍 チームを検索...</div>
+                <div style="padding:3px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;color:var(--text-secondary)">関東 ▾</div>
+                <div style="padding:3px 8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:4px;color:var(--text-secondary)">レベル ▾</div>
+              </div>
+              <div class="mock-teams">
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">DF</div><div><div class="mock-team-name">DigitalForce FC</div><div class="mock-team-area">東京都</div></div></div>
+                  <div class="mock-team-meta"><span>練習試合可</span><span>中級</span></div>
+                </div>
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">SW</div><div><div class="mock-team-name">SportsWorks U.</div><div class="mock-team-area">神奈川</div></div></div>
+                  <div class="mock-team-meta"><span>公式戦</span><span>上級</span></div>
+                </div>
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">YK</div><div><div class="mock-team-name">横浜キッカーズ</div><div class="mock-team-area">神奈川</div></div></div>
+                  <div class="mock-team-meta"><span>練習試合可</span><span>中級</span></div>
+                </div>
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">BS</div><div><div class="mock-team-name">BizSports FC</div><div class="mock-team-area">東京都</div></div></div>
+                  <div class="mock-team-meta"><span>公式戦</span><span>初級</span></div>
+                </div>
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">TR</div><div><div class="mock-team-name">Tokyo Reds</div><div class="mock-team-area">東京都</div></div></div>
+                  <div class="mock-team-meta"><span>練習試合可</span><span>上級</span></div>
+                </div>
+                <div class="mock-team">
+                  <div class="mock-team-head"><div class="mock-team-logo">NO</div><div><div class="mock-team-name">名古屋 OB U.</div><div class="mock-team-area">愛知県</div></div></div>
+                  <div class="mock-team-meta"><span>大会</span><span>中級</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            登録チームをエリア・レベルで検索し、対戦相手を探せるオープンスペース。<br>
+            チームプロフィール・直近成績を見てから申し込めます。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>エリアまたはレベルで対戦相手を絞り込み</li>
+              <li>チームカードをクリックでプロフィール表示</li>
+              <li>「対戦申し込み」から日程調整リクエスト</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">マッチング</span>
+            <span class="screen-tag">対戦相手探し</span>
+            <span class="screen-tag">交流</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. チャット -->
+    <div class="screen-card">
+      <div class="screen-card-header">
+        <div class="screen-card-icon">💬</div>
+        <div class="screen-card-title">チャット</div>
+        <div class="screen-card-num">SCREEN 08</div>
+      </div>
+      <div class="screen-card-body">
+        <div class="screen-frame-wrap">
+          <div class="mock" aria-label="チャット画面イメージ">
+            <div class="mock-side">
+              <div class="mock-side-logo">TACTICL</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>ダッシュ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>スケジュール</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>メンバー</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>フォーメ</div>
+              <div class="mock-side-item"><span class="mock-side-dot"></span>試合状況</div>
+              <div class="mock-side-item active"><span class="mock-side-dot"></span>チャット</div>
+            </div>
+            <div class="mock-top">
+              <div class="mock-top-title">CHAT</div>
+              <div class="mock-top-spacer"></div>
+              <div class="mock-top-btn">＋ 新規</div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-chat">
+                <div class="mock-chat-channels">
+                  <div style="font-size:8px;color:var(--text-muted);padding:2px 6px;letter-spacing:1px">チャンネル</div>
+                  <div class="mock-chat-ch"># 全体連絡</div>
+                  <div class="mock-chat-ch active"># 試合連絡</div>
+                  <div class="mock-chat-ch"># コーチ陣</div>
+                  <div class="mock-chat-ch"># 雑談</div>
+                  <div style="font-size:8px;color:var(--text-muted);padding:6px 6px 2px;letter-spacing:1px">DM</div>
+                  <div class="mock-chat-ch">吉村 彰吾</div>
+                  <div class="mock-chat-ch">イニエスタ</div>
+                </div>
+                <div class="mock-chat-thread">
+                  <div class="mock-chat-msg">
+                    <div class="mock-chat-author">監督・コーチ ・ 10:24</div>
+                    <div class="mock-chat-bubble">明日の試合、9:00集合でお願いします</div>
+                  </div>
+                  <div class="mock-chat-msg me">
+                    <div class="mock-chat-author">あなた ・ 10:26</div>
+                    <div class="mock-chat-bubble">了解です！フォーメーションどうしますか？</div>
+                  </div>
+                  <div class="mock-chat-msg">
+                    <div class="mock-chat-author">監督・コーチ ・ 10:30</div>
+                    <div class="mock-chat-bubble">4-4-2で。詳細はフォーメ画面に保存しました</div>
+                  </div>
+                  <div class="mock-chat-msg me">
+                    <div class="mock-chat-author">あなた ・ 10:31</div>
+                    <div class="mock-chat-bubble">確認しました 👍</div>
+                  </div>
+                  <div style="margin-top:auto;display:flex;gap:4px;background:var(--bg-surface);padding:4px 6px;border-radius:4px;font-size:8px;color:var(--text-muted)">
+                    <span style="flex:1">メッセージを入力...</span>
+                    <span style="color:var(--neon-green);font-weight:700">送信</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-summary">
+            チーム内連絡をプラットフォームに統合。<br>
+            LINE と TACTICL を行き来する必要がなく、スケジュールやメンバー情報とのリンクも実装予定。
+          </div>
+          <div class="screen-how">
+            <div class="screen-how-title">▶ 主な使い方</div>
+            <ol>
+              <li>チャンネル一覧から会話を選ぶ</li>
+              <li>メッセージ入力＆送信で連絡</li>
+              <li>未読バッジで見逃しを防止</li>
+            </ol>
+          </div>
+          <div class="screen-tags">
+            <span class="screen-tag">連絡</span>
+            <span class="screen-tag">チャンネル</span>
+            <span class="screen-tag">通知</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== 05. 今後の展望 ===== -->
+  <section class="tab-panel" id="tab-roadmap">
+    <h2 class="section-h"><span class="accent">05.</span> 今後の展望 — データから戦術へ</h2>
+    <p class="section-lead">
+      TACTICL の本当の価値は「データを蓄積した後」にあります。<br>
+      試合・練習・選手のデータを構造化して持つことで、AIによる戦術解析、対戦相手の傾向分析、個人成長プランの提案など、これまで強豪クラブにしかできなかった戦術運用を、社会人チームでも実現します。
+    </p>
+
+    <div class="roadmap-list">
+
+      <div class="roadmap-item">
+        <div class="roadmap-step">PHASE 01 — NOW</div>
+        <div class="roadmap-title">運営の一元化（実装中）</div>
+        <div class="roadmap-text">
+          スケジュール・メンバー・試合・成績の一元管理を実装済み。<br>
+          散らばっていた情報をひとつの画面にまとめ、運営コストを大幅に削減します。
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-step">PHASE 02 — NEXT</div>
+        <div class="roadmap-title">出欠管理・チーム間マッチング</div>
+        <div class="roadmap-text">
+          スケジュールに直接 ⭕ ❌ で参加表明、出欠統計の自動集計を予定。<br>
+          チーム一覧から対戦相手の申し込み・日程調整のオンライン化も進めます。
+        </div>
+      </div>
+
+      <div class="roadmap-item future">
+        <div class="roadmap-step roadmap-future-step">PHASE 03 — COMING</div>
+        <div class="roadmap-title">AIによる戦術解析</div>
+        <div class="roadmap-text">
+          蓄積した試合データから、強み・弱み・対戦相手の傾向をAIが解析。<br>
+          「次の試合では右サイドを強化すべき」「相手のセットプレーは決まりやすい」など、根拠ある戦術判断を支援します。
+        </div>
+      </div>
+
+      <div class="roadmap-item future">
+        <div class="roadmap-step roadmap-future-step">PHASE 04 — FUTURE</div>
+        <div class="roadmap-title">動画 × データ統合</div>
+        <div class="roadmap-text">
+          試合動画と入力済みイベント（得点・カード・交代）を時刻同期し、ワンクリックで「この得点シーン」へジャンプ。<br>
+          動画レビューが格段に効率化されます。
+        </div>
+      </div>
+
+      <div class="roadmap-item future">
+        <div class="roadmap-step roadmap-future-step">PHASE 05 — VISION</div>
+        <div class="roadmap-title">個人成長プラン</div>
+        <div class="roadmap-text">
+          選手ごとに「次の試合で意識すべきポイント」「強化すべきプレー」をAIが提案。<br>
+          チームとしてだけでなく、選手一人ひとりの成長も支えるプラットフォームへ。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== フッター ===== -->
+  <footer class="intro-footer">
+    <div>© 2025 TACTICL — 社会人サッカー戦術プラットフォーム</div>
+    <div style="display:flex;gap:14px">
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none">アプリへ →</a>
+      <a href="companies.html" style="color:var(--text-muted);text-decoration:none">チーム一覧</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+function switchTab(name, event) {
+  if (event) event.preventDefault();
+  // タブボタン
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  // パネル
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  // タブナビをスクロール（モバイル：横スクロール）
+  const activeBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+  if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  // ハッシュを更新（再読み込み対応）
+  if (history && history.replaceState) {
+    history.replaceState(null, '', '#tab-' + name);
+  }
+  // タブナビ自体がスティッキーヘッダー直下に来るよう、ヘッダー高さ分オフセット
+  const header = document.querySelector('.intro-header');
+  const headerH = header ? header.offsetHeight : 0;
+  const tabNav = document.querySelector('.tab-nav');
+  const targetY = tabNav.offsetTop - headerH - 8;
+  window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+}
+
+// ページ読み込み時にハッシュからタブ初期化
+document.addEventListener('DOMContentLoaded', () => {
+  const hash = (location.hash || '').replace('#tab-', '');
+  if (hash && document.getElementById('tab-' + hash)) {
+    switchTab(hash);
+  }
+});
+</script>
+
+</body>
+</html>

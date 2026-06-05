@@ -164,6 +164,23 @@ function openMemberEdit(idx) {
   openModal('modal-edit-member');
 }
 
+/* === メンバー画像変更（プレビュー用） === */
+function onEditMemberImageChange(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const previewImg = document.getElementById('editMemberPreview');
+    previewImg.src = ev.target.result;
+    previewImg.style.display = '';
+    const ph = document.getElementById('editMemberPreviewPh');
+    if (ph) ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+  // 同じファイルを再選択できるようにinputをリセット
+  e.target.value = '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const search = document.getElementById('memberSearch');
   const posSel = document.getElementById('memberPosFilter');
