@@ -496,20 +496,20 @@
         const panelSets = {
 			
 			gb: {
-			    title: "「GBめぐりシリーズ、どれだけ知ってる？」",
+			    title: "「GBめぐりシリーズ<br>どれだけ知ってる？」",
 			    subtitle1:"",
 			    subtitle2:"",
 			    xAccount: "@gbiidabashi",
 			    xAccountURL: "https://x.com/gbiidabashi",
 			    images: [
-			        { path: "./images/gb/001.png", description: "めぐりす<br>めぐりすは好奇心旺盛で<br>ちょっとドジ" },
-			        { path: "./images/gb/002.png", description: "ワイナリーめぐり<br>全国46都道府県に<br>ワイナリーがあるって知ってた？" },
-			        { path: "./images/gb/003.png", description: "街の本屋さん<br>本好きならこれを読んでるだけで<br>ウズウズしてきます" },
-			        { path: "./images/gb/004.png", description: "恐竜めぐり<br>博物館だけじゃない！<br>発掘現場から恐竜ホテルまで" },
-			        { path: "./images/gb/005.png", description: "水族館めぐり<br>京都水族館は<br>オオサンショウウオ推し" },
-			        { path: "./images/gb/006.png", description: "動物園めぐり<br>天王寺動物園のマレーグマ<br>「マーサ」はおっさんぽい" },
-			        { path: "./images/gb/007.png", description: "飛行機めぐり<br>撮る・泊まる・体験する<br>乗るだけじゃない楽しみ方" },
-			        { path: "./images/gb/008.png", description: "美術館めぐり<br>もっと気軽に<br>アートを楽しみたい！" }
+			        { path: "./images/gb/001.png", description: "めぐりすは好奇心旺盛で<br>ちょっとドジ" },
+			        { path: "./images/gb/002.png", description: "「全国のちいさなワイナリーめぐり」<br>全国46都道府県に<br>ワイナリーがあるって知ってた？" },
+			        { path: "./images/gb/003.png", description: "「わざわざ行きたい街の本屋さん」<br>本好きならこれを読んでるだけで<br>ウズウズしてきます" },
+			        { path: "./images/gb/004.png", description: "「全国 恐竜めぐり」<br>博物館だけじゃない！<br>発掘現場から恐竜ホテルまで" },
+			        { path: "./images/gb/005.png", description: "「水族館めぐり」<br>京都水族館は<br>オオサンショウウオ推し" },
+			        { path: "./images/gb/006.png", description: "「動物園めぐり」<br>天王寺動物園のマレーグマ<br>「マーサ」はおっさんぽい" },
+			        { path: "./images/gb/007.png", description: "「全国 飛行機めぐり」<br>撮る・泊まる・体験する<br>乗るだけじゃない楽しみ方" },
+			        { path: "./images/gb/008.png", description: "「東京のちいさな美術館めぐり」<br>もっと気軽に<br>アートを楽しみたい！" }
 			    ]
 			},
 
@@ -565,12 +565,15 @@
             document.getElementById('gameContainer').style.display = 'none';
             document.getElementById('scoreBoard').style.display = 'none';
         } else {
-            document.querySelector('.image-title').textContent = currentSet.title;
+//            document.querySelector('.image-title').textContent = currentSet.title;
+			document.querySelector('.image-title').innerHTML = currentSet.title;
             document.querySelector('.x-link a').textContent = currentSet.xAccount;
             document.querySelector('.x-link a').href = currentSet.xAccountURL;
 
-            document.querySelector('.sub-title1').textContent = currentSet.subtitle1;
-            document.querySelector('.sub-title2').textContent = currentSet.subtitle2;
+//            document.querySelector('.sub-title1').textContent = currentSet.subtitle1;
+//            document.querySelector('.sub-title2').textContent = currentSet.subtitle2;
+			document.querySelector('.sub-title1').innerHTML = currentSet.subtitle1;
+			document.querySelector('.sub-title2').innerHTML = currentSet.subtitle2;
 
             let panelImages = currentSet.images;
             let selectedImages = [];
