@@ -284,6 +284,16 @@
         }
 
         /* ── 説明テキスト: 遅延フェードアップ ── */
+        #matchText .asahi-product-name {
+            font-weight: bold;
+            font-size: calc(1em + 1px);
+        }
+
+        #matchText .asahi-product-subtitle {
+            color: #ff80c0;
+            text-shadow: 0 0 6px #ff1493, 0 0 12px #ff1493;
+        }
+
         #matchModal.show #matchText {
             animation: textSlideUp 0.4s ease 0.42s both;
         }
@@ -495,6 +505,23 @@
 
         const panelSets = {
 			
+            asahi: {
+                title: "「ゲームで覚えてや～！大阪地ソース大図鑑」",
+                subtitle1:"",
+                subtitle2:"",
+                xAccount: "@asahi_so_prod",
+                xAccountURL: "https://x.com/asahi_so_prod",
+                images: [
+                    { path: "./images/asahi/001.jpg", description: "三晃とんかつソース<br/>（三晃ソース株式会社）<br/>甘口でフルーティーな味わいに、<br/>スパイスの香りが絶妙に調和。" },
+                    { path: "./images/asahi/002.jpg", description: "大阪の味お好み焼ソース<br/>（株式会社大黒屋）<br/>リンゴベースのフルーティーな味わいが特長で<br/>たこ焼きやとんかつにも相性抜群。" },
+                    { path: "./images/asahi/003.jpg", description: "ハグルマウスターソース<br/>（ハグルマ株式会社）<br/>国産野菜と果実にこだわり、<br/>熟成で引き出した旨味が特長。" },
+                    { path: "./images/asahi/004.jpg", description: "ヘルメスとんかつソース<br/>（株式会社石見食品工業所）<br/>手作業にこだわった伝統製法で、<br/>香り立つ風味が人気。" },
+                    { path: "./images/asahi/005.jpg", description: "金紋とんかつソース<br/>（株式会社金紋ソース本舗）<br/>上品な味わいが一度食べるとクセになる濃厚で<br/>やや甘口のとんかつソース。" },
+                    { path: "./images/asahi/006.jpg", description: "OKソース<br/>（井谷食品工業株式会社）<br/>職人の技で丁寧に仕込まれた味は、<br/>酸味・甘味・旨味のバランスが絶妙。" },
+                    { path: "./images/asahi/007.jpg", description: "パロマお好みソース<br/>（製造元：株式会社和泉食品）<br/>素材にこだわり、<br/>昔ながらの釜炊き製法で<br/>丁寧に仕上げた素朴でやさしい味。" },
+                    { path: "./images/asahi/008.jpg", description: "大阪地ソース大図鑑<br/>大阪を代表する<br/>地ソースメーカー7社のソースを<br/>ミニパックにしました！" }
+                ]
+            },
             normal1: {
                 title: "「カラフルリンク」",
                 subtitle1:"",
@@ -698,7 +725,20 @@
             function showMatchModal(imagePath, description, onClose) {
                 const modal = document.getElementById("matchModal");
                 document.getElementById("matchImage").src = "" + imagePath;
-                document.getElementById("matchText").innerHTML = description || "説明文は準備中です。";
+                const matchText = document.getElementById("matchText");
+                if (mode === "asahi" && description) {
+                    const [name, subtitle, ...details] = description.split(/<br\s*\/?\s*>/i);
+                    const styledSubtitle = imagePath === "./images/asahi/008.jpg"
+                        ? subtitle
+                        : `<span class="asahi-product-subtitle">${subtitle}</span>`;
+                    matchText.innerHTML = [
+                        `<span class="asahi-product-name">${name}</span>`,
+                        ...(subtitle !== undefined ? [styledSubtitle] : []),
+                        ...details
+                    ].join("<br/>");
+                } else {
+                    matchText.innerHTML = description || "説明文は準備中です。";
+                }
 
                 modal.classList.remove("fade-out", "show");
                 modal.style.display = "flex";
